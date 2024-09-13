@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'dev_cosmeb'
+      #trigger
 env:
   REPOSITORY: cosmeb/portal-dev
   AWS_REGION: ap-southeast-1

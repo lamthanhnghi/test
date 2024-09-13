@@ -1,0 +1,9 @@
+<nz-tabset class="mc-tabset" nzLinkRouter>
+  <ng-container *ngFor="let i of menuItems">
+    <nz-tab>
+      <a *nzTabLink nz-tab-link [routerLink]="i.link" [queryParams]="i['queryParams']" queryParamsHandling="merge">
+        {{ i.title | translate }}
+      </a>
+    </nz-tab>
+  </ng-container>
+</nz-tabset>

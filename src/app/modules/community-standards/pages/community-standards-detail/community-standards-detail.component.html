@@ -1,0 +1,42 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <form
+    [formGroup]="form"
+    class="container-lg h-full px-5 lg:px-10 py-5 bg-white rounded shadow mb-5"
+    nz-form
+    nzLayout="vertical"
+  >
+    <app-approval-btn-group
+      (btnClicked)="onBtnClicked($event)"
+      [data]="data"
+      [isReviewer]="isReviewer"
+      [mode]="mode"
+      [role]="role"
+    ></app-approval-btn-group>
+    <div class="container-sm mx-auto">
+      <section class="block-version">
+        <nz-form-item>
+          <nz-form-label mcRequired nzLabelAlign="left">
+            {{ 'common.bad_word' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <input
+              [formControlName]="eBadWordFormKeys.word"
+              [placeholder]="'common.input' | translate"
+              [readonly]="mode === ePageActions.View"
+              nz-input
+            />
+            <ng-template #errorTpl let-control>
+              @if (control.hasError('required')) {
+                {{ 'form.this_field_is_required' | translate }}
+              } @else if (control.hasError('maxlength')) {
+                {{ 'form.content_can_not_longer_than_x' | translate : { x: 50 } }}
+              } @else if (control.hasError('existed')) {
+                {{ 'form.bad_word_duplicated' | translate }}
+              }
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </section>
+    </div>
+  </form>
+</app-item-detail-master-layout>

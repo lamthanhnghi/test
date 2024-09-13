@@ -1,0 +1,546 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="flex mb-5 gap-3 lg:justify-end">
+      <!--@if (data && [eContentStatuses.New, eContentStatuses.AdminRejected].includes(data.contentStatus)) {-->
+      <!--@if (data) {-->
+      <!--  <button-->
+      <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !bg-transparent !border-red !border !text-red !text-[14px] !h-9 min-w-24"-->
+      <!--    nz-button-->
+      <!--    nzType="default"-->
+      <!--    nzDanger-->
+      <!--    (click)="delete()"-->
+      <!--  >-->
+      <!--    {{ 'common.delete' | translate }}-->
+      <!--  </button>-->
+      <!--}-->
+      @if (mode === ePageActions.Edit) {
+        <button
+          class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+          nz-button
+          nzType="primary"
+          nzDanger
+          (click)="cancel()"
+        >
+          {{ 'common.cancel' | translate }}
+        </button>
+      }
+      @if (mode === ePageActions.View) {
+        <!-- todo: un hide when integrate approval flow -->
+        <!--@if (data?.contentStatus === eContentStatuses.New) {-->
+        <!--  <button-->
+        <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"-->
+        <!--    nz-button-->
+        <!--    nzType="primary"-->
+        <!--    (click)="sendApproval()"-->
+        <!--  >-->
+        <!--    {{ 'common.send_for_review' | translate }}-->
+        <!--  </button>-->
+        <!--}-->
+
+        @if (data?.contentStatus !== eContentStatuses.AdminReviewing) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+            nz-button
+            nzType="default"
+            (click)="edit()"
+          >
+            {{ 'common.edit' | translate }}
+          </button>
+        }
+      }
+      @if ([ePageActions.Edit, ePageActions.Create].includes(mode)) {
+        <button
+          class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+          nz-button
+          nzType="default"
+          (click)="submit()"
+        >
+          {{ 'common.save' | translate }}
+        </button>
+      }
+    </div>
+    <form class="wrapper-right" nz-form [nzNoColon]="mode !== ePageActions.View" [formGroup]="form">
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label nzRequired nzLabelAlign="left" [nzSm]="4" [nzFor]="eDeliveryFeePolicyFormKeys.Title">
+            {{ 'Tên chính sách' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="titleError">
+            <input
+              nz-input
+              [formControlName]="eDeliveryFeePolicyFormKeys.Title"
+              [id]="eDeliveryFeePolicyFormKeys.Title"
+              [placeholder]="'common.input' | translate"
+              [readonly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            />
+            <ng-template #titleError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'Tên chính sách' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div [ngClass]="{ 'bg-main-lighter px-4 py-3 rounded my-2 -mx-4': mode === ePageActions.View }">
+        <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+          <nz-form-item>
+            <nz-form-label nzRequired nzLabelAlign="left" [nzSm]="4" [nzFor]="eDeliveryFeePolicyFormKeys.Version">
+              {{ 'common.version' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="versionError">
+              <input
+                nz-input
+                [formControlName]="eDeliveryFeePolicyFormKeys.Version"
+                [id]="eDeliveryFeePolicyFormKeys.Version"
+                [placeholder]="'common.input' | translate"
+                [readonly]="mode === ePageActions.View"
+                [nzBorderless]="mode === ePageActions.View"
+              />
+              <ng-template #versionError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'common.please_input' | translate }} {{ 'common.version' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+          <nz-form-item>
+            <nz-form-label
+              nzRequired
+              nzLabelAlign="left"
+              nzLabelWrap
+              [nzSm]="4"
+              [nzFor]="eDeliveryFeePolicyFormKeys.Content"
+            >
+              {{ 'common.description' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="descError">
+              <input
+                nz-input
+                [formControlName]="eDeliveryFeePolicyFormKeys.Content"
+                [id]="eDeliveryFeePolicyFormKeys.Version"
+                [placeholder]="'common.input' | translate"
+                [readonly]="mode === ePageActions.View"
+                [nzBorderless]="mode === ePageActions.View"
+              />
+              <ng-template #descError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'common.please_input' | translate }} {{ 'common.description' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <h4 class="mb-3">{{ 'common.packaging_standard' | translate }}</h4>
+      <div class="row-content col-2" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.MaxLength"
+          >
+            {{ 'common.max_length' | translate }} ({{ eSizeUnits.CentiMeter | enumKey: 'size_units' | translate }})
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="maxLengthError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.MaxLength"
+              [id]="eDeliveryFeePolicyFormKeys.MaxLength"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #maxLengthError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.max_length' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.MaxWidth"
+          >
+            {{ 'common.max_width' | translate }} ({{ eSizeUnits.CentiMeter | enumKey: 'size_units' | translate }})
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="maxWidthError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.MaxWidth"
+              [id]="eDeliveryFeePolicyFormKeys.MaxWidth"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #maxWidthError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.max_width' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content col-2" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.MaxHeight"
+          >
+            {{ 'common.max_height' | translate }} ({{ eSizeUnits.CentiMeter | enumKey: 'size_units' | translate }})
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="maxHeightError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.MaxHeight"
+              [id]="eDeliveryFeePolicyFormKeys.MaxHeight"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #maxHeightError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.max_height' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.MaxWeight"
+          >
+            {{ 'common.max_weight' | translate }} ({{ eWeightUnits.KiloGram | enumKey: 'weight_units' | translate }})
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="maxWeightError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.MaxWeight"
+              [id]="eDeliveryFeePolicyFormKeys.MaxWeight"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #maxWeightError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.max_weight' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content col-2" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.ExpressPercent"
+          >
+            {{ 'common.express_percent' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="expressPercentError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.ExpressPercent"
+              [id]="eDeliveryFeePolicyFormKeys.ExpressPercent"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzMax]="100"
+              [nzFormatter]="percentFormatter"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #expressPercentError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.express_percent' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.FastPercent"
+          >
+            {{ 'common.fast_percent' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="fastPercentError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.FastPercent"
+              [id]="eDeliveryFeePolicyFormKeys.FastPercent"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzMax]="100"
+              [nzFormatter]="percentFormatter"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #fastPercentError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.fast_percent' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content col-2" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.SavingPercent"
+          >
+            {{ 'common.saving_percent' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="savingPercentError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.SavingPercent"
+              [id]="eDeliveryFeePolicyFormKeys.SavingPercent"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzMax]="100"
+              [nzFormatter]="percentFormatter"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #savingPercentError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.saving_percent' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.ExpressMinPrice"
+          >
+            {{ 'common.express_min_price' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="expressMinPriceError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.ExpressMinPrice"
+              [id]="eDeliveryFeePolicyFormKeys.ExpressMinPrice"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzFormatter]="priceFormatter"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #expressMinPriceError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.express_min_price' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content col-2" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.FastMinPrice"
+          >
+            {{ 'common.fast_min_price' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="fastMinPriceError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.FastMinPrice"
+              [id]="eDeliveryFeePolicyFormKeys.FastMinPrice"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzFormatter]="priceFormatter"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #fastMinPriceError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.fast_min_price' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.SavingMinPrice"
+          >
+            {{ 'common.saving_min_price' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="savingMinPriceError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.SavingMinPrice"
+              [id]="eDeliveryFeePolicyFormKeys.SavingMinPrice"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzFormatter]="priceFormatter"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #savingMinPriceError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.saving_min_price' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <h4 class="mb-3">{{ 'common.oversize_packaging' | translate }}</h4>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content col-2" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzNoColon
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.AdditionalSizeFee"
+          >
+            {{ 'common.additional_size_fee' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="additionalSizeFeeError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.AdditionalSizeFee"
+              [id]="eDeliveryFeePolicyFormKeys.AdditionalSizeFee"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzFormatter]="priceFormatter"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #additionalSizeFeeError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.additional_size_fee' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label
+            nzNoColon
+            nzLabelAlign="left"
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.AdditionalWeightFee"
+          >
+            {{ 'common.additional_weight_fee' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="additionalWeightFeeError">
+            <nz-input-number
+              class="w-full"
+              nzSize="large"
+              [formControlName]="eDeliveryFeePolicyFormKeys.AdditionalWeightFee"
+              [id]="eDeliveryFeePolicyFormKeys.AdditionalWeightFee"
+              [nzPlaceHolder]="'common.input' | translate"
+              [nzMin]="0"
+              [nzFormatter]="priceFormatter"
+              [nzReadOnly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            ></nz-input-number>
+            <ng-template #additionalWeightFeeError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.additional_weight_fee' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div
+        class="row-content col-2"
+        [ngClass]="{ 'w-1/2': mode !== ePageActions.View }"
+        [attr.aria-readonly]="mode === ePageActions.View"
+      >
+        <nz-form-item>
+          <nz-form-label
+            class="!pl-0"
+            nzRequired
+            nzLabelAlign="left"
+            nzLabelWrap
+            [nzSm]="mode === ePageActions.View ? 4 : 8"
+            [nzFor]="eDeliveryFeePolicyFormKeys.ApplyDate"
+          >
+            {{ 'common.applied_date' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="applyDateError">
+            <nz-date-picker
+              class="w-full"
+              [nzFormat]="DATE_FORMAT"
+              [formControlName]="eDeliveryFeePolicyFormKeys.ApplyDate"
+              [nzPlaceHolder]="'common.select' | translate"
+              [nzInputReadOnly]="true"
+              [nzAllowClear]="false"
+              [attr.aria-readonly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+              [nzSuffixIcon]="mode === ePageActions.View ? '' : 'calendar'"
+            ></nz-date-picker>
+            <ng-template #applyDateError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.applied_date' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View" *ngIf="data?.deliveryPricePolicyID">
+        <nz-form-item>
+          <nz-form-label nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="4">
+            {{ 'common.status' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="">
+            <div [class.pl-3]="mode === ePageActions.View">
+              <app-content-status-label [status]="data?.contentStatus"></app-content-status-label>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </div>
+</app-item-detail-master-layout>

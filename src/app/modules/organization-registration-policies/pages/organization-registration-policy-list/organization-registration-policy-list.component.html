@@ -1,0 +1,121 @@
+<app-item-list-master-layout
+  heading="Chính sách"
+  [menuItems]="menuItems"
+  menuStyle="multiple"
+  (searchInputChange)="onSearchKeywordChange($event)"
+>
+  <section class="flex flex-col items-stretch lg:px-5">
+    <div class="flex-grow lg:block hidden">
+      <div class="flex justify-end gap-4 mb-4">
+        <button
+          nz-button
+          nzType="primary"
+          nzShape="circle"
+          [routerLink]="RouteUtils.OrganizationRegistrationPoliciesPage.Create"
+        >
+          <span nz-icon nzType="plus"></span>
+        </button>
+      </div>
+      <nz-table
+        [nzData]="data" nzBordered class="mc-table" [nzShowPagination]="false"
+        [nzScroll]="{ x: '1280px', y: 'calc(100dvh - var(--footer-height) - 358px)' }"
+      >
+        <thead>
+        <tr>
+          <th nzColumnKey="name">{{ 'Tên chính sách' | translate }}</th>
+          <th nzColumnKey="stock">{{ 'Phiên bản' | translate }}</th>
+          <th nzColumnKey="stock">{{ 'Ngày cập nhật' | translate }}</th>
+          <th nzColumnKey="stock">{{ 'Trạng thái' | translate }}</th>
+          <th nzColumnKey="stock"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of data">
+          <tr>
+            <td>
+              <div>{{ item.title }}</div>
+            </td>
+            <td>
+              <div class="text-center">{{ item.version }}</div>
+            </td>
+            <td class="text-center">
+              <div class="text-center">{{ item.updatedDate | date: 'shortDate' }}</div>
+            </td>
+            <td class="text-center">
+              <app-content-status-label [status]="item.contentStatus"></app-content-status-label>
+            </td>
+            <td>
+              <div class="flex gap-3 justify-center">
+                <button
+                  class="ant-btn-link flex justify-center items-center"
+                  nzType="link"
+                  [routerLink]="item.organizationRegistrationPolicyID"
+                >
+                  Xem
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="block lg:hidden">
+      <div class="flex justify-between p-4 bg-white">
+        <div></div>
+        <div class="flex gap-3 items-center">
+          <button
+            nz-button
+            nzShape="circle"
+            class="flex items-center justify-center !p-0 !border-none text-main rounded-full"
+          >
+            <app-icon name="import" size="24"></app-icon>
+          </button>
+          <button nzSize="small" nz-button nzType="primary" nzShape="circle">
+            <span nz-icon nzType="plus"></span>
+          </button>
+        </div>
+      </div>
+      <ul class="flex flex-col gap-5 px-5 pt-5">
+        <ng-container *ngFor="let item of data">
+          <li>
+            <a
+              [routerLink]="item.organizationRegistrationPolicyID"
+              class="card block p-4 bg-white hover:shadow transition rounded-lg"
+            >
+              <div class="flex justify-start items-start gap-3">
+                <app-avatar [hasShadow]="true" [allowChange]="false" [src]="''" shape="circle" size="52"></app-avatar>
+                <div class="flex flex-col justify-center gap-2 grow items-stretch">
+                  <h5 class="font-semibold text-[14px] text-grey-dark line-clamp-2 break-all">
+                    {{ item.title }}
+                  </h5>
+                  <p class="text-grey line-clamp-2">
+                    {{ item.version }}
+                  </p>
+                  <div class="flex flex-nowrap justify-between">
+                    <span class="text-grey-default">{{ 'Ngày cập nhật' | translate }}</span>
+                    <span>{{ item.updatedDate | date: 'shortDate' }}</span>
+                  </div>
+                  <div class="flex flex-nowrap justify-between">
+                    <span class="text-grey-default">{{ 'common.status' | translate }}</span>
+                    <app-content-status-label [status]="item.contentStatus"></app-content-status-label>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <nz-pagination
+      nzShowSizeChanger
+      nzResponsive
+      [nzPageSizeOptions]="[10, 20, 30, 40, 50]"
+      [(nzPageSize)]="filterObject.pageSize"
+      [(nzPageIndex)]="filterObject.pageIndex"
+      [nzTotal]="filterObject.total"
+      (nzPageSizeChange)="onPageSizeChange()"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+    ></nz-pagination>
+  </section>
+</app-item-list-master-layout>

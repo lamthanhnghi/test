@@ -1,0 +1,57 @@
+:host {
+  .preview {
+    transition: all 300ms ease;
+    @apply flex flex-col gap-4;
+    //grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+
+    .upload-preview-item {
+      cursor: pointer;
+      position: relative;
+      width: 100%;
+
+      &:hover {
+        .actions {
+          @apply flex justify-center items-center gap-1;
+          @apply bg-black/40 text-white;
+        }
+      }
+
+      .actions {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.5rem;
+
+        .ant-btn-icon-only {
+          &:hover {
+            @apply bg-white/20;
+          }
+        }
+      }
+    }
+
+    .upload-preview-item-placeholder {
+      border-radius: 0.5rem;
+      width: 100%;
+      height: 3.625rem;
+      border: 1px dashed gray;
+    }
+
+    .upload-preview-item-dragging {
+      border-radius: 0.5rem;
+      border: 1px dashed gray;
+      overflow: hidden;
+      img {
+        opacity: 0.5;
+        border-radius: 0.5rem;
+      }
+    }
+
+    .dndDraggingSource {
+      display: none !important;
+    }
+  }
+}

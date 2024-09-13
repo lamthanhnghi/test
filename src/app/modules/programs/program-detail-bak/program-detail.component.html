@@ -1,0 +1,249 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="flex mb-5 gap-3 lg:justify-end">
+      <button
+        class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+        nz-button
+        nzType="default"
+        *ngIf="data?.contentStatus === eContentStatuses.AdminPending"
+        (click)="setStatus(eContentStatuses.AdminReviewing)"
+      >
+        {{ 'enums.content_statuses.admin_reviewing' | translate }}
+      </button>
+
+      <!--    Approving -->
+      <button
+        class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9"
+        nz-button
+        nzType="primary"
+        nzDanger
+        *ngIf="data?.contentStatus === eContentStatuses.AdminReviewing"
+        (click)="reject()"
+      >
+        {{ 'enums.content_statuses.admin_rejected' | translate }}
+      </button>
+      <!--  Approving / Rejected -->
+      <button
+        class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+        nz-button
+        nzType="default"
+        *ngIf="
+          data?.contentStatus === eContentStatuses.AdminReviewing ||
+          data?.contentStatus === eContentStatuses.AdminRejected
+        "
+        (click)="approve()"
+      >
+        {{ 'enums.content_statuses.admin_approved' | translate }}
+      </button>
+
+      <!--    Approved -->
+      <button
+        class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9"
+        nz-button
+        nzType="primary"
+        *ngIf="data?.contentStatus === eContentStatuses.AdminApproved"
+        (click)="hide()"
+      >
+        {{ 'enums.content_statuses.hidden' | translate }}
+      </button>
+      <button
+        class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+        nz-button
+        nzType="default"
+        *ngIf="data?.contentStatus === eContentStatuses.AdminApproved"
+        (click)="archive()"
+      >
+        {{ 'enums.content_statuses.admin_archived' | translate }}
+      </button>
+    </div>
+
+    <div
+      class="-mx-4 mb-4 bg-[#FB822A33] rounded py-3 px-4 flex lg:flex-row flex-col lg:flex-nowrap gap-2 lg:gap-5 lg:items-center"
+      *ngIf="data?.contentStatus === eContentStatuses.AdminRejected"
+    >
+      <div class="flex-shrink-0 w-full max-w-[200px] text-grey">
+        {{ 'Từ chối duyệt, lý do:' | translate }}
+      </div>
+      <p class="grow">
+        {{ data?.status?.reason }}
+      </p>
+    </div>
+
+    <article class="text-grey-dark mb-8">
+      <app-read-only-form-row [text]="'Seller' | translate" [hasContent]="true">
+        {{ data?.seller?.businessName }}
+      </app-read-only-form-row>
+    </article>
+
+    <!-- DESCRIPTION -->
+    <article>
+      <h3 class="uppercase text-default-text">{{ 'Mô tả' | translate }}</h3>
+      <div class="flex flex-col items-stretch gap-4 lg:gap-6 mt-4">
+        <!--   thumbnail   -->
+        <app-read-only-form-row [text]="'Ảnh bìa' | translate" [hasContent]="true">
+          <div class="aspect-video overflow-hidden w-full max-w-[450px]">
+            <img [src]="data?.linkString || ''" alt="" class="object-cover w-full h-full" />
+          </div>
+        </app-read-only-form-row>
+
+        <!--   name   -->
+        <app-read-only-form-row
+          [text]="'Tên chương trình' | translate"
+          [value]="data?.title || '?'"
+        ></app-read-only-form-row>
+
+        <!--   name   -->
+        <app-read-only-form-row
+          [text]="'Mô tả chi tiết' | translate"
+          [value]="data?.description || '?'"
+        ></app-read-only-form-row>
+      </div>
+    </article>
+
+    <!-- DETAIL -->
+    <article class="text-grey-dark mt-8">
+      <div class="flex justify-between items-center">
+        <h3 class="uppercase text-default-text">{{ 'Chi tiết chương trình' | translate }}</h3>
+      </div>
+      <div class="flex flex-col items-stretch gap-4 lg:gap-6 mt-4">
+        <div class="flex justify-between items-center">
+          <h4 class="uppercase text-default-text">{{ 'Thời gian' | translate }}</h4>
+        </div>
+        <app-read-only-form-row [text]="'Bắt đầu' | translate" [hasContent]="true">
+          <div class="flex items-center gap-3">
+            <input nz-input readonly [value]="data?.startValidDate | date: 'dd/MM/yyyy'" class="grow max-w-[220px]" />
+            <input nz-input readonly [value]="data?.startValidDate | date: 'HH:mm'" class="grow lg:max-w-[110px]" />
+          </div>
+        </app-read-only-form-row>
+
+        <app-read-only-form-row [text]="'Kết thúc' | translate" [hasContent]="true">
+          <div class="flex items-center gap-3">
+            <input nz-input readonly [value]="data?.endValidDate | date: 'dd/MM/yyyy'" class="grow max-w-[220px]" />
+            <input nz-input readonly [value]="data?.endValidDate | date: 'HH:mm'" class="grow lg:max-w-[110px]" />
+          </div>
+        </app-read-only-form-row>
+
+        <app-read-only-form-row [text]="'Hiển thị' | translate" [hasContent]="true">
+          <div class="flex items-center gap-3">
+            <input nz-input readonly [value]="data?.publishedDate | date: 'dd/MM/yyyy'" class="grow max-w-[220px]" />
+            <input nz-input readonly [value]="data?.publishedDate | date: 'HH:mm'" class="grow lg:max-w-[110px]" />
+          </div>
+        </app-read-only-form-row>
+
+        <div class="flex justify-between items-center">
+          <h4 class="uppercase text-default-text">{{ 'Chương trình và quà tặng' | translate }}</h4>
+        </div>
+
+        <app-read-only-form-row [text]="'Loại chương trình' | translate" [hasContent]="true">
+          <div class="ant-input pt-2">
+            <app-program-type-label [status]="data?.programType"></app-program-type-label>
+          </div>
+        </app-read-only-form-row>
+
+        <div class="grid lg:grid-cols-2 gap-4 lg:gap-6 items-center">
+          <app-read-only-form-row [text]="'Loại quà tặng' | translate" [hasContent]="true">
+            <div class="ant-input pt-2">
+              <app-program-gift-type-label [status]="data?.programGift?.programGiftType"></app-program-gift-type-label>
+            </div>
+          </app-read-only-form-row>
+
+          <app-read-only-form-row [text]="'Cơ sở áp dụng' | translate" [value]="''"></app-read-only-form-row>
+
+          <app-read-only-form-row
+            [text]="'Số lượng quà tặng' | translate"
+            [value]="data?.programGift?.programGiftValue"
+          ></app-read-only-form-row>
+
+          <app-read-only-form-row [text]="'Số lượng mua' | translate" [hasContent]="true">
+            <div class="flex items-center gap-2">
+              <input
+                nz-input
+                readonly
+                [value]="data?.programGift?.programGiftMinPurchaseQuantity"
+                class="grow lg:max-w-[200px]"
+              />
+              <span>Hộp</span>
+            </div>
+          </app-read-only-form-row>
+
+          <app-read-only-form-row
+            [text]="'Mô tả quà tặng' | translate"
+            [value]="data?.programGift?.programGiftDescription"
+          ></app-read-only-form-row>
+
+          <app-read-only-form-row
+            [text]="'Trị giá chương trình' | translate"
+            [value]="data?.programValue || 0 | currency: 'VND'"
+          ></app-read-only-form-row>
+        </div>
+
+        <app-read-only-form-row [text]="'Sản phẩm áp dụng' | translate" [hasContent]="true">
+          <ul class="flex flex-col gap-4">
+            <ng-container *ngFor="let item of data?.productSKUs">
+              <li class="flex gap-3 items-center">
+                <img [src]="item.linkString" alt="" class="w-[60px] h-[60px] object-cover" />
+                <div class="flex flex-col gap-1">
+                  <p class="font-medium line-clamp-1">{{ item.productPublishName }}</p>
+                  <p class="text-grey-default line-clamp-1">{{ item.productShortDescription }}</p>
+                </div>
+              </li>
+            </ng-container>
+          </ul>
+        </app-read-only-form-row>
+
+        <app-read-only-form-row [text]="'Giấy phép chương trình' | translate" [hasContent]="true">
+          <app-media-list [items]="data?.certificates || []"></app-media-list>
+        </app-read-only-form-row>
+
+        <app-read-only-form-row [text]="'Ngày gửi duyệt' | translate" [hasContent]="true">
+          <span *ngIf="data?.status">{{ (data?.status)!.statusDate | date: 'shortDate' }}</span>
+        </app-read-only-form-row>
+
+        <app-read-only-form-row [text]="'Trạng thái' | translate" [hasContent]="true">
+          <app-content-status-label [status]="data?.contentStatus"></app-content-status-label>
+        </app-read-only-form-row>
+      </div>
+    </article>
+  </div>
+  <div
+    *ngIf="
+      data?.contentStatus !== eContentStatuses.AdminPending && data?.contentStatus !== eContentStatuses.AdminReviewing
+    "
+    class="px-10 py-5 bg-white shadow rounded"
+  >
+    <ul>
+      <li class="flex flex-col gap-5">
+        <div class="flex gap-5">
+          <img src="https://placehold.co/64x64" alt="" class="w-[52px] h-[52px] object-cover rounded-full" />
+          <div>
+            <p class="font-semibold">Commenter</p>
+            <p class="text-grey-neutral text-sm">23/2/2023 19:20</p>
+            <p>Comment content</p>
+          </div>
+        </div>
+        <ul class="pl-[56px] flex flex-col gap-5">
+          <li class="flex flex-col gap-5">
+            <div class="flex gap-5">
+              <img src="https://placehold.co/64x64" alt="" class="w-[52px] h-[52px] object-cover rounded-full" />
+              <div>
+                <p class="font-semibold">Commenter</p>
+                <p class="text-grey-neutral text-sm">23/2/2023 19:20</p>
+                <p>Comment content</p>
+              </div>
+            </div>
+          </li>
+          <li class="flex flex-col gap-5">
+            <div class="flex gap-5">
+              <img src="https://placehold.co/64x64" alt="" class="w-[52px] h-[52px] object-cover rounded-full" />
+              <div>
+                <p class="font-semibold">Commenter</p>
+                <p class="text-grey-neutral text-sm">23/2/2023 19:20</p>
+                <p>Comment content</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</app-item-detail-master-layout>

@@ -1,0 +1,232 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="flex mb-5 gap-3 lg:justify-end">
+      <!--@if (data && [eContentStatuses.New, eContentStatuses.AdminRejected].includes(data.contentStatus)) {-->
+      <!--@if (data) {-->
+      <!--  <button-->
+      <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !bg-transparent !border-red !border !text-red !text-[14px] !h-9 min-w-24"-->
+      <!--    nz-button-->
+      <!--    nzType="default"-->
+      <!--    nzDanger-->
+      <!--    (click)="delete()"-->
+      <!--  >-->
+      <!--    {{ 'common.delete' | translate }}-->
+      <!--  </button>-->
+      <!--}-->
+      @if (mode === ePageActions.Edit) {
+        <button
+          class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+          nz-button
+          nzType="primary"
+          nzDanger
+          (click)="cancel()"
+        >
+          {{ 'common.cancel' | translate }}
+        </button>
+      }
+      @if (mode === ePageActions.View) {
+        <!-- todo: un hide when integrate approval flow -->
+        <!--@if (data?.contentStatus === eContentStatuses.New) {-->
+        <!--  <button-->
+        <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"-->
+        <!--    nz-button-->
+        <!--    nzType="primary"-->
+        <!--    (click)="sendApproval()"-->
+        <!--  >-->
+        <!--    {{ 'common.send_for_review' | translate }}-->
+        <!--  </button>-->
+        <!--}-->
+
+        @if (data?.agreementStatus !== eContentStatuses.AdminReviewing) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+            nz-button
+            nzType="default"
+            (click)="edit()"
+          >
+            {{ 'common.edit' | translate }}
+          </button>
+        }
+      }
+      @if ([ePageActions.Edit, ePageActions.Create].includes(mode)) {
+        <button
+          class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+          nz-button
+          nzType="default"
+          (click)="submit()"
+        >
+          {{ 'common.save' | translate }}
+        </button>
+      }
+    </div>
+    <form class="wrapper-right" nz-form [nzNoColon]="mode !== ePageActions.View" [formGroup]="form">
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label nzNoColon nzLabelAlign="left" [nzSm]="4" [nzFor]="eAgreementFormKeys.AgreementType">
+            {{ 'common.agreement_type' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="typeError">
+            <nz-select
+              *ngIf="mode !== ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+              [attr.aria-readonly]="mode === ePageActions.View"
+              [nzPlaceHolder]="'common.agreement_type' | translate"
+              [formControlName]="eAgreementFormKeys.AgreementType"
+            >
+              <ng-container *ngFor="let item of agreementTypeOptions">
+                <nz-option
+                  [nzValue]="item.value"
+                  [nzLabel]="item.value | enumKey: 'agreement_types' | translate"
+                ></nz-option>
+              </ng-container>
+            </nz-select>
+            <ng-template #typeError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.agreement_type' | translate }}
+              </ng-container>
+            </ng-template>
+            <div *ngIf="mode === ePageActions.View" class="pl-3 text-16px">
+              {{ data?.agreementType | enumKey: 'agreement_types' | translate }}
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            nzLabelWrap
+            [nzSm]="4"
+            [nzFor]="eAgreementFormKeys.AgreementName"
+          >
+            {{ 'common.agreement_name' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="nameError">
+            <input
+              class="w-full"
+              nzSize="large"
+              nz-input
+              [formControlName]="eAgreementFormKeys.AgreementName"
+              [id]="eAgreementFormKeys.AgreementName"
+              [placeholder]="'common.input' | translate"
+              [readonly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            />
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.agreement_name' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            nzLabelWrap
+            [nzSm]="4"
+            [nzFor]="eAgreementFormKeys.AgreementVersion"
+          >
+            {{ 'common.version' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="versionError">
+            <input
+              class="w-full"
+              nz-input
+              [formControlName]="eAgreementFormKeys.AgreementVersion"
+              [id]="eAgreementFormKeys.AgreementVersion"
+              [placeholder]="'common.input' | translate"
+              [readonly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            />
+            <ng-template #versionError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.version' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            nzLabelWrap
+            [nzSm]="4"
+            [nzFor]="eAgreementFormKeys.AgreementContent"
+          >
+            {{ 'common.content' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="contentError">
+            <app-ck-editor
+              [formControlName]="eAgreementFormKeys.AgreementContent"
+              *ngIf="mode !== ePageActions.View"
+            ></app-ck-editor>
+            <div
+              class="pt-4 pl-3"
+              *ngIf="mode === ePageActions.View"
+              [innerHTML]="data?.agreementContent | nzSanitizer: 'html'"
+            ></div>
+            <ng-template #contentError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.content' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            nzLabelWrap
+            [nzSm]="4"
+            [nzFor]="eAgreementFormKeys.AgreementAppliedDate"
+          >
+            {{ 'common.applied_date' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="appliedDateError">
+            <nz-date-picker
+              class="w-full"
+              [nzFormat]="DATE_FORMAT"
+              [formControlName]="eAgreementFormKeys.AgreementAppliedDate"
+              [nzPlaceHolder]="'common.select' | translate"
+              [nzInputReadOnly]="true"
+              [nzAllowClear]="false"
+              [attr.aria-readonly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+              [nzSuffixIcon]="mode === ePageActions.View ? '' : 'calendar'"
+            ></nz-date-picker>
+            <ng-template #appliedDateError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.applied_date' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View" *ngIf="data?.agreementID">
+        <nz-form-item>
+          <nz-form-label nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="4">
+            {{ 'common.status' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="">
+            <div [class.pl-3]="mode === ePageActions.View">
+              <app-content-status-label [status]="data?.contentStatus"></app-content-status-label>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </div>
+</app-item-detail-master-layout>

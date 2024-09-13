@@ -1,0 +1,125 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="mb-5 flex items-center justify-between gap-4 lg:flex-row flex-col">
+      <div *ngIf="mode !== ePageActions.Create" class="flex items-center gap-3 text-sm">
+        <app-content-status-label-tag [status]="data?.contentStatus"></app-content-status-label-tag>
+        <span>Ngày cập nhật <span class="font-semibold">{{data?.updatedDate | date: 'shortDate'}}</span></span>
+      </div>
+      <div  class="max-desktop:w-full grow flex gap-3 lg:justify-end lg:order-last">
+        @if (mode !== ePageActions.View) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+            nz-button
+            nzType="primary"
+            nzDanger
+            (click)="cancel()"
+          >
+            {{ 'common.cancel' | translate }}
+          </button>
+        }
+        @if (mode === ePageActions.View) {
+
+          <!-- todo: un hide when integrate approval flow -->
+            <!--@if (data?.contentStatus === eContentStatuses.New) {-->
+            <!--  <button-->
+            <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"-->
+            <!--    nz-button-->
+            <!--    nzType="primary"-->
+            <!--    (click)="sendApproval()"-->
+            <!--  >-->
+            <!--    {{ 'common.send_for_review' | translate }}-->
+            <!--  </button>-->
+            <!--}-->
+
+          @if (data?.contentStatus === eContentStatuses.AdminReviewing
+        || data?.contentStatus === eContentStatuses.AdminRejected
+          || data?.contentStatus === eContentStatuses.AdminPending) {
+            <button
+              class="lg:flex-grow-0 flex-grow ant-btn btn !bg-transparent !border-red !border !text-red !text-[14px] !h-9 min-w-24"
+              nz-button
+              nzType="default"
+              nzDanger
+              (click)="delete()"
+            >
+              {{ 'common.delete' | translate }}
+            </button>
+          }
+
+          @if (data?.contentStatus === eContentStatuses.AdminArchived) {
+            <button
+              class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+              nz-button
+              nzType="default"
+              (click)="restore()"
+            >
+              {{ 'common.restore' | translate }}
+            </button>
+          }
+
+<!--          @if (data?.contentStatus === eContentStatuses.AdminApproved) {-->
+<!--            <button-->
+<!--              class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"-->
+<!--              nz-button-->
+<!--              nzType="default"-->
+<!--              (click)="archive()"-->
+<!--            >-->
+<!--              {{ 'common.archive' | translate }}-->
+<!--            </button>-->
+<!--          }-->
+
+          @if (data?.contentStatus !== eContentStatuses.AdminReviewing
+          && data?.contentStatus !== eContentStatuses.AdminApproved
+          && data?.contentStatus !== eContentStatuses.AdminArchived) {
+            <button
+              class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+              nz-button
+              nzType="default"
+              (click)="edit()"
+            >
+              {{ 'common.edit' | translate }}
+            </button>
+          }
+        }
+        @if ([ePageActions.Edit, ePageActions.Create].includes(mode)) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn-primary !border !h-9 btn !text-[14px] min-w-24"
+            nz-button
+            nzType="default"
+            (click)="submit()"
+          >
+            {{ 'common.save' | translate }}
+          </button>
+        }
+      </div>
+    </div>
+    <form class="wrapper-right" nz-form [nzNoColon]="mode !== ePageActions.View" [formGroup]="form" nzLayout="vertical">
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item class="w-full">
+          <nz-form-label
+            [isShow]="true"
+            mcRequired
+           nzLabelAlign="left" nzLabelWrap [nzSm]="24" [nzFor]="eSaleUnitFormKey.Name">
+            {{ 'sale_unit_page.name' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="24" [nzErrorTip]="nameError">
+            <input
+              class="w-full"
+              nzSize="large"
+              nz-input
+              [formControlName]="eSaleUnitFormKey.Name"
+              [id]="eSaleUnitFormKey.Name"
+              [placeholder]="'common.input' | translate"
+              [readonly]="mode === ePageActions.View"
+            />
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'sale_unit_page.name' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+    </form>
+  </div>
+</app-item-detail-master-layout>

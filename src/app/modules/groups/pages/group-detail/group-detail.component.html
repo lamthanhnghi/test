@@ -1,0 +1,92 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbItems">
+  <div class="flex gap-3 lg:justify-end justify-stretch mb-4">
+    <button
+      class="grow lg:grow-0 ant-btn !bg-transparent !border border-red !text-red btn !h-9"
+      nz-button
+      nzType="default"
+      *ngIf="
+        data.contentStatus !== eContentStatuses.AdminReviewing && data.contentStatus !== eContentStatuses.AdminArchived
+      "
+    >
+      {{ 'common.delete' | translate }}
+    </button>
+    <button
+      class="grow lg:grow-0 ant-btn-primary btn"
+      nz-button
+      nzType="primary"
+      *ngIf="data.contentStatus === eContentStatuses.Draft"
+    >
+      {{ 'common.review_request' | translate }}
+    </button>
+    <button
+      class="grow lg:grow-0 ant-btn !bg-main-lighter !border !border-main !h-9 !text-main btn"
+      nz-button
+      nzType="default"
+      *ngIf="
+        data.contentStatus !== eContentStatuses.AdminReviewing &&
+        data.contentStatus !== eContentStatuses.AdminApproved &&
+        data.contentStatus !== eContentStatuses.AdminArchived
+      "
+    >
+      {{ 'common.edit' | translate }}
+    </button>
+    <button
+      class="grow lg:grow-0 ant-btn !bg-main-lighter !border-main !h-9 !text-main btn"
+      nz-button
+      nzType="default"
+      *ngIf="data.contentStatus === eContentStatuses.AdminApproved"
+    >
+      {{ 'common.archive' | translate }}
+    </button>
+    <button
+      class="grow lg:grow-0 ant-btn !bg-main-lighter !border-main !h-9 !text-main btn"
+      nz-button
+      nzType="default"
+      *ngIf="data.contentStatus === eContentStatuses.AdminArchived"
+    >
+      {{ 'common.restore' | translate }}
+    </button>
+  </div>
+  <!--  Info -->
+  <ul class="flex flex-col gap-4 text-default-text-dark">
+    <li class="grid lg:grid-cols-[200px_1fr] grid-cols-[120px_1fr] gap-3">
+      <span class="text-grey">Icon</span>
+      <img [src]="data.thumbnailUrl" alt="" class="w-[44px] h-[44px] object-contain" />
+    </li>
+    <li class="grid lg:grid-cols-[200px_1fr] grid-cols-[120px_1fr] gap-3">
+      <span class="text-grey">Tên danh mục</span>
+      <span>{{ data.name }}</span>
+    </li>
+    <li class="grid lg:grid-cols-[200px_1fr] grid-cols-[120px_1fr] gap-3">
+      <span class="text-grey">Gọi tắt</span>
+      <span>{{ data.shortName }}</span>
+    </li>
+    <li class="grid lg:grid-cols-[200px_1fr] grid-cols-[120px_1fr] gap-3">
+      <span class="text-grey">Mô tả</span>
+      <span>{{ data.desc }}</span>
+    </li>
+    <li class="grid lg:grid-cols-[200px_1fr] grid-cols-[120px_1fr] gap-3">
+      <span class="text-grey">{{ 'common.status' | translate }}</span>
+      <ng-container [ngSwitch]="data.contentStatus">
+        <span *ngSwitchCase="eContentStatuses.AdminPending" class="text-blue">
+          {{ 'enums.content_statuses.admin_pending' | translate }}
+        </span>
+        <span *ngSwitchCase="eContentStatuses.Draft" class="text-grey-default">
+          {{ 'enums.content_statuses.draft' | translate }}
+        </span>
+        <span *ngSwitchCase="eContentStatuses.AdminReviewing" class="text-orange">
+          {{ 'enums.content_statuses.admin_reviewing' | translate }}
+        </span>
+        <span *ngSwitchCase="eContentStatuses.AdminRejected" class="text-red">
+          {{ 'enums.content_statuses.admin_rejected' | translate }}
+        </span>
+        <span *ngSwitchCase="eContentStatuses.AdminApproved" class="text-green">
+          {{ 'enums.content_statuses.admin_approved' | translate }}
+        </span>
+        <span *ngSwitchCase="eContentStatuses.AdminArchived" class="text-grey">
+          {{ 'enums.content_statuses.admin_archived' | translate }}
+        </span>
+      </ng-container>
+    </li>
+  </ul>
+</app-item-detail-master-layout>

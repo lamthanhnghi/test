@@ -1,0 +1,280 @@
+:root {
+  // main colors
+  --main-darkness: #a80051;
+  --main-dark: #db257c;
+  --main-default: #ff60ac;
+  --main-light: #ffb1d6;
+  --main-neutral: #ffd9f0;
+  --main-lighter: #ffebf4;
+  --main-lightest: #fff5f8;
+  --main-lighten: #fff5f8;
+  // blue colors
+  --blue-darkness: #003a6b;
+  --blue-dark: #0068c4;
+  --blue-default: #4a8cef;
+  --blue-light: #7aa9ff;
+  --blue-neutral: #b3d0ff;
+  --blue-lighter: #e6f0ff;
+  // red colors
+  --red-darkness: #5a0000;
+  --red-dark: #a80000;
+  --red-default: #e92323;
+  --red-light: #ff7a7a;
+  --red-neutral: #ffb7b7;
+  --red-lighter: #ffe6e6;
+  // cyan colors
+  --cyan-darkness: #004d5a;
+  --cyan-dark: #0088a9;
+  --cyan-default: #5edfe8;
+  --cyan-light: #a7f1f9;
+  --cyan-neutral: #d6f9fe;
+  --cyan-lighter: #f0feff;
+  // yellow colors
+  --yellow-darkness: #5a4a00;
+  --yellow-dark: #a88a00;
+  --yellow-default: #f9b83b;
+  --yellow-light: #ffd27a;
+  --yellow-neutral: #ffe0b7;
+  --yellow-lighter: #fff0e6;
+  // green colors
+  --green-darkness: #004a00;
+  --green-dark: #008800;
+  --green-default: #44c542;
+  --green-light: #7aff7a;
+  --green-neutral: #b7ffb7;
+  --green-lighter: #e6ffe6;
+  // orange colors
+  --orange-darkness: #5a2a00;
+  --orange-dark: #a85a00;
+  --orange-default: #fb822a;
+  --orange-light: #ffb27a;
+  --orange-neutral: #ffd0b7;
+  --orange-lighter: #ffe6e6;
+  // pink colors
+  --pink-darkness: #5a004a;
+  --pink-dark: #a800a8;
+  --pink-default: #ff66b9;
+  --pink-light: #ffa7e6;
+  --pink-neutral: #ffd0f0;
+  --pink-lighter: #ffe6f8;
+  // grey colors
+  --grey-darkness: #121212;
+  --grey-dark: #333333;
+  --grey-default: #5f5f5f;
+  --grey-light: #808080;
+  --grey-neutral: #b7b7b7;
+  --grey-lighter: #dcdcdc;
+  // background colors
+  --background-default: #f1f1f1;
+  --background-white: #ffffff;
+  --background-black: #000000;
+  // text colors
+  --text-dark: #5f5f5f;
+  --text-white: #959595;
+  --text-black: #000000;
+  --text-default: #555555;
+
+  // main colors
+  --main-darkness-rgb: 168 0 81;
+  --main-dark-rgb: 219 37 124;
+  --main-default-rgb: 255 96 172;
+  --main-light-rgb: 255 177 214;
+  --main-neutral-rgb: 255 217 240;
+  --main-lighter-rgb: 255 235 244;
+  --main-lightest-rgb: 255 245 248;
+  --main-lighten-rgb: 255 245 248;
+
+  // blue colors
+  --blue-darkness-rgb: 0 58 107;
+  --blue-dark-rgb: 0 104 196;
+  --blue-default-rgb: 74 140 239;
+  --blue-light-rgb: 122 169 255;
+  --blue-neutral-rgb: 179 208 255;
+  --blue-lighter-rgb: 230 240 255;
+
+  // red colors
+  --red-darkness-rgb: 90 0 0;
+  --red-dark-rgb: 168 0 0;
+  --red-default-rgb: 233 35 35;
+  --red-light-rgb: 255 122 122;
+  --red-neutral-rgb: 255 183 183;
+  --red-lighter-rgb: 255 230 230;
+
+  // cyan colors
+  --cyan-darkness-rgb: 0 77 90;
+  --cyan-dark-rgb: 0 136 169;
+  --cyan-default-rgb: 94 223 232;
+  --cyan-light-rgb: 167 241 249;
+  --cyan-neutral-rgb: 214 249 254;
+  --cyan-lighter-rgb: 240 254 255;
+
+  // yellow colors
+  --yellow-darkness-rgb: 90 74 0;
+  --yellow-dark-rgb: 168 138 0;
+  --yellow-default-rgb: 249 184 59;
+  --yellow-light-rgb: 255 210 122;
+  --yellow-neutral-rgb: 255 224 183;
+  --yellow-lighter-rgb: 255 240 230;
+
+  // green colors
+  --green-darkness-rgb: 0 74 0;
+  --green-dark-rgb: 0 136 0;
+  --green-default-rgb: 68 197 66;
+  --green-light-rgb: 122 255 122;
+  --green-neutral-rgb: 183 255 183;
+  --green-lighter-rgb: 230 255 230;
+
+  // orange colors
+  --orange-darkness-rgb: 90 42 0;
+  --orange-dark-rgb: 168 90 0;
+  --orange-default-rgb: 251 130 42;
+  --orange-light-rgb: 255 178 122;
+  --orange-neutral-rgb: 255 208 183;
+  --orange-lighter-rgb: 255 230 230;
+
+  // pink colors
+  --pink-darkness-rgb: 90 0 74;
+  --pink-dark-rgb: 168 0 168;
+  --pink-default-rgb: 255 102 185;
+  --pink-light-rgb: 255 167 230;
+  --pink-neutral-rgb: 255 208 240;
+  --pink-lighter-rgb: 255 230 248;
+
+  // grey colors
+  --grey-darkness-rgb: 18 18 18;
+  --grey-dark-rgb: 51 51 51;
+  --grey-default-rgb: 95 95 95;
+  --grey-light-rgb: 128 128 128;
+  --grey-neutral-rgb: 183 183 183;
+  --grey-lighter-rgb: 220 220 220;
+
+  // background colors
+  --background-default-rgb: 241 241 241;
+  --background-white-rgb: 255 255 255;
+  --background-black-rgb: 0 0 0;
+  --background-table-rgb: 251 251 251;
+
+  // text colors
+  --text-dark-rgb: 95 95 95;
+  --text-white-rgb: 149 149 149;
+  --text-black-rgb: 0 0 0;
+  --text-default-rgb: 85 85 85;
+
+  // table
+  --table-highlight: #fbfbfb;
+  --table-highlight-rgb: 251 251 251;
+
+  &.dark-theme {
+    // main colors - darker
+    --main-darkness: #6a002c;
+    --main-dark: #b51763;
+    --main-default: #d84795;
+    --main-light: #ff8dc8;
+    --main-neutral: #ffb7e2;
+    --main-lighter: #ffd6ed;
+    --main-lightest: #ffeaf3;
+    --main-lighten: #ffeaf3;
+
+    // blue colors - darker
+    --blue-darkness: #001f46;
+    --blue-dark: #004c92;
+    --blue-default: #1e4c7f;
+    --blue-light: #3e5e87;
+    --blue-neutral: #6790b8;
+    --blue-lighter: #a9bcd2;
+
+    // red colors - darker
+    --red-darkness: #3a0000;
+    --red-dark: #840000;
+    --red-default: #c41616;
+    --red-light: #ff5858;
+    --red-neutral: #ff8d8d;
+    --red-lighter: #ffcdcd;
+
+    // cyan colors - darker
+    --cyan-darkness: #003e49;
+    --cyan-dark: #0070a1;
+    --cyan-default: #4abebf;
+    --cyan-light: #84cdd2;
+    --cyan-neutral: #b7f1ff;
+    --cyan-lighter: #d4f9ff;
+
+    // yellow colors - darker
+    --yellow-darkness: #4a3d00;
+    --yellow-dark: #8e7500;
+    --yellow-default: #e0892b;
+    --yellow-light: #ffc765;
+    --yellow-neutral: #ffe8a9;
+    --yellow-lighter: #fff5d8;
+
+    // green colors - darker
+    --green-darkness: #003c00;
+    --green-dark: #006c00;
+    --green-default: #36863a;
+    --green-light: #4d9f4d;
+    --green-neutral: #92d692;
+    --green-lighter: #b8ffb8;
+
+    // orange colors - darker
+    --orange-darkness: #4a2500;
+    --orange-dark: #8a4e00;
+    --orange-default: #d8751e;
+    --orange-light: #ffa15e;
+    --orange-neutral: #ffcfa9;
+    --orange-lighter: #ffdfdf;
+
+    // pink colors - darker
+    --pink-darkness: #4a003d;
+    --pink-dark: #840084;
+    --pink-default: #ff4c8f;
+    --pink-light: #ff87c2;
+    --pink-neutral: #ffb7dc;
+    --pink-lighter: #ffe6f1;
+
+    // grey colors - darker
+    --grey-darkness: #0c0c0c;
+    --grey-dark: #282828;
+    --grey-default: #4d4d4d;
+    --grey-light: #666666;
+    --grey-neutral: #8c8c8c;
+    --grey-lighter: #a6a6a6;
+
+    // background colors - darker
+    --background-default: #d1d1d1;
+    --background-white: #c0c0c0;
+    --background-black: #000000;
+    --background-table: #FBFBFB;
+
+    // text colors - darker
+    --text-dark: #4d4d4d;
+    --text-white: #7f7f7f;
+    --text-black: #000000;
+    --default: #555555;
+
+    // table
+    --table-highlight: #fbfbfb;
+    --table-highlight-rgb: 251 251 251;
+  }
+
+  // global styles
+  --default-line-height: 1.2;
+  --header-height: 4rem; // 64px
+  --footer-height: 4rem; // 64px
+  /** breakpoint */
+  --breakpoint-from-pc: 1400px;
+  --breakpoint-to-pc: 1399px;
+  --breakpoint-from-desktop: 1200px;
+  --breakpoint-to-desktop: 1199px;
+  --breakpoint-from-laptop: 992px;
+  --breakpoint-to-laptop: 991px;
+  --breakpoint-from-tablet: 768px;
+  --breakpoint-to-tablet: 767px;
+  --breakpoint-from-mobile: 576px;
+  --breakpoint-to-mobile: 575px;
+  /** image ratio */
+  --profile-cover-ratio: 852 / 229;
+
+  @media screen and (max-width: 1023px) {
+    --footer-height: 0rem;
+  }
+}

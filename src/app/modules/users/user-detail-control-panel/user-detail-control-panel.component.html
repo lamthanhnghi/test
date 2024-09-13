@@ -1,0 +1,64 @@
+<div class="p-5">
+  <h3 class="text-default-text mb-5">Tài khoản và mật khẩu</h3>
+  <div class="grid lg:grid-cols-2 gap-5">
+    <div>
+      <div class="flex justify-between items-center gap-4 mb-2">
+        <div class="group-title">{{ 'user_page.name' | translate }}</div>
+      </div>
+      <nz-input-group class="!bg-white" [nzSuffix]="suffixTemplate">
+        <input nz-input readonly [value]="data?.adminFullName || ''" />
+      </nz-input-group>
+    </div>
+    <div>
+      <div class="flex justify-between items-center gap-4 mb-2">
+        <div class="group-title">{{ 'user_page.code' | translate }}</div>
+      </div>
+      <nz-input-group class="!bg-white" [nzSuffix]="suffixTemplate">
+        <input nz-input readonly [value]="data?.adminCode || ''" />
+      </nz-input-group>
+    </div>
+    <div>
+      <div class="flex justify-between items-center gap-4 mb-2">
+        <div class="group-title">{{ 'user_page.login_id' | translate }}</div>
+      </div>
+      <nz-input-group class="!bg-white">
+        <input disabled nz-input [value]="data?.adminCode" />
+      </nz-input-group>
+    </div>
+    <div>
+      <div class="flex justify-between items-center gap-4 mb-2">
+        <div class="group-title">{{ 'user_page.role' | translate }}</div>
+      </div>
+      <nz-input-group class="!bg-white" [nzSuffix]="suffixTemplate">
+        <div class="!flex items-center grow">
+          <span>{{ data?.adminRole | enumKey: 'roles' | translate }}</span>
+        </div>
+      </nz-input-group>
+    </div>
+    <div>
+      <div class="flex items-center gap-4">
+        <div class="group-title">{{ 'user_page.status' | translate }}</div>
+        <p class="text-center">
+          <app-account-status-label [status]="data?.accountStatus"></app-account-status-label>
+        </p>
+      </div>
+    </div>
+    <ng-template #suffixTemplate>
+      <button type="button" nz-button nzType="link" (click)="edit()">
+        <app-icon name="pencil-simple-line" size="20"></app-icon>
+      </button>
+    </ng-template>
+  </div>
+  <div *ngIf="isSuperAdmin$" class="w-[420px] max-w-full flex gap-5 mx-auto p-5 justify-center">
+    <button *ngIf="data?.accountStatus !== eAccountStatus.Hidden && data?.accountStatus !== eAccountStatus.Disabled" (click)="updateStatus(eAccountStatus.Hidden)" class="grow ant-btn !bg-transparent !border border-red !text-red btn !h-9" nz-button nzType="default">
+      {{ 'user_page.hide_account' | translate }}
+    </button>
+    <!--    <button class="grow ant-btn-primary btn !h-9" nz-button nzType="primary"-->
+    <!--    >-->
+    <!--      {{ 'Mở tài khoản' | translate }}-->
+    <!--    </button>-->
+    <button *ngIf="data?.accountStatus !== eAccountStatus.Disabled" (click)="updateStatus(eAccountStatus.Disabled)" class="grow ant-btn-primary btn !h-9" nz-button nzType="primary">
+      {{ 'user_page.block_account' | translate }}
+    </button>
+  </div>
+</div>

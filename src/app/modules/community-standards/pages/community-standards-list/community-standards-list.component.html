@@ -1,0 +1,101 @@
+<app-item-list-master-layout
+  (searchInputChange)="onSearchKeywordChange($event)"
+  [heading]="(title$ | async)! | translate"
+  [menuItems]="menuItems"
+>
+  <section class="rounded flex flex-col items-stretch lg:px-5">
+    <div class="flex-grow lg:block hidden">
+      <div class="flex justify-end gap-4 mb-4">
+        <button [routerLink]="RouteUtils.GeneralSettingPage.Create" nz-button nzShape="circle" nzType="primary">
+          <span nz-icon nzType="plus"></span>
+        </button>
+      </div>
+      <nz-table
+        [nzData]="data" [nzScroll]="{ x: '1280px', y: 'calc(100dvh - var(--footer-height) - 358px)' }"
+        [nzShowPagination]="false" class="mc-table"
+        nzBordered
+      >
+        <thead>
+        <tr>
+          <th nzAlign="center" nzColumnKey="label" nzWidth="10rem">
+            <span class="font-semibold">{{ 'common.bad_word' | translate }}</span>
+          </th>
+          <th nzColumnKey="updatedAt" nzWidth="20ch">
+            <span class="font-semibold">{{ 'common.updated_date' | translate }}</span>
+          </th>
+          <th nzColumnKey="shouldShowSKU" nzWidth="10rem">
+            <span class="font-semibold">{{ 'common.status' | translate }}</span>
+          </th>
+          <th nzWidth="8rem">{{ 'common.actions' | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of data">
+          <tr>
+            <td nzAlign="center">
+              {{ item.word }}
+            </td>
+            <td nzAlign="center">
+              <div>{{ item.updatedDate | date: 'shortDate' }}</div>
+            </td>
+            <td nzAlign="center">
+              <div class="flex justify-center items-center">
+                <app-content-status-label [status]="item.contentStatus"></app-content-status-label>
+              </div>
+            </td>
+            <td nzAlign="center">
+              <div class="flex gap-3 justify-center">
+                @if (item.contentStatus === eContentStatuses.AdminPending && isReviewer) {
+                  <button
+                    *appRole="[eRoles.SuperAdmin, eRoles.OperationAdmin]"
+                    (click)="reviewing(item)"
+                    class="!text-[14px] ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn"
+                    nz-button
+                    nzType="default"
+                  >
+                    {{ 'enums.content_statuses.admin_reviewing' | translate }}
+                  </button>
+                }
+                <button
+                  [routerLink]="item.badWordID"
+                  class="ant-btn-link flex justify-center items-center"
+                  nzType="link"
+                >
+                  {{ 'common.view' | translate }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="block lg:hidden">
+      <div class="flex justify-between p-4 bg-white">
+        <div></div>
+        <div class="flex gap-3 items-center">
+          <button
+            class="flex items-center justify-center !p-0 !border-none text-main rounded-full"
+            nz-button
+            nzShape="circle"
+          >
+            <app-icon name="import" size="24"></app-icon>
+          </button>
+          <button nz-button nzShape="circle" nzSize="small" nzType="primary">
+            <span nz-icon nzType="plus"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <nz-pagination
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange()"
+      [(nzPageIndex)]="filterObject.pageIndex"
+      [(nzPageSize)]="filterObject.pageSize"
+      [nzPageSizeOptions]="[10, 20, 30, 40, 50]"
+      [nzTotal]="filterObject.total"
+      nzResponsive
+      nzShowSizeChanger
+    ></nz-pagination>
+  </section>
+</app-item-list-master-layout>

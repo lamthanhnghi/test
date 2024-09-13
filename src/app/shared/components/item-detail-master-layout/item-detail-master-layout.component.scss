@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+}
+
+::ng-deep {
+  .detail-master-layout-breadcrumb {
+    nz-breadcrumb-item:not(:nth-last-child(2)) {
+      .ant-breadcrumb-separator {
+        @apply text-main;
+      }
+    }
+
+    .ant-breadcrumb-separator {
+      @apply mx-1;
+    }
+  }
+}

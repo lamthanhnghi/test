@@ -1,0 +1,229 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="mb-5 flex items-center justify-between gap-4 lg:flex-row flex-col">
+      <div *ngIf="mode !== ePageActions.Create" class="flex items-center gap-3 text-sm">
+        <app-content-status-label-tag [status]="data?.contentStatus"></app-content-status-label-tag>
+        <span>Ngày cập nhật <span class="font-semibold">{{data?.updatedDate | date: 'shortDate'}}</span></span>
+      </div>
+      <div  class="max-desktop:w-full grow flex gap-3 lg:justify-end lg:order-last">
+        @if (mode !== ePageActions.View) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+            nz-button
+            (click)="cancel()"
+          >
+            {{ 'common.cancel' | translate }}
+          </button>
+        }
+        @if (mode === ePageActions.View) {
+
+          <!-- todo: un hide when integrate approval flow -->
+            <!--@if (data?.contentStatus === eContentStatuses.New) {-->
+            <!--  <button-->
+            <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"-->
+            <!--    nz-button-->
+            <!--    nzType="primary"-->
+            <!--    (click)="sendApproval()"-->
+            <!--  >-->
+            <!--    {{ 'common.send_for_review' | translate }}-->
+            <!--  </button>-->
+            <!--}-->
+
+          @if (data?.contentStatus === eContentStatuses.AdminReviewing
+          || data?.contentStatus === eContentStatuses.AdminRejected
+          || data?.contentStatus === eContentStatuses.AdminPending) {
+            <button
+              class="lg:flex-grow-0 flex-grow ant-btn btn !bg-transparent !border-red !border !text-red !text-[14px] !h-9 min-w-24"
+              nz-button
+              nzType="default"
+              nzDanger
+              (click)="delete()"
+            >
+              {{ 'common.delete' | translate }}
+            </button>
+          }
+
+          @if (data?.contentStatus === eContentStatuses.AdminArchived) {
+            <button
+              class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+              nz-button
+              nzType="default"
+              (click)="restore()"
+            >
+              {{ 'common.restore' | translate }}
+            </button>
+          }
+
+<!--          @if (data?.contentStatus === eContentStatuses.AdminApproved) {-->
+<!--            <button-->
+<!--              class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"-->
+<!--              nz-button-->
+<!--              nzType="default"-->
+<!--              (click)="archive()"-->
+<!--            >-->
+<!--              {{ 'common.archive' | translate }}-->
+<!--            </button>-->
+<!--          }-->
+
+          @if (data?.contentStatus !== eContentStatuses.AdminReviewing
+          && data?.contentStatus !== eContentStatuses.AdminApproved
+          && data?.contentStatus !== eContentStatuses.AdminArchived) {
+            <button
+              class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+              nz-button
+              nzType="default"
+              (click)="edit()"
+            >
+              {{ 'common.edit' | translate }}
+            </button>
+          }
+        }
+        @if ([ePageActions.Edit, ePageActions.Create].includes(mode)) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn-primary !border !h-9 btn !text-[14px] min-w-24"
+            nz-button
+            nzType="default"
+            (click)="submit()"
+          >
+            {{ 'common.save' | translate }}
+          </button>
+        }
+      </div>
+    </div>
+    <form  nz-form [nzNoColon]="mode !== ePageActions.View" [formGroup]="form" nzLayout="vertical">
+      <!--      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">-->
+      <!--        <nz-form-item nz-col nzSpan=12>-->
+      <!--          <nz-form-label-->
+      <!--            [isShow]="true"-->
+      <!--            mcRequired-->
+      <!--            nzLabelAlign="left" nzLabelWrap [nzSm]="24" [nzFor]="eSaleUnitFormKey.Name">-->
+      <!--            {{ 'sale_unit_page.name' | translate }}-->
+      <!--          </nz-form-label>-->
+      <!--          <nz-form-control [nzSm]="24" [nzErrorTip]="nameError">-->
+      <!--            <input-->
+      <!--              class="w-full"-->
+      <!--              nzSize="large"-->
+      <!--              nz-input-->
+      <!--              [formControlName]="eSaleUnitFormKey.Name"-->
+      <!--              [id]="eSaleUnitFormKey.Name"-->
+      <!--              [placeholder]="'common.input' | translate"-->
+      <!--              [readonly]="mode === ePageActions.View"-->
+      <!--            />-->
+      <!--            <ng-template #nameError let-control>-->
+      <!--              <ng-container *ngIf="control.hasError('required')">-->
+      <!--                {{ 'common.please_input' | translate }} {{ 'sale_unit_page.name' | translate }}-->
+      <!--              </ng-container>-->
+      <!--            </ng-template>-->
+      <!--          </nz-form-control>-->
+      <!--        </nz-form-item>-->
+      <!--      </div>-->
+      <div nz-row [nzGutter]="[16,0]">
+
+        <div nz-col  nzLg="12" nzXs="24">
+          <nz-form-item >
+            <nz-form-label mcRequired
+                           [isShow]="mode !== ePageActions.View"
+                           nzLabelAlign="left" nzLabelWrap [nzFor]="eAttributeFormKeys.Name">
+              {{ 'Tên phân loại' | translate }}
+            </nz-form-label>
+            <nz-form-control  [nzErrorTip]="nameError">
+              <nz-input-group [appReadonlySelect]="mode !== ePageActions.Create">
+                <input
+                  class="w-full"
+                  nzSize="large"
+                  nz-input
+                  [formControlName]="eAttributeFormKeys.Name"
+                  [id]="eAttributeFormKeys.Name"
+                  [placeholder]="'common.input' | translate"
+                  [readonly]="mode === ePageActions.View"
+
+                />
+              </nz-input-group>
+              <ng-template #nameError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  <p class="mb-3">
+                    {{ 'common.please_input' | translate }} {{ "Tên phân loại" | translate }}
+                  </p>
+                </ng-container>
+                <ng-container *ngIf="control.hasError('duplicated')">
+                  <p class="mb-3">
+                    {{ "error_code.MSG0244" | translate }}
+                  </p>
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col  nzLg="12" nzXs="24" >
+          <nz-form-item >
+            <nz-form-label mcRequired
+                           [isShow]="mode !== ePageActions.View"
+                           nzLabelAlign="left" nzLabelWrap [nzFor]="eAttributeFormKeys.Categories">
+              {{ 'Danh mục' | translate }}
+            </nz-form-label>
+            <nz-form-control *ngIf="mode !== ePageActions.View">
+              <nz-select
+                [class.ant-select-status-error]="form.dirty && form.controls[eAttributeFormKeys.Categories].hasError('requiredArray')"
+                [compareWith]="compareCategory"
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="selectedCategories"
+                nzMode="multiple"
+                (ngModelChange)="setCategory($event)"
+                [nzPlaceHolder]="'form.select' | translate"
+                [appReadonlySelect]="mode === ePageActions.View"
+                (nzOnSearch)="productCategorySelection.searchDebounce$.next($event)"
+                [nzShowSearch]="true"
+                nzServerSearch
+                [nzLoading]="productCategorySelection.isLoading"
+                (nzScrollToBottom)="productCategorySelection.onLoadMore()"
+                [nzDropdownRender]="renderTemplate"
+                [nzCustomTemplate]="selectTemplate"
+                class="multiple-select-with-selected-tags"
+                nzDropdownClassName="multiple-select-with-selected-tags-dropdown"
+              >
+
+                @for (item of productCategorySelection?.data ?? [] ; track item.productGroupID) {
+                  <nz-option
+                    [nzLabel]="item.categoryName!"
+                    [nzValue]="item"
+                  >
+                  </nz-option>
+                }
+                <ng-template #renderTemplate>
+                  <div *ngIf="productCategorySelection.isLoading">
+                    <nz-spin></nz-spin>
+                  </div>
+                </ng-template>
+                <ng-template #selectTemplate>
+                  <div class="ant-select-selection-item-content">
+                    <span class="ant-select-selection-placeholder">{{'form.select' | translate}}</span>
+                  </div>
+                </ng-template>
+              </nz-select>
+              <ng-container *ngIf="form.dirty && form.controls[eAttributeFormKeys.Categories].hasError('requiredArray')">
+                <p class="mb-3 text-red">
+                  {{ 'common.please_select' | translate }} {{ 'Danh mục' | translate }}
+                </p>
+              </ng-container>
+            </nz-form-control>
+
+            <div>
+              @for (category of form.get(eAttributeFormKeys.Categories)?.value ?? [] ; track category) {
+                <nz-tag
+                  [ngClass]="{'mt-4': mode !== ePageActions.View, 'mt-1.5 ': mode === ePageActions.View}"
+                  class="inline-flex justify-start items-center h-10 rounded gap-2 px-3 text-14px border-grey-lighter bg-transparent"
+                  [nzMode]="(mode !== ePageActions.View) ? 'closeable' : 'default'"
+                  (nzOnClose)="removeCategory(category.productCategoryID!)"
+                >
+                  {{ category.productCategoryName || category.categoryName }}
+                </nz-tag>
+              }
+            </div>
+          </nz-form-item>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</app-item-detail-master-layout>

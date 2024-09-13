@@ -1,0 +1,11 @@
+<article class="flex flex-col justify-start px-8 items-center animated-fade-in-up relative tablet:w-[26rem] w-full">
+  <section class="flex items-center justify-center flex-col gap-8 p-4">
+    <img class="w-[96px] aspect-square object-contain" src="assets/images/logo.png" alt="logo-main" />
+    <h1 class="text-main text-center font-semibold text-[32px] leading-8">
+      {{ 'account_page.heading' | translate }}
+    </h1>
+  </section>
+  <section class="w-full mt-4">
+    <ng-content></ng-content>
+  </section>
+</article>

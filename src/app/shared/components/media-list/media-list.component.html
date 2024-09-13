@@ -1,0 +1,22 @@
+<ul class="flex gap-4">
+  <ng-container *ngFor="let i of items">
+    <li
+      class="aspect-square w-[120px] h-[120px] rounded border border-grey-lighter overflow-hidden transition hover:border-main"
+    >
+      <img
+        *ngIf="i.mediaFileType === 'image'"
+        class="object-cover w-full h-full"
+        nz-image
+        [nzSrc]="i.linkString || ''"
+      />
+      <a
+        *ngIf="i.mediaFileType === 'pdf'"
+        target="_blank"
+        [href]="i.linkString"
+        class="flex items-center justify-center w-fulll h-full"
+      >
+        <app-icon name="color:file-pdf" size="56"></app-icon>
+      </a>
+    </li>
+  </ng-container>
+</ul>

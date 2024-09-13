@@ -1,0 +1,7 @@
+<ckeditor
+  [editor]="editor"
+  [(ngModel)]="value"
+  (ready)="onReady($event)"
+  (change)="onChange(value)"
+  [disabled]="isDisabled"
+></ckeditor>

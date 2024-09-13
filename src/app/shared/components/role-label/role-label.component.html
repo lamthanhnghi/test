@@ -1,0 +1,20 @@
+<ng-container [ngSwitch]="type">
+  <span *ngSwitchCase="eRoles.SuperAdmin">
+    {{ 'Super Admin' | translate }}
+  </span>
+  <span *ngSwitchCase="eRoles.OperationAdmin">
+    {{ 'Operation Admin' | translate }}
+  </span>
+  <span *ngSwitchCase="eRoles.DataAdmin">
+    {{ 'Data Admin' | translate }}
+  </span>
+  <span *ngSwitchCase="eRoles.CustomerServiceAdmin">
+    {{ 'Customer Service Admin' | translate }}
+  </span>
+  <span *ngSwitchCase="eRoles.AccountantAdmin">
+    {{ 'Accountant Admin' | translate }}
+  </span>
+  <span *ngSwitchCase="eRoles.ShippingAdmin">
+    {{ 'Shipping Admin' | translate }}
+  </span>
+</ng-container>

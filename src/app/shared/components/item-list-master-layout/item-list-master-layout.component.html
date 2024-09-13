@@ -1,0 +1,63 @@
+<div
+  class="lg:px-10 pb-5 bg-background min-h-[calc(100dvh_-_var(--footer-height)_-_var(--header-height))] flex flex-col items-stretch">
+  <div class="flex justify-start items-center gap-2 lg:px-0 px-5 py-5 h-[4.75rem]" *ngIf="crumbs?.length">
+    <app-icon nz-icon name="caret-left" size="20" routerLink="../"></app-icon>
+    <nz-breadcrumb nzSeparator="/">
+      <ng-container *ngFor="let c of crumbs">
+        <nz-breadcrumb-item>
+          <button
+            nz-button
+            nzType="link"
+            [routerLink]="c.link"
+            [ngClass]="{ '!text-default-text !hover:text-default-text pointer-events-none': c.disabled }"
+          >
+            {{ c.title | translate }}
+          </button>
+        </nz-breadcrumb-item>
+      </ng-container>
+    </nz-breadcrumb>
+  </div>
+  <div class="bg-white lg:bg-transparent lg:px-0 px-5 flex flex-col lg:flex-row lg:justify-between py-5 items-center" *ngIf="!crumbs?.length">
+    <h2 class="hidden lg:block text-xl leading-6 font-semibold">{{ heading | translate }}</h2>
+    <nz-input-group
+      [nzPrefix]="prefixTpl"
+      class="w-full lg:max-w-[300px] lg:!bg-white !h-9 !min-h-9"
+      (keyup)="onInputChange($event)"
+    >
+      <input mcAutocompleteOff [placeholder]="'common.search' | translate" nz-input type="text" class="lg:!bg-white" />
+      <ng-template #prefixTpl>
+        <app-icon name="search" size="16"></app-icon>
+      </ng-template>
+    </nz-input-group>
+  </div>
+  <div class="flex-col lg:flex-row flex gap-5 flex-grow max-w-screen">
+    <div
+      class="lg:block hidden bg-white p-4 shadow rounded w-80 overflow-y-auto flex-shrink-0"
+      [ngClass]="{ 'max-h-[calc(100dvh_-_var(--footer-height)_-_var(--header-height)_-_6rem)]': layout === eLayouts.Fixed }"
+    >
+      <app-main-menu *ngIf="menuStyle === 'normal'" [menuItems]="menuItems"></app-main-menu>
+      <app-side-menu-master *ngIf="menuStyle === 'multiple'" [menuItems]="menuItems">></app-side-menu-master>
+    </div>
+    <div class="grow lg:max-w-[calc(100%_-_21.25rem)]">
+      <ng-template #content>
+        <ng-content></ng-content>
+      </ng-template>
+      <div *ngIf="shouldBeInSection" class="lg:shadow rounded py-5 pt-0 lg:pt-5 lg:bg-white min-h-[100%]">
+        <div class="block lg:hidden bg-white">
+          <app-tab-menu [menuItems]="menuItems"></app-tab-menu>
+        </div>
+        <div>
+          <ng-container *ngTemplateOutlet="content"></ng-container>
+        </div>
+      </div>
+      <div *ngIf="!shouldBeInSection">
+        <div class="block lg:hidden bg-white">
+          <app-tab-menu [menuItems]="menuItems"></app-tab-menu>
+        </div>
+        <div>
+          <ng-container *ngTemplateOutlet="content"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

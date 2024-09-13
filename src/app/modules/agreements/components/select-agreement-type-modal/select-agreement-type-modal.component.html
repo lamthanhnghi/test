@@ -1,0 +1,25 @@
+<form [formGroup]="form" nz-form id="feedbackForm" (ngSubmit)="submit()">
+  <div *nzModalTitle>{{ 'common.select' | translate }} {{ 'common.agreement_type' | translate }}</div>
+  <nz-form-item class="row-content gap-4">
+    <nz-form-control [nzXs]="24">
+      <nz-radio-group formControlName="agreementType" class="w-full flex justify-center items-center">
+        <div nz-radio [nzValue]="eAgreementTypes.User" class="flex-1">
+          {{ eAgreementTypes.User | enumKey: 'agreement_types' | translate }}
+        </div>
+        <div nz-radio [nzValue]="eAgreementTypes.Seller" class="flex-1">
+          {{ eAgreementTypes.Seller | enumKey: 'agreement_types' | translate }}
+        </div>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <div *nzModalFooter>
+    <div class="flex justify-stretch gap-5">
+      <button class="flex-1" nz-button nzType="default" (click)="modalRef.close(undefined)">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button class="flex-1 !ml-0" nz-button nzType="primary" form="feedbackForm">
+        {{ 'common.continue' | translate }}
+      </button>
+    </div>
+  </div>
+</form>

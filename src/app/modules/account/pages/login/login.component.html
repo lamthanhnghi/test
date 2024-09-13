@@ -1,0 +1,80 @@
+<app-account-master-layout heading="account_page.login">
+  <form class="w-full" nz-form nzLayout="horizontal" [formGroup]="form" (ngSubmit)="login()">
+    <nz-form-item class="auth-input mb-4 style-filled">
+      <nz-form-control
+        [nzErrorTip]="loginError"
+        class="w-full"
+        [nzValidateStatus]="form.controls[LoginFormKeys.UserLogin] | ctrlValidateStatus"
+      >
+        <nz-input-group>
+          <input
+            nz-input
+            mcAutocompleteOff
+            mcRequired
+            [placeholder]="'form.input_phone_number_or_email' | translate"
+            type="text"
+            [formControlName]="LoginFormKeys.UserLogin"
+          />
+        </nz-input-group>
+        <ng-template #loginError let-control>
+          <ng-container *ngIf="control.hasError('required'); else invalidEmailOrPhone">
+            {{ 'form.please_input' | translate }} {{ 'form.email' | translate | lowercase }}
+          </ng-container>
+          <ng-template #invalidEmailOrPhone>
+            <ng-container *ngIf="control.hasError('phoneOrMailPattern')">
+              {{ 'form.email' | translate }} {{ 'form.invalid' | translate | lowercase }}
+            </ng-container>
+          </ng-template>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item class="mb-0 style-filled">
+      <nz-form-control
+        [nzSpan]="8"
+        class="auth-input w-full"
+        [nzErrorTip]="pwdErrors"
+        [nzValidateStatus]="form.controls[LoginFormKeys.Password] | ctrlValidateStatus"
+      >
+        <nz-input-group [nzSuffix]="suffixTemplate">
+          <input
+            nz-input
+            mcAutocompleteOff
+            mcRequired
+            [placeholder]="'form.password' | translate"
+            [type]="passwordVisible ? 'text' : 'password'"
+            [formControlName]="LoginFormKeys.Password"
+          />
+          <ng-template #suffixTemplate>
+            <app-icon
+              classes="cursor-pointer"
+              size="20x20"
+              color="text-grey"
+              [name]="passwordVisible ? 'eye-solid-slash' : 'eye-solid'"
+              (click)="passwordVisible = !passwordVisible"
+            ></app-icon>
+          </ng-template>
+          <ng-template #pwdErrors let-control>
+            <ng-container *ngIf="control.hasError('required'); else passwordPattern">
+              {{ 'form.please_input' | translate }} {{ 'form.password' | translate | lowercase }}
+            </ng-container>
+            <ng-template #passwordPattern>
+              <ng-container *ngIf="control.hasError('passwordPattern')">
+                {{ 'form.password' | translate }} {{ 'form.must_be_password_pattern' | translate | lowercase }}
+              </ng-container>
+            </ng-template>
+          </ng-template>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <div class="text-center w-full mt-2">
+      <a nz-button nzType="link" [routerLink]="['../', RouteUtils.AccountPage.ForgotPassword]" type="button">
+        {{ 'account_page.forgot_password' | translate }}
+      </a>
+    </div>
+    <div class="flex justify-center">
+      <button class="mt-6 ant-btn-warning w-full max-w-[140px]" nz-button nzSize="large" nzType="primary">
+        {{ 'account_page.login' | translate }}
+      </button>
+    </div>
+  </form>
+</app-account-master-layout>

@@ -1,0 +1,23 @@
+export const config = {
+  production: false,
+  api_url: 'https://devapi.mulstore.smatez.com/api/kosmez-portal',
+  api_url2: 'https://devapi.mulstore.smatez.com/api',
+  connect_api_url: 'https://devapi.mulstore.smatez.com/api/kosmez-connect',
+  appName: 'app_config.app_name',
+  phone: '0918999888',
+  email: 'abc@gmail.com',
+  office: 'app_config.office',
+  office_map: 'https://maps.app.goo.gl/1hbnzzSHFHZTadJE9',
+  headOffice: 'app_config.head_office',
+  headOffice_map: 'https://maps.app.goo.gl/1hbnzzSHFHZTadJE9',
+  firebaseConfig: {
+    apiKey: 'AIzaSyBINuJc-gIxgSoWSqCaJEphDlKwv-cmtiM',
+    authDomain: 'cosmeb-4458f.firebaseapp.com',
+    projectId: 'cosmeb-4458f',
+    storageBucket: 'cosmeb-4458f.appspot.com',
+    messagingSenderId: '288631391147',
+    appId: '1:288631391147:web:c563b57e36820e3c50c8ee',
+    measurementId: 'G-C6TBSG0D4G',
+    vapidKey: 'BNArV17LPi8WkS-LagNaAsG_Q8AQ2Mi8yz8tZgZRFx77AazW1dSdNaer7MCh5ZXn7mvK96JRL0SUGeaUdxelfkU',
+  },
+};

@@ -1,0 +1,58 @@
+<article class="relative h-full main-layout-container">
+  <div class="tablet:!hidden bg-background-white">
+    <button class="btn-icon" nz-button nzType="default" (click)="drawerOpen = !drawerOpen">
+      <app-icon name="three-line-horizontal" size="24" class="animated-fade-in"></app-icon>
+    </button>
+  </div>
+  <!-- heading section -->
+  <!-- <header class="flex justify-between items-center h-16 px-5 w-full top-16 bg-background border-b"> -->
+  <!--   <div class="flex justify-start items-center gap-2"> -->
+  <!--     <button class="btn-icon tablet:!hidden" nz-button nzType="default" (click)="drawerOpen = !drawerOpen"> -->
+  <!--       <app-icon name="three-line-horizontal" size="24" class="animated-fade-in"></app-icon> -->
+  <!--     </button> -->
+  <!--     <button nz-button nzType="link"> -->
+  <!--       <app-icon nz-icon name="caret-left" size="20" routerLink="../"></app-icon> -->
+  <!--       <nz-breadcrumb> -->
+  <!--         <nz-breadcrumb-item>Home</nz-breadcrumb-item> -->
+  <!--         <nz-breadcrumb-item>List</nz-breadcrumb-item> -->
+  <!--         <nz-breadcrumb-item>App</nz-breadcrumb-item> -->
+  <!--       </nz-breadcrumb> -->
+  <!--     </button> -->
+  <!--   </div> -->
+  <!--   <ng-content select="[layoutHeaderRight]"></ng-content> -->
+  <!-- </header> -->
+
+  <!-- main content section -->
+  <section
+    class="main-content-section px-16 pt-5 pb-12 bg-background"
+    [class.scroll-content]="scrollMode === 'content'"
+  >
+    <nz-drawer
+      nzWrapClassName="side-menu-drawer"
+      nzWidth="min(80vw, 400px)"
+      [nzClosable]="false"
+      [nzVisible]="drawerOpen"
+      nzPlacement="left"
+      [nzCloseOnNavigation]="true"
+      (nzOnClose)="toggleDrawer()"
+    >
+      <ng-container *nzDrawerContent>
+        <app-side-menu [menuItems]="menuItems" (itemClicked)="closeDrawer()"></app-side-menu>
+      </ng-container>
+    </nz-drawer>
+    <nz-layout class="inner-layout h-full items-stretch gap-5 bg-transparent">
+      <nz-sider
+        nzWidth="26rem"
+        nzTheme="light"
+        class="h-full !bg-background-white rounded-sm"
+        [nzCollapsedWidth]="0"
+        nzBreakpoint="md"
+      >
+        <app-side-menu [menuItems]="menuItems" (itemClicked)="closeDrawer()"></app-side-menu>
+      </nz-sider>
+      <nz-content class="inner-content p-5 bg-background-white rounded-sm">
+        <!-- <ng-content select="[mcContent]"></ng-content> -->
+      </nz-content>
+    </nz-layout>
+  </section>
+</article>

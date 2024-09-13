@@ -1,0 +1,79 @@
+<section class="w-full h-full py-6 px-10 max-tablet:p-5 overflow-y-auto overflow-x-hidden animated-fade-in-up">
+  <!--  <div-->
+  <!--    class="mb-10 max-tablet:mb-5 ml-auto grid grid-cols-3 gap-10 max-desktop:grid-cols-2 max-mobile:grid-cols-1 max-mobile:gap-5"-->
+  <!--  >-->
+  <!--    <nz-input-group [nzPrefix]="prefixTpl" class="w-full lg:!bg-white !h-9 !min-h-9 col-start-3">-->
+  <!--      <input [formControl]="searchCtrl" mcAutocompleteOff [placeholder]="'common.search' | translate" nz-input-->
+  <!--             type="text" class="lg:!bg-white" />-->
+  <!--      <ng-template #prefixTpl>-->
+  <!--        <app-icon name="search" size="16"></app-icon>-->
+  <!--      </ng-template>-->
+  <!--    </nz-input-group>-->
+  <!--  </div>-->
+  <div class="grid grid-cols-4 gap-5 max-desktop:grid-cols-2 max-mobile:grid-cols-1 max-mobile:gap-5">
+    <a
+      *ngFor="let item of menuItems | search : ['title'] : (searchTerm$ | async)!"
+      [ngClass]="{ '!bg-white/25 pointer-events-none': item['disabled'] || item?.link?.includes('#') }"
+      [routerLink]="item.link"
+      class="rounded-lg shadow-sm bg-background-white cursor-pointer hover:scale-101 hover:shadow-lg transition-all duration-500 p-4"
+    >
+      <div class="flex flex-row justify-start items-stretch gap-4">
+        <app-icon
+          [name]="item.icon!"
+          classes="w-10 h-10 text-104px max-tablet:w-20 max-tablet:h-20 max-tablet:text-80px"
+          color="text-main"
+        ></app-icon>
+        <div class="flex flex-col justify-center grow">
+          <h2 class="font-normal text-base text-grey-darkness">{{ item.title | translate }}</h2>
+          <!--          <ng-container *ngIf="!!item.infoItems?.length">-->
+          <!--            <ng-container *ngFor="let info of item.infoItems">-->
+          <!--              <div class="flex flex-row justify-between items-center gap-1">-->
+          <!--                <span class="line-clamp-1 break-word">{{ info.title | translate }}</span>-->
+          <!--                <span [ngClass]="{ 'font-semibold': true, 'text-green': info.type === 'green' }">{{ info.count }}</span>-->
+          <!--              </div>-->
+          <!--            </ng-container>-->
+          <!--          </ng-container>-->
+        </div>
+      </div>
+    </a>
+  </div>
+  <!-- <mulstore-base-footer class="max-mobile:block hidden mt-10 w-screen -mx-5 -mb-5"></mulstore-base-footer> -->
+</section>
+
+<!-- <menu nz-menu nzMode="inline" class="mc-main-menu py-4"> -->
+<!--   <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menuItems }"></ng-container> -->
+<!--   <ng-template #menuTpl let-menus> -->
+<!--     <ng-container *ngFor="let menu of menus"> -->
+<!--       <li -->
+<!--         #menuItem -->
+<!--         *ngIf="!menu?.children?.length" -->
+<!--         nz-menu-item -->
+<!--         [nzPaddingLeft]="menu.level * 24" -->
+<!--         [nzMatchRouter]="true" -->
+<!--         [id]="menu.id" -->
+<!--       > -->
+<!--         <a [routerLink]="menu.link" [queryParams]="menu['queryParams']"> -->
+<!--           <span>{{ menu.title | translate }}</span> -->
+<!--         </a> -->
+<!--       </li> -->
+<!--       <li -->
+<!--         #subMenu -->
+<!--         *ngIf="menu?.children?.length" -->
+<!--         nz-submenu -->
+<!--         [nzPaddingLeft]="menu.level * 24" -->
+<!--         [nzTitle]="subTitleTpl" -->
+<!--         [ngClass]="{ 'mc-submenu-active': isActive(menu) }" -->
+<!--       > -->
+<!--         <ng-template #subTitleTpl> -->
+<!--           <div class="h-6 leading-6 px-0 flex items-center gap-3"> -->
+<!--             <app-icon [name]="menu.icon" size="24"></app-icon> -->
+<!--             <span class="font-semibold line-clamp-1">{{ menu.title | translate }}</span> -->
+<!--           </div> -->
+<!--         </ng-template> -->
+<!--         <ul> -->
+<!--           <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"></ng-container> -->
+<!--         </ul> -->
+<!--       </li> -->
+<!--     </ng-container> -->
+<!--   </ng-template> -->
+<!-- </menu> -->

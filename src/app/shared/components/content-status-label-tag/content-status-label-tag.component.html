@@ -1,0 +1,48 @@
+<div
+  [ngClass]="[
+    'font-semibold py-1 px-3 rounded whitespace-nowrap',
+    status === eContentStatuses.AdminRejected ? 'bg-[#FEDCDC]' : '',
+    status === eContentStatuses.AdminHidden ? 'bg-[#FEDCDC]' : '',
+    status === eContentStatuses.SellerHidden ? 'bg-[#FEDCDC]' : '',
+    status === eContentStatuses.AdminReviewing ? 'bg-[#FFF1E7]' : '',
+    status === eContentStatuses.AdminApproved ? 'bg-[#E0F5DF]' : '',
+    status === eContentStatuses.AdminArchived ? 'bg-grey-neutral' : '',
+    status === eContentStatuses.Draft ? 'bg-background' : '',
+    status === eContentStatuses.New ? 'bg-background' : '',
+    status === eContentStatuses.AdminPending ? 'bg-[#DCEAFE]' : ''
+  ]"
+>
+  <ng-container [ngSwitch]="status">
+    <span *ngSwitchCase="eContentStatuses.New" class="text-grey-default">
+      {{ 'enums.content_statuses.draft' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.AdminPending" class="text-blue">
+      {{ 'enums.content_statuses.admin_pending' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.AdminReviewing" class="text-orange">
+      {{ 'enums.content_statuses.admin_reviewing' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.AdminRejected" class="text-red">
+      {{ 'enums.content_statuses.admin_rejected' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.AdminApproved" class="text-green">
+      {{ 'enums.content_statuses.admin_approved' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.Published" class="text-main">
+      {{ 'enums.content_statuses.published' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.SellerHidden" class="text-red">
+      {{ 'enums.content_statuses.seller_hidden' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.AdminHidden" class="text-red">
+      {{ 'enums.content_statuses.admin_hidden' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.AdminArchived" class="text-white">
+      {{ 'enums.content_statuses.admin_archived' | translate }}
+    </span>
+    <span *ngSwitchCase="eContentStatuses.Draft" class="text-grey-dark">
+      {{ 'enums.content_statuses.draft' | translate }}
+    </span>
+    <span *ngSwitchDefault>[?] ({{ status }})</span>
+  </ng-container>
+</div>

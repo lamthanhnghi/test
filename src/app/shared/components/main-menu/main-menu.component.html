@@ -1,0 +1,103 @@
+<!-- <section class="w-full h-full p-10 max-tablet:p-5 overflow-y-auto overflow-x-hidden"> -->
+<!--   <div class="grid grid-cols-3 gap-10 max-desktop:grid-cols-2 max-mobile:grid-cols-1 max-mobile:gap-5"> -->
+<!--     <nz-card -->
+<!--       *ngFor="let item of menuItems" -->
+<!--       class="rounded-lg shadow-sm bg-background-white cursor-pointer hover:scale-101 hover:shadow-lg transition-all duration-500" -->
+<!--       [routerLink]="item.link" -->
+<!--     > -->
+<!--       <div class="flex flex-row justify-start items-stretch gap-3"> -->
+<!--         <app-icon [name]="item.icon" classes="w-24 h-24 text-104px max-tablet:w-20 max-tablet:h-20 max-tablet:text-80px"></app-icon> -->
+<!--         <div class="flex flex-col justify-center items-stretch grow"> -->
+<!--           <h2 class="text-xl font-bold mb-2">{{ item.title | translate }}</h2> -->
+<!--           <div class="flex flex-row justify-between items-center gap-1"> -->
+<!--             <p class="line-clamp-1 break-word">{{ item.title | translate }}</p> -->
+<!--             <p>20</p> -->
+<!--           </div> -->
+<!--           <div class="flex flex-row justify-between items-center gap-1"> -->
+<!--             <p class="line-clamp-1 break-word">Lorem ipsum dolor.</p> -->
+<!--             <p>20</p> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </nz-card> -->
+<!--   </div> -->
+<!--   <app-footer class="max-mobile:block hidden mt-10 w-screen -mx-5 -mb-5"></app-footer> -->
+<!-- </section> -->
+
+<menu nz-menu nzMode="inline" class="mc-main-menu w-full">
+  <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menuItems }"></ng-container>
+  <ng-template #menuTpl let-menus>
+    <ng-container *ngFor="let menu of menus">
+      <li
+        #menuItem
+        [routerLink]="menu.link"
+        [queryParams]="menu['queryParams']"
+        *ngIf="!menu?.children?.length && menu?.level !== 1 && menu?.type !== 'divider'"
+        nz-menu-item
+        [nzPaddingLeft]="0"
+        nzMatchRouter
+        [id]="menu.id"
+      >
+        <div class="flex justify-between">
+          <span>{{ menu.title | translate }}</span>
+          <span>{{ menu.count || 0 }}</span>
+        </div>
+      </li>
+      <li #menuDivider *ngIf="menu?.type === 'divider'" nz-menu-item [nzPaddingLeft]="0">
+        <hr class="border-t border-main-lighter" />
+      </li>
+      <li
+        #menuItemLarge
+        *ngIf="menu?.level === 1 && menu?.type === 'item'"
+        class="py-3 rounded-lg"
+        [ngClass]="{ 'text-main bg-main-lighter': isQueryActive(menu) }"
+      >
+        <a
+          [routerLink]="menu?.emitEvent ? null : menu.link"
+          [queryParams]="menu?.emitEvent ? null : menu['queryParams']"
+          (click)="$event.preventDefault(); menu?.emitEvent ? clickEvent.next(menu.emitEvent) : null"
+        >
+          <div class="h-6 leading-6 pl-4 flex items-center gap-3">
+            <app-icon [name]="menu.icon" size="24"></app-icon>
+            <div class="flex justify-between text-sm">
+              <span class="font-semibold line-clamp-1">{{ menu.title | translate }}</span>
+            </div>
+          </div>
+        </a>
+      </li>
+      <li
+        #menuItemWithCollapse
+        *ngIf="menu?.children?.length"
+        nz-submenu
+        [nzOpen]="!menu.collapsed"
+        [nzPaddingLeft]="0"
+        [nzTitle]="subTitleTpl"
+      >
+        <ng-template #subTitleTpl>
+          <a
+            [routerLink]="menu.link"
+            [queryParams]="menu['queryParams']"
+            *ngIf="!!menu.link"
+            class="!flex-grow max-w-[calc(100%_-_3rem)]"
+          >
+            <div class="h-6 leading-6 px-0 flex items-center gap-3">
+              <app-icon [name]="menu.icon" size="24"></app-icon>
+              <div class="flex justify-between">
+                <span class="font-semibold line-clamp-1">{{ menu.title | translate }}</span>
+              </div>
+            </div>
+          </a>
+          <div class="h-6 leading-6 px-0 flex items-center gap-3" *ngIf="!menu.link">
+            <app-icon [name]="menu.icon" size="24"></app-icon>
+            <div class="flex justify-between">
+              <span class="font-semibold line-clamp-1">{{ menu.title | translate }}</span>
+            </div>
+          </div>
+        </ng-template>
+        <ul>
+          <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"></ng-container>
+        </ul>
+      </li>
+    </ng-container>
+  </ng-template>
+</menu>

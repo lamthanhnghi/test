@@ -1,0 +1,42 @@
+<ul nz-menu nzMode="inline" class="side-menu-portal w-full border-r-0">
+  <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menuItems }"></ng-container>
+  <ng-template #menuTpl let-menus>
+    @for (menu of menus; track menu) {
+      @if (!menu.children) {
+        <li nz-menu-item [nzPaddingLeft]="0" [nzDisabled]="menu.disabled" nzMatchRouter="exact">
+          <a
+            [routerLink]="menu.link"
+            [queryParams]="menu.queryParams"
+            class="flex justify-start items-center gap-2 px-4 py-2 w-full text-14px"
+          >
+            @if (menu.icon) {
+              <app-icon [name]="menu.icon" size="24"></app-icon>
+            }
+            <span>{{ menu.title | translate }}</span>
+            @if (menu.level > 1) {
+              <span class="ml-auto">{{ menu?.count || 0 }}</span>
+            }
+          </a>
+        </li>
+      } @else {
+        <li nz-submenu #element [nzPaddingLeft]="0" [nzTitle]="titleRef" [nzOpen]="isOpen(element)">
+          <ng-template #titleRef>
+            <a
+              class="h-full !transition-[background] flex justify-start items-center gap-2 w-full px-4 py-3 text-14px"
+              [routerLink]="menu.link"
+              routerLinkActive="ant-menu-item-active bg-main !text-white"
+            >
+              @if (menu.icon) {
+                <app-icon [name]="menu.icon" size="24"></app-icon>
+              }
+              {{ menu.title | translate }}
+            </a>
+          </ng-template>
+          <ul>
+            <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }" />
+          </ul>
+        </li>
+      }
+    }
+  </ng-template>
+</ul>

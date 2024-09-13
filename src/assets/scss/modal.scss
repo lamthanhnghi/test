@@ -1,0 +1,99 @@
+// @overwrite nz-modal
+.ant-modal-content {
+  @apply rounded-xl;
+}
+
+.ant-modal-header {
+  @apply rounded-t-xl;
+}
+
+.mc-address-modal {
+  width: min(90vw, 48rem) !important; // 768px
+}
+
+.modal-sm {
+  width: min(90vw, 24rem) !important; // 384px
+}
+
+.modal-md {
+  width: min(90vw, 32rem) !important; // 512px
+}
+
+.modal-lg {
+  width: min(90vw, 48rem) !important; // 768px
+}
+
+.modal-xl {
+  width: min(90vw, 64rem) !important; // 1024px
+}
+
+.modal-xxl {
+  width: min(90vw, 80rem) !important; // 1280px
+}
+
+.modal-confirm {
+  width: min(90vw, 22rem) !important; // 352px
+  .ant-modal-body {
+    @apply px-4 py-8;
+  }
+  .ant-modal-close {
+    @apply hidden;
+  }
+
+  .ant-modal-footer {
+    @apply border-t-0 p-4 pt-0;
+  }
+}
+
+.modal-feedback {
+  width: min(90vw, 26rem) !important; // 364px
+
+  .ant-modal-header {
+    @apply border-none font-bold text-center pb-0;
+
+    .ant-modal-title {
+      @apply font-bold;
+    }
+  }
+
+  .ant-modal-body {
+    @apply px-4 py-6;
+  }
+  .ant-modal-close {
+    @apply hidden;
+  }
+
+  .ant-modal-footer {
+    @apply border-t-0 p-4 pt-0;
+  }
+}
+
+.modal-add {
+  .ant-modal-header {
+    @apply border-none font-bold text-center pb-0;
+
+    .ant-modal-title {
+      @apply font-bold;
+    }
+  }
+
+  .ant-modal-body {
+    @apply px-4 py-6;
+  }
+  .ant-modal-close {
+    @apply hidden;
+  }
+
+  .ant-modal-footer {
+    @apply border-t-0 p-4 pt-0;
+  }
+}
+
+.modal-add-packed-unit {
+  width: min(90vw, 30rem) !important; // 420px
+}
+
+.modal-add-user,
+.modal-edit-user {
+  width: min(90vw, 45rem) !important; // 640px
+}

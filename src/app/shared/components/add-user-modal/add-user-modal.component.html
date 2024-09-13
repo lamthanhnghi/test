@@ -1,0 +1,78 @@
+<form [formGroup]="form" nz-form id="feedbackForm" (ngSubmit)="submit()">
+  <div *nzModalTitle>
+    {{ config.title | translate }}
+  </div>
+  <p class="mb-2 text-default-text">{{ config.message }}</p>
+  <nz-form-item>
+    <nz-form-label nzLabelAlign="left" [nzSm]="7" [nzXs]="24" [nzFor]="formKeys.name">
+      {{ 'Tên tài khoản (*)' | translate }}
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="nameError">
+      <input nz-input [formControlName]="formKeys.name" [id]="formKeys.name" />
+      <ng-template #nameError let-control>
+        <ng-container *ngIf="control.hasError('required')">
+          {{ 'common.please_input' | translate }} {{ 'Tên tài khoản' | translate }}
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzLabelAlign="left" [nzSm]="7" [nzXs]="24" [nzFor]="formKeys.code">
+      {{ 'Mã nhân viên (*)' | translate }}
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="userIDError">
+      <input nz-input [formControlName]="formKeys.code" [id]="formKeys.code" />
+      <ng-template #userIDError let-control>
+        <ng-container *ngIf="control.hasError('required')">
+          {{ 'common.please_input' | translate }} {{ 'Mã nhân viên' | translate }}
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item *ngIf="!config.isMyProfile">
+    <nz-form-label nzLabelAlign="left" [nzSm]="7" [nzXs]="24" [nzFor]="formKeys.loginID">
+      {{ 'ID đăng nhập (*)' | translate }}
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="loginIDError">
+      <input nz-input [formControlName]="formKeys.loginID" [id]="formKeys.loginID" />
+      <ng-template #loginIDError let-control>
+        <ng-container *ngIf="control.hasError('required')">
+          {{ 'common.please_input' | translate }} {{ 'ID đăng nhập' | translate }}
+        </ng-container>
+        <ng-container *ngIf="control.hasError('email')">
+          {{ 'common.please_input' | translate }} {{ 'đúng định dạng email' | translate }}
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item *ngIf="!config.isMyProfile">
+    <nz-form-label nzLabelAlign="left" [nzSm]="7" [nzXs]="24" [nzFor]="formKeys.role">
+      {{ 'Vai trò (*)' | translate }}
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="roleError">
+      <nz-select [formControlName]="formKeys.role" [nzPlaceHolder]="'Chọn vai trò' | translate">
+        <ng-container *ngFor="let item of roleOptions">
+          <nz-option [nzValue]="item.value" [nzLabel]="item.label | translate"></nz-option>
+        </ng-container>
+      </nz-select>
+      <ng-template #roleError let-control>
+        <ng-container *ngIf="control.hasError('required')">
+          {{ 'Vui lòng chọn' | translate }} {{ 'Vai trò' | translate }}
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <div *nzModalFooter>
+    <div class="flex justify-stretch gap-5 max-w-[380px] mx-auto">
+      <button class="grow" nz-button nzType="default" (click)="modalRef.close(undefined)">
+        {{ 'Hủy' | translate }}
+      </button>
+      <button *ngIf="!this.config.data" class="grow !ml-0" nz-button nzType="primary" form="feedbackForm">
+        {{ 'Thêm' | translate }}
+      </button>
+      <button *ngIf="this.config.data" class="grow !ml-0" nz-button nzType="primary" form="feedbackForm">
+        {{ 'Lưu' | translate }}
+      </button>
+    </div>
+  </div>
+</form>

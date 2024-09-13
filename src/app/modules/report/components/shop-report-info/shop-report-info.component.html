@@ -1,0 +1,22 @@
+<div class="rounded-lg relative overflow-hidden">
+  <img [src]="data?.sellerInfos?.coverLink || ''" alt="" class="h-full w-full absolute top-0 left-0 object-cover">
+  <div class="flex items-center p-8 bg-black/50 gap-2 relative">
+    <div class="flex gap-5 items-center grow">
+      <app-avatar size="80" shape="circle" class="shrink-0" [src]="data?.sellerInfos?.avatarLink || ''"></app-avatar>
+      <div class="flex flex-col gap-2 text-white">
+        <div>
+          <h5 class="font-semibold text-base text-white">{{data?.sellerInfos?.businessName|| "N/A"}}</h5>
+          <span class="text-sm text-background">*Online</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm">
+          <app-icon name="star" size="18" color="text-yellow"></app-icon>
+          <span>{{(data?.sellerInfos?.averageRating || 0) + "/5"}}</span>
+          <span class="text-background">|</span>
+          <app-icon name="follow" size="18" color="text-white"></app-icon>
+          <span>*0 người theo dõi</span>
+        </div>
+      </div>
+    </div>
+    <button nz-button  nzType="primary" class="text-sm uppercase py-3 max-w-[140px] w-full">Xem shop</button>
+  </div>
+</div>

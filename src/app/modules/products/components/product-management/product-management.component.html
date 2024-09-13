@@ -1,0 +1,706 @@
+<form [formGroup]="form" nz-form nzLayout="vertical" nzNoColon class="p-5 pt-0">
+  <section class="px-4 py-3 bg-white rounded">
+    <div class="flex justify-between flex-wrap-reverse gap-4">
+      <div class="flex justify-between items-center gap-3 md:basis-[20rem] basis-[100%]">
+        <app-content-status-label-tag [status]="data?.productVersionContentStatus"></app-content-status-label-tag>
+        <div class="flex justify-start items-center gap-2">
+          <span class="text-grey whitespace-nowrap">Ngày gửi duyệt</span>
+          <span class="font-semibold">{{ data?.submittedDate | date: DATE_FORMAT }}</span>
+        </div>
+      </div>
+      <div class="flex gap-3 grow">
+        <button
+          class="first:ml-auto md:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+          nz-button
+          nzType="default"
+          *ngIf="data?.productVersionContentStatus === eContentStatuses.AdminPending"
+          (click)="setStatus(eContentStatuses.AdminReviewing)"
+        >
+          {{ 'enums.content_statuses.admin_reviewing' | translate }}
+        </button>
+
+        <!--    Approving -->
+        <button
+          class="first:ml-auto md:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9"
+          nz-button
+          nzType="primary"
+          nzDanger
+          *ngIf="data?.productVersionContentStatus === eContentStatuses.AdminReviewing"
+          (click)="reject()"
+        >
+          {{ 'enums.content_statuses.admin_rejected' | translate }}
+        </button>
+        <!--  Approving / Rejected -->
+        <button
+          class="first:ml-auto md:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+          nz-button
+          nzType="default"
+          *ngIf="
+            data?.productVersionContentStatus === eContentStatuses.AdminReviewing ||
+            data?.productVersionContentStatus === eContentStatuses.AdminRejected
+          "
+          (click)="approve()"
+        >
+          {{ 'enums.content_statuses.admin_approved' | translate }}
+        </button>
+
+        <!--    Approved -->
+        <!--<button-->
+        <!--  class="first:ml-auto md:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9"-->
+        <!--  nz-button-->
+        <!--  nzType="primary"-->
+        <!--  *ngIf="data?.productVersionContentStatus === eContentStatuses.AdminApproved"-->
+        <!--  (click)="hide()"-->
+        <!--&gt;-->
+        <!--  {{ 'enums.content_statuses.hidden' | translate }}-->
+        <!--</button>-->
+        <!--<button-->
+        <!--  class="first:ml-auto md:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"-->
+        <!--  nz-button-->
+        <!--  nzType="default"-->
+        <!--  *ngIf="data?.productVersionContentStatus === eContentStatuses.AdminApproved"-->
+        <!--  (click)="archive()"-->
+        <!--&gt;-->
+        <!--  {{ 'enums.content_statuses.admin_archived' | translate }}-->
+        <!--</button>-->
+      </div>
+    </div>
+    <div class="flex justify-between items-start gap-4 mt-4 w-[min(100%_,_20rem)]">
+      <div class="min-w-20">Seller</div>
+      <div class="text-right whitespace-normal font-medium">
+        {{ data?.seller?.businessName }}
+      </div>
+    </div>
+  </section>
+  <section class="p-6 mt-5 bg-white rounded">
+    <h4 class="mb-6">{{ 'product_page.product_description' | translate | uppercase }}</h4>
+    <!-- product image -->
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzLabelAlign="left" mcRequired [isShow]="false">
+        {{ 'product_page.product_image' | translate }}
+      </nz-form-label>
+      <div class="col-right flex items-start gap-x-4 justify-start flex-wrap">
+        <div class="grow flex justify-start items-center gap-4 flex-wrap">
+          @for (item of avatars; track item.uid; let isFirst = $first) {
+            <div
+              class="w-[6.25rem] h-[6.25rem] rounded border-1 border-main-lighter/80 bg-background overflow-hidden relative"
+            >
+              <app-media-item [file]="item" [disabled]="true"></app-media-item>
+              @if (isFirst) {
+                <div class="absolute bottom-0 left-0 w-full text-center text-grey-dark bg-main-lighter/80">
+                  {{ 'common.cover_image' | translate }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </nz-form-item>
+    <!-- end product image -->
+    <!-------------------------------------------------------------------------------------------------------->
+    <!-- announcement_name -->
+    <nz-form-item>
+      <nz-form-label mcRequired [isShow]="false" nzXs="24" nzLabelAlign="left">
+        {{ 'common.announcement_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [appReadonlySelect]="true">
+          <input
+            [formControlName]="ProductMgtFormKeys.Name"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            [maxlength]="200"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- end announcement_name -->
+    <!-------------------------------------------------------------------------------------------------------->
+    <!-- display_name -->
+    <nz-form-item>
+      <nz-form-label mcRequired [isShow]="false" nzXs="24" nzLabelAlign="left">
+        {{ 'common.display_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [appReadonlySelect]="true">
+          <input [formControlName]="ProductMgtFormKeys.publishName" mcAutocompleteOff nz-input type="text" [maxlength]="200" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- end display_name -->
+    <!-------------------------------------------------------------------------------------------------------->
+    <!-- product_card_preview -->
+    <nz-form-item>
+      <div class="rounded-xl border-1 border-background p-4 w-56 h-fit">
+        <img
+          class="w-48 h-48 object-cover"
+          nz-image
+          [nzSrc]="avatars?.[0]?.thumbUrl || 'https://placehold.co/500'"
+          [nzPlaceholder]="PLACEHOLDER_IMAGE"
+          [nzFallback]="FALLBACK_IMAGE"
+          alt="product-image-preview"
+        />
+        <p class="line-clamp-2 font-medium text-14px mt-4 text-grey-light">
+          {{ form.get(ProductMgtFormKeys.publishName)?.value || 'Tên sản phẩm hiển thị trên ứng dụng CosmeB' }}
+        </p>
+      </div>
+    </nz-form-item>
+    <!-- end product_card_preview -->
+    <!-------------------------------------------------------------------------------------------------------->
+    <!-- description -->
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzLabelAlign="left" mcRequired [isShow]="false">
+        {{ 'common.product_description' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <div class="p-4 rounded border-grey-lighter border-1 relative bg-background-table">
+          <div class="whitespace-pre-line">
+            {{ data?.productDescription }}
+          </div>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- end description -->
+  </section>
+  <!-------------------------------------------------------------------------------------------------------->
+  <!-------------------------------------------------------------------------------------------------------->
+  <!-------------------------------------------------------------------------------------------------------->
+  <section class="px-8 py-4 mt-5 bg-white rounded">
+    <h4 class="mb-6">{{ 'product_page.detail_info' | translate | uppercase }}</h4>
+    <!--   keywords -->
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzLabelAlign="left" mcRequired [isShow]="false">
+        {{ 'product_page.keywords' | translate }}
+        <span class="text-grey-light">&nbsp;({{ 'common.hashtag' | translate }})</span>
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="'form.this_field_is_required' | translate"
+        [nzValidateStatus]="
+          form.controls[ProductMgtFormKeys.keywords].dirty && !form.controls[ProductMgtFormKeys.keywords].value.length
+            ? 'error'
+            : 'success'
+        "
+      >
+        <div class="flex justify-start items-center flex-wrap gap-2">
+          <nz-tag
+            *ngFor="let tag of form.controls[ProductMgtFormKeys.keywords].value; let i = index"
+            [nz-tooltip]="tag.length > 20 ? tag : null"
+            class="rounded-lg h-10 inline-flex items-center m-0"
+            [nzMode]="mode === ePageActions.View ? 'default' : 'closeable'"
+          >
+            {{ sliceTagName(tag) }}
+          </nz-tag>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- end keywords -->
+    <!-------------------------------------------------------------------------------------------------------->
+    <!-- Ngành hàng / Danh mục -->
+    <div nz-row [nzGutter]="{ lg: 20, md: 0 }">
+      <!-- Ngành hàng -->
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzLg="8" nzLabelAlign="left" mcRequired [isShow]="false">
+            {{ 'Ngành hàng' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+            <nz-select
+              [appReadonlySelect]="true"
+              [formControlName]="ProductMgtFormKeys.productGroup"
+              (nzOnSearch)="productGroupSelection.searchDebounce$.next($event)"
+              [nzShowSearch]="true"
+              nzServerSearch
+              [nzLoading]="productGroupSelection.isLoading"
+              (nzScrollToBottom)="productGroupSelection.onLoadMore()"
+              [nzDropdownRender]="renderTemplate"
+            >
+              @for (item of productGroupSelection?.data ?? []; track item.productGroupID) {
+                <nz-option [nzLabel]="item.productGroupName!" [nzValue]="item"></nz-option>
+              }
+              <ng-template #renderTemplate>
+                <div *ngIf="productGroupSelection.isLoading">
+                  <nz-spin></nz-spin>
+                </div>
+              </ng-template>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- end Ngành hàng -->
+      <!-- Danh mục -->
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzLg="8" nzLabelAlign="left" mcRequired [isShow]="false">
+            {{ 'Danh mục' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+            <nz-select
+              [appReadonlySelect]="true"
+              [formControlName]="ProductMgtFormKeys.productCategory"
+              (nzOnSearch)="productCategorySelection.searchDebounce$.next($event)"
+              [nzShowSearch]="true"
+              nzServerSearch
+              [nzLoading]="productCategorySelection.isLoading"
+              (nzScrollToBottom)="productCategorySelection.onLoadMore()"
+              [nzDropdownRender]="renderTemplate"
+              [nzCustomTemplate]="valueTpl"
+              [nzDisabled]="form.get(ProductMgtFormKeys.productGroup)?.invalid"
+            >
+              @for (item of productCategorySelection?.data ?? []; track item.productCategoryID) {
+                <nz-option
+                  nzCustomContent
+                  [nzLabel]="item.productCategoryName!"
+                  [nzValue]="item"
+                  [nzTitle]="
+                    item?.parentCategory
+                      ? item.parentCategory?.productCategoryName + ' > ' + item?.productCategoryName
+                      : item?.productCategoryName
+                  "
+                >
+                  <div
+                    class="text-ellipsis"
+                    [class.!font-bold]="item.subCategories?.length"
+                    [class.!pl-3]="item?.parentCategory"
+                  >
+                    {{ item.productCategoryName! }}
+                  </div>
+                </nz-option>
+              }
+
+              <ng-template #valueTpl let-selected>
+                {{ selected['nzTitle'] }}
+              </ng-template>
+              <ng-template #renderTemplate>
+                <div *ngIf="productCategorySelection.isLoading">
+                  <nz-spin></nz-spin>
+                </div>
+              </ng-template>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- end Danh mục -->
+    </div>
+    <!-- end Ngành hàng / Danh mục -->
+    <!-------------------------------------------------------------------------------------------------------->
+    <!-- Nhà sản xuất / Xuất xứ -->
+    <div nz-row [nzGutter]="{ lg: 20, md: 0 }">
+      <!-- Nhà sản xuất -->
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzLg="8" nzLabelAlign="left">
+            {{ 'Nhà sản xuất' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+            <nz-input-group [appReadonlySelect]="true">
+              <input
+                [readonly]="mode === ePageActions.View"
+                [formControlName]="ProductMgtFormKeys.producerName"
+                mcAutocompleteOff
+                nz-input
+                type="text"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- end Nhà sản xuất -->
+      <!-- Xuất xứ -->
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzLg="8" nzLabelAlign="left" mcRequired [isShow]="false">
+            {{ 'Xuất xứ' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+            <nz-select [appReadonlySelect]="true" [formControlName]="ProductMgtFormKeys.madeInCountryID">
+              @for (item of countries; track item.countryID) {
+                <nz-option [nzLabel]="item.countryName | translate" [nzValue]="item.countryID"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- end Xuất xứ -->
+    </div>
+    <!-- end Nhà sản xuất / Xuất xứ -->
+    <!-------------------------------------------------------------------------------------------------------->
+    <!-- Brand / Số đăng ký -->
+    <div nz-row [nzGutter]="{ lg: 20, md: 0 }">
+      <!-- Brand -->
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzLg="8" nzLabelAlign="left" mcRequired [isShow]="false">
+            {{ 'common.brand' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+            <nz-input-group [appReadonlySelect]="true">
+              <input
+                [readonly]="mode === ePageActions.View"
+                [formControlName]="ProductMgtFormKeys.brandName"
+                mcAutocompleteOff
+                nz-input
+                type="text"
+                [nzAutocomplete]="auto"
+              />
+            </nz-input-group>
+            <nz-autocomplete #auto (scrollend)="brandSelection.onLoadMore()" (selectionChange)="onBrandChange($event)">
+              @for (item of brandSelection.data; track item.brandID) {
+                <nz-auto-option [nzLabel]="item.brandName || 'common.undefined' | translate" [nzValue]="item.brandName">
+                  {{ item.brandName || 'common.undefined' | translate }}
+                </nz-auto-option>
+              }
+            </nz-autocomplete>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- end Brand -->
+      <!-- Số đăng ký -->
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzXs="24" nzLg="8" nzLabelAlign="left">
+            {{ 'Số đăng ký' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+            <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+              <nz-input-group [appReadonlySelect]="true">
+                <input
+                  [readonly]="mode === ePageActions.View"
+                  [formControlName]="ProductMgtFormKeys.registerNo"
+                  mcAutocompleteOff
+                  nz-input
+                  type="text"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- end Số đăng ký -->
+    </div>
+    <!-- Brand / Số đăng ký -->
+    <!-------------------------------------------------------------------------------------------------------->
+    <!-- genuine_certificate -->
+    <nz-form-item>
+      <nz-form-label nzXs="24" nzLabelAlign="left" mcRequired [isShow]="false">
+        {{ 'common.genuine_certificate' | translate }}
+      </nz-form-label>
+      <div class="col-right flex items-start gap-x-4 justify-start flex-wrap">
+        <div class="grow flex justify-start items-center gap-4 flex-wrap">
+          @for (item of genuineDocs; track item.uid) {
+            <div
+              class="w-[6.25rem] h-[6.25rem] rounded border-1 border-main-lighter/80 bg-background overflow-hidden relative"
+            >
+              <app-media-item [file]="item" [disabled]="mode === ePageActions.View"></app-media-item>
+            </div>
+          }
+        </div>
+      </div>
+    </nz-form-item>
+    @if (
+      [
+        eContentStatuses.AdminReviewing,
+        eContentStatuses.AdminApproved,
+        eContentStatuses.AdminRejected,
+        eContentStatuses.SellerHidden,
+        eContentStatuses.AdminHidden,
+        eContentStatuses.Published,
+        eContentStatuses.AdminArchived].includes(+data?.productVersionContentStatus!)
+    ) {
+      <div class="relative w-fit">
+        <div class="w-full h-full absolute top-0 left-0 cursor-pointer z-[1]" (click)="verifyChange(data?.isVerify!)"></div>
+        <div class="pointer-events-none" nz-checkbox [nzChecked]="data?.isVerify">{{ 'product_page.verified_certificates' | translate }}</div>
+      </div>
+    }
+    <!-- end genuine_certificate -->
+  </section>
+  <!-------------------------------------------------------------------------------------------------------->
+  <!-------------------------------------------------------------------------------------------------------->
+  <!-------------------------------------------------------------------------------------------------------->
+  <section class="px-8 py-4 mt-5 bg-white rounded">
+    <h4 class="mb-6">{{ 'common.sales_info' | translate | uppercase }}</h4>
+    <!-- Phân loại hàng theo -->
+    <div nz-col nzXs="24" nzLg="12">
+      <nz-form-item class="!flex-row flex-wrap">
+        <nz-form-label
+          class="min-w-[10rem] lg:!py-2 !font-semibold"
+          nzXs="24"
+          nzLg="8"
+          nzLabelAlign="left"
+          mcRequired
+          [isShow]="false"
+        >
+          {{ 'Phân loại hàng theo' | translate }}
+        </nz-form-label>
+        <nz-form-control nzXs="24" nzLg="16" [nzErrorTip]="'form.this_field_is_required' | translate">
+          <nz-select
+            [appReadonlySelect]="true"
+            [formControlName]="ProductMgtFormKeys.attribute"
+            [nzDisabled]="!form.get(ProductMgtFormKeys.productCategory)?.value"
+            (nzOnSearch)="attributeSelection.searchDebounce$.next($event)"
+            [nzShowSearch]="true"
+            nzServerSearch
+            [nzLoading]="attributeSelection.isLoading"
+            (nzScrollToBottom)="attributeSelection.onLoadMore()"
+            [nzDropdownRender]="renderTemplate"
+            [nzCustomTemplate]="valueTpl"
+          >
+            @for (item of attributeSelection?.data ?? []; track item.attributeID) {
+              <nz-option [nzLabel]="item.attributeName!" [nzValue]="item"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <!-- end Phân loại hàng theo -->
+    <!-------------------------------------------------------------------------------------------------------->
+    @for (formGroup of formSKUGroups; track formGroup; let index = $index) {
+      <form [formGroup]="formGroup" nz-form nzLayout="vertical" nzNoColon>
+        <!-- Tên SKU -->
+        <div nz-col nzXs="24" nzLg="12">
+          <nz-form-item>
+            <nz-form-label nzXs="24" nzLg="8" nzLabelAlign="left" mcRequired [isShow]="false">
+              {{ 'common.sku_name' | translate }} {{ index + 1 }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+              <nz-input-group [appReadonlySelect]="true">
+                <input
+                  [readonly]="mode === ePageActions.View"
+                  [formControlName]="ProductMgtFormKeys.productSKUName"
+                  mcAutocompleteOff
+                  nz-input
+                  type="text"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- end Tên SKU 1 -->
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-- attributeValue / saleUnit -->
+        <div nz-row [nzGutter]="{ lg: 20, md: 0 }">
+          <!-- attributeValue -->
+          <div nz-col nzXs="24" nzLg="12">
+            <nz-form-item>
+              <nz-form-label nzXs="24" nzLabelAlign="left" mcRequired [isShow]="false">
+                {{
+                  form.get(ProductMgtFormKeys.attribute)?.value?.['attributeName'] ?? 'common.select_attribute'
+                    | translate
+                }}
+              </nz-form-label>
+              <nz-form-control nzXs="24" [nzErrorTip]="'form.this_field_is_required' | translate">
+                <nz-input-group [appReadonlySelect]="true">
+                  <input
+                    [readonly]="mode === ePageActions.View"
+                    [formControlName]="ProductMgtFormKeys.attributeValue"
+                    mcAutocompleteOff
+                    nz-input
+                    type="text"
+                  />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- end attributeValue -->
+          <!-- saleUnit -->
+          <div nz-col nzXs="24" nzLg="12">
+            <nz-form-item>
+              <nz-form-label nzXs="24" nzLabelAlign="left" mcRequired [isShow]="false">
+                {{ 'common.sale_unit' | translate }}
+              </nz-form-label>
+              <nz-form-control nzXs="24" [nzErrorTip]="'form.this_field_is_required' | translate">
+                <nz-select
+                  [appReadonlySelect]="true"
+                  [formControlName]="ProductMgtFormKeys.saleUnit"
+                  (nzOnSearch)="saleUnitSelection.searchDebounce$.next($event)"
+                  [nzShowSearch]="true"
+                  nzServerSearch
+                  [nzLoading]="saleUnitSelection.isLoading"
+                  (nzScrollToBottom)="saleUnitSelection.onLoadMore()"
+                  [nzDropdownRender]="renderTemplate"
+                  [nzCustomTemplate]="valueTpl"
+                >
+                  @for (item of saleUnitSelection?.data ?? []; track item.saleUnitID) {
+                    <nz-option [nzLabel]="item.saleUnitName!" [nzValue]="item"></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- end saleUnit -->
+        </div>
+        <!-- end attributeValue / saleUnit -->
+        <!-------------------------------------------------------------------------------------------------------->
+        <!--  weight / size  -->
+        <div nz-row [nzGutter]="{ lg: 20, md: 0 }">
+          <!-- weight -->
+          <div nz-col nzXs="24" nzLg="12">
+            <nz-form-item>
+              <nz-form-label nzXs="24" nzLabelAlign="left" nzNoColon mcRequired [isShow]="false">
+                <span>{{ 'common.weight' | translate }}</span>
+                <span class="text-grey-light font-normal">
+                  &nbsp;({{ 'common.after_packed' | translate | lowercase }})
+                </span>
+              </nz-form-label>
+              <div nz-row [nzGutter]="16">
+                <nz-form-control nzXs="24" nzLg="16" class="mb-4 lg:mb-0">
+                  <nz-input-number
+                    class="w-full"
+                    [appReadonlySelect]="true"
+                    [formControlName]="ProductMgtFormKeys.weight"
+                    [nzStep]="1"
+                    [nzMin]="0"
+                    nzSize="large"
+                  ></nz-input-number>
+                </nz-form-control>
+                <nz-form-control nzXs="24" nzLg="8">
+                  <nz-select [appReadonlySelect]="true" [formControlName]="ProductMgtFormKeys.weightUnit">
+                    <nz-option
+                      *ngFor="let item of weightUnitOptions"
+                      [nzLabel]="item.value | enumKey: 'weight_units' | translate"
+                      [nzValue]="item.value"
+                    ></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </div>
+              @if (
+                (formGroup.get(ProductMgtFormKeys.weight)?.dirty &&
+                  formGroup.get(ProductMgtFormKeys.weight)?.invalid) ||
+                (formGroup.get(ProductMgtFormKeys.weightUnit)?.dirty &&
+                  formGroup.get(ProductMgtFormKeys.weightUnit)?.invalid)
+              ) {
+                <small class="helper-text !text-red">
+                  {{ 'form.this_field_is_required' | translate }}
+                </small>
+              }
+            </nz-form-item>
+          </div>
+          <!-- end weight -->
+          <!-------------------------------------------------------------------------------------------------------->
+          <!-- size -->
+          <div nz-col nzXs="24" nzLg="12">
+            <nz-form-item>
+              <nz-form-label nzXs="24" nzLabelAlign="left" nzNoColon mcRequired [isShow]="false">
+                {{ 'common.size' | translate }}
+                <span class="text-grey-light font-normal">
+                  &nbsp;({{ 'common.after_packed' | translate | lowercase }})
+                </span>
+              </nz-form-label>
+              <div nz-row nzGutter="16">
+                <!-- length -->
+                <nz-form-control nzXs="24" nzLg="6" class="mb-4 lg:mb-0">
+                  <nz-input-number
+                    class="w-full"
+                    [appReadonlySelect]="true"
+                    [formControlName]="ProductMgtFormKeys.sizeLength"
+                    type="number"
+                    [nzStep]="1"
+                    [nzMin]="0"
+                  ></nz-input-number>
+                </nz-form-control>
+                <!-- end length -->
+                <!-- width -->
+                <nz-form-control nzXs="24" nzLg="6" class="mb-4 lg:mb-0">
+                  <nz-input-number
+                    class="w-full"
+                    [appReadonlySelect]="true"
+                    [formControlName]="ProductMgtFormKeys.sizeWidth"
+                    type="number"
+                    [nzStep]="1"
+                    [nzMin]="0"
+                  ></nz-input-number>
+                </nz-form-control>
+                <!-- end width -->
+                <!-- height -->
+                <nz-form-control nzXs="24" nzLg="6" class="mb-4 lg:mb-0">
+                  <nz-input-number
+                    class="w-full"
+                    [appReadonlySelect]="true"
+                    [formControlName]="ProductMgtFormKeys.sizeHeight"
+                    type="number"
+                    [nzStep]="1"
+                    [nzMin]="0"
+                  ></nz-input-number>
+                </nz-form-control>
+                <!-- end height -->
+                <!-- sizeUnit -->
+                <nz-form-control nzXs="24" nzLg="6">
+                  <nz-select [appReadonlySelect]="true" [formControlName]="ProductMgtFormKeys.sizeUnit">
+                    <nz-option
+                      *ngFor="let item of sizeUnitOptions"
+                      [nzLabel]="item.value | enumKey: 'size_units' | translate"
+                      [nzValue]="item.value"
+                    ></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </div>
+              @if (
+                (formGroup.get(ProductMgtFormKeys.sizeLength)?.dirty &&
+                  formGroup.get(ProductMgtFormKeys.sizeLength)?.invalid) ||
+                (formGroup.get(ProductMgtFormKeys.sizeWidth)?.dirty &&
+                  formGroup.get(ProductMgtFormKeys.sizeWidth)?.invalid) ||
+                (formGroup.get(ProductMgtFormKeys.sizeHeight)?.dirty &&
+                  formGroup.get(ProductMgtFormKeys.sizeHeight)?.invalid) ||
+                (formGroup.get(ProductMgtFormKeys.sizeUnit)?.dirty &&
+                  formGroup.get(ProductMgtFormKeys.sizeUnit)?.invalid)
+              ) {
+                <small class="helper-text !text-red">
+                  {{ 'form.this_field_is_required' | translate }}
+                </small>
+              }
+            </nz-form-item>
+          </div>
+          <!-- end size -->
+        </div>
+        <!-- end weight / size -->
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-- sku media -->
+        <nz-form-item class="!mb-0">
+          <nz-form-label nzXs="24" nzLabelAlign="left" mcRequired [isShow]="false">
+            {{ 'common.sku_image' | translate }}
+          </nz-form-label>
+          <div class="col-right flex items-start gap-x-4 justify-start flex-wrap">
+            <div class="grow flex justify-start items-center gap-4 flex-wrap">
+              @for (item of skuMediaRecord[index]; track item.uid) {
+                <div
+                  class="w-[6.25rem] h-[6.25rem] rounded border-1 border-main-lighter/80 bg-background overflow-hidden relative"
+                >
+                  <app-media-item [file]="item" [disabled]="mode === ePageActions.View"></app-media-item>
+                </div>
+              }
+            </div>
+          </div>
+        </nz-form-item>
+        <!-- end genuine_certificate -->
+      </form>
+      <nz-divider class="my-5"></nz-divider>
+    }
+  </section>
+  <section class="px-8 py-4 mt-5 bg-white rounded">
+    <h4 class="mb-5">{{ 'common.delivery_info' | translate | uppercase }}</h4>
+    <p class="font-semibold mb-5">{{ 'common.delivery_method' | translate }}</p>
+    <nz-checkbox-wrapper class="w-full">
+      <div nz-row>
+        @for (item of deliveryTypeOptions; track item.value) {
+          <div nz-col nzXs="8">
+            <div
+              nz-checkbox
+              class="pointer-events-none"
+              [nzValue]="item.value"
+              [nzChecked]="
+                (form?.get(ProductMgtFormKeys.deliveryMethods)?.value || '')?.includes(item.value.toString())
+              "
+            >
+              {{ item.value | enumKey: 'delivery_methods' | translate }}
+            </div>
+          </div>
+        }
+      </div>
+    </nz-checkbox-wrapper>
+  </section>
+  @if (data?.productVersionContentStatus === eContentStatuses.AdminRejected) {
+    <section class="px-8 mt-5 bg-white rounded">
+      <app-comment-section [listApi]="getComments" [addApi]="addComment"></app-comment-section>
+    </section>
+  }
+</form>

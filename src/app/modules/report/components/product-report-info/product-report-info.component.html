@@ -1,0 +1,38 @@
+<div class="overflow-hidden rounded-lg border border-grey-lighter">
+  <div class="py-2 text-sm text-grey-dark px-4 flex items-center gap-2 border-b border-b-grey-lighter">
+    <div class="shrink-0 flex items-center">
+      <app-avatar
+        [src]="data?.dataRating?.userAvatar || ''"
+        shape="circle"
+        size="24"
+      ></app-avatar>
+    </div>
+    <span class="font-medium">{{ data?.dataRating?.userContactFullName || "N/A" }}</span>
+    <span>|</span>
+    <span class="text-grey">MĐH: {{data?.dataRating?.orderCode || "N/A"}}</span>
+  </div>
+  <div class="grid grid-cols-[1fr_2fr]">
+    <div class="border-r border-r-grey-lighter p-4">
+      <div class="flex items-center gap-4">
+        <img nz-image [nzSrc]="data?.medias?.[0]?.linkString || ''" alt="" class="rounded w-[60px] h-[60px] object-contain shrink-0">
+        <div class="flex flex-col gap-2 ">
+          <h5
+            class="text-sm font-semibold text-grey-dark line-clamp-2 break-all">{{ data?.productPublishName || "N/A" }}</h5>
+          <p class="text-grey text-sm line-clamp-2">{{data?.attributes?.[0]?.locAttributeName || "N/A"}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="p-4 flex flex-col gap-2">
+      <nz-rate [ngModel]="data?.dataRating?.rating || 0" nzDisabled></nz-rate>
+      <p class="text-sm">{{ data?.dataRating?.comment || "N/A" }}</p>
+      <ul class="flex gap-2">
+        <ng-container  *ngFor="let item of data?.dataRating?.medias">
+          <li class="w-[72px] h-[72px] shrink-0">
+            <img nz-image [nzSrc]="item.linkString || ''" alt="" class="rounded w-full h-full object-cover">
+          </li>
+        </ng-container>
+      </ul>
+      <span class="text-grey text-xs">{{ data?.dataRating?.createdDate | date: DATE_TIME_FORMAT }}</span>
+    </div>
+  </div>
+</div>

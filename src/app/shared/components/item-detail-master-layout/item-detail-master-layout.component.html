@@ -1,0 +1,22 @@
+<div class="lg:px-10 py-5 min-h-[calc(100dvh_-_var(--footer-height)_-_var(--header-height))] bg-background flex flex-col items-stretch">
+  <div class="flex justify-start items-center gap-2 mb-4 lg:px-0 px-5">
+    <app-icon nz-icon name="caret-left" size="20" routerLink="../"></app-icon>
+    <nz-breadcrumb nzSeparator="/" class="detail-master-layout-breadcrumb">
+      <ng-container *ngFor="let c of crumbs">
+        <nz-breadcrumb-item>
+          <button
+            nz-button
+            nzType="link"
+            [routerLink]="c.link"
+            [ngClass]="{ '!text-default-text !hover:text-default-text pointer-events-none': c.disabled }"
+          >
+            {{ c.title | translate }}
+          </button>
+        </nz-breadcrumb-item>
+      </ng-container>
+    </nz-breadcrumb>
+  </div>
+  <div [ngClass]="{ 'bg-white shadow rounded px-5 lg:px-10 py-5': shouldBeInSection }" class="grow h-1">
+    <ng-content></ng-content>
+  </div>
+</div>

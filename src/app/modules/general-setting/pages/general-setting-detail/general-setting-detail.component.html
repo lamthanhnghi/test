@@ -1,0 +1,630 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <section class="flex items-center justify-between mb-5">
+      <div
+        *ngIf="data && mode === ePageActions.View"
+      >
+        <span>Trạng thái</span>
+        <span class="sm:pl-3">
+          <app-content-status-label [status]="data?.contentStatus"></app-content-status-label>
+        </span>
+      </div>
+      <div class="ml-auto flex gap-3 lg:justify-end">
+        @if (
+          mode !== ePageActions.Create &&
+          data?.contentStatus !== eContentStatuses.AdminArchived &&
+          data?.contentStatus !== eContentStatuses.AdminApproved
+        ) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn btn !bg-transparent !border-red !border !text-red !text-[14px] !h-9 min-w-24"
+            nz-button
+            nzType="default"
+            nzDanger
+            (click)="delete()"
+          >
+            {{ 'common.delete' | translate }}
+          </button>
+        }
+        @if (mode === ePageActions.Edit) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+            nz-button
+            nzType="primary"
+            nzDanger
+            (click)="cancel()"
+          >
+            {{ 'common.cancel' | translate }}
+          </button>
+        }
+        @if (mode === ePageActions.Create) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+            nz-button
+            nzType="default"
+            (click)="cancel()"
+          >
+            {{ 'common.cancel' | translate }}
+          </button>
+        }
+        @if (mode === ePageActions.View) {
+          <!--@if (data?.contentStatus === eContentStatuses.New) {-->
+          <!--  <button-->
+          <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"-->
+          <!--    nz-button-->
+          <!--    nzType="primary"-->
+          <!--    (click)="sendApproval()"-->
+          <!--  >-->
+          <!--    {{ 'common.send_for_review' | translate }}-->
+          <!--  </button>-->
+          <!--}-->
+
+          @if (
+            data &&
+            data.contentStatus !== eContentStatuses.AdminReviewing &&
+            data.contentStatus !== eContentStatuses.AdminApproved &&
+            data.contentStatus !== eContentStatuses.AdminArchived
+          ) {
+            <button
+              class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+              nz-button
+              nzType="default"
+              (click)="edit()"
+            >
+              {{ 'common.edit' | translate }}
+            </button>
+          }
+        }
+        @if ([ePageActions.Edit, ePageActions.Create].includes(mode)) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+            nz-button
+            nzType="default"
+            (click)="submit()"
+          >
+            {{ 'common.save' | translate }}
+          </button>
+        }
+      </div>
+    </section>
+    <div class="container-sm mx-auto">
+      <form class="wrapper-right" nz-form nzLayout="vertical" [formGroup]="form">
+        <section class="block-version">
+          <h4 class="heading">{{ 'common.version' | translate }}</h4>
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzSm]="mode === ePageActions.View ? 8 : 4"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.version"
+            >
+              {{ 'common.version' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="versionError">
+              <input
+                nz-input
+                [formControlName]="eGeneralSettingAuthenticationFormKeys.version"
+                [id]="eGeneralSettingAuthenticationFormKeys.version"
+                [placeholder]="'common.input' | translate"
+                [style]="mode === ePageActions.View ? { background: 'transparent' } : {}"
+                [readonly]="mode === ePageActions.View"
+              />
+              <ng-template #versionError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'form.this_field_is_required' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label mcRequired nzLabelAlign="left" [nzFor]="eGeneralSettingAuthenticationFormKeys.applyDate">
+              {{ 'common.applied_date' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="dateApplyError">
+              <nz-date-picker
+                class="w-full"
+                [nzFormat]="DATE_FORMAT"
+                [formControlName]="eGeneralSettingAuthenticationFormKeys.applyDate"
+                [nzPlaceHolder]="mode === ePageActions.View ? ' ' : ('dd/mm/yy' | translate)"
+                [nzInputReadOnly]="true"
+                [nzAllowClear]="false"
+                [attr.aria-readonly]="mode === ePageActions.View"
+                [nzSuffixIcon]="mode === ePageActions.View ? '' : 'calendar'"
+              ></nz-date-picker>
+              <ng-template #dateApplyError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'form.this_field_is_required' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzSm]="mode === ePageActions.View ? 8 : 4"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.updatedDescription"
+            >
+              {{ 'common.change_description' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="updatedDescriptionError">
+              <input
+                nz-input
+                [formControlName]="eGeneralSettingAuthenticationFormKeys.updatedDescription"
+                [style]="mode === ePageActions.View ? { background: 'transparent' } : {}"
+                [id]="eGeneralSettingAuthenticationFormKeys.updatedDescription"
+                [placeholder]="'common.input' | translate"
+                [readonly]="mode === ePageActions.View"
+              />
+              <ng-template #updatedDescriptionError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'form.this_field_is_required' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </section>
+
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------------------------------------------->
+
+        <section class="block-authentication">
+          <h4 class="heading">{{ 'common.authentication' | translate }}</h4>
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              nzLabelWrap
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.intervalToExpireToken"
+            >
+              {{ 'common.token_expiration_time' | translate }} ({{ 'common.minutes' | translate }})
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="intervalToExpireTokenError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.intervalToExpireToken"
+                  [id]="eGeneralSettingAuthenticationFormKeys.intervalToExpireToken"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="0"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #intervalToExpireTokenError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              nzLabelWrap
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.intervalToExpireOTP"
+            >
+              {{ 'common.otp_expiration_time' | translate }} ({{ 'common.minutes' | translate }})
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="intervalToExpireOTPError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.intervalToExpireOTP"
+                  [id]="eGeneralSettingAuthenticationFormKeys.intervalToExpireOTP"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="0"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #intervalToExpireOTPError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- --------------------------------------------------------------------------------------------------------- -->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              nzLabelWrap
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.numberOTPToExceedLimitation"
+            >
+              {{ 'common.maximum_otp_reaches_limit' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="numberOTPToExceedLimitationError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.numberOTPToExceedLimitation"
+                  [id]="eGeneralSettingAuthenticationFormKeys.numberOTPToExceedLimitation"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="0"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #numberOTPToExceedLimitationError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              nzLabelWrap
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.intervalToCountFreOTP"
+            >
+              {{ 'common.count_otp_duration' | translate }} ({{ 'common.minutes' | translate }})
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="intervalToCountFreOTPError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.intervalToCountFreOTP"
+                  [id]="eGeneralSettingAuthenticationFormKeys.intervalToCountFreOTP"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="0"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #intervalToCountFreOTPError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              nzLabelWrap
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.intervalToUnlockOTPLimitation"
+            >
+              {{ 'common.lock_otp_duration' | translate }} ({{ 'common.minutes' | translate }})
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="intervalToUnlockOTPLimitationError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.intervalToUnlockOTPLimitation"
+                  [id]="eGeneralSettingAuthenticationFormKeys.intervalToUnlockOTPLimitation"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="0"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #intervalToUnlockOTPLimitationError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+        </section>
+
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------------------------------------------->
+
+        <section class="block-order">
+          <h4 class="heading">{{ 'common.order' | translate }}</h4>
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              nzLabelWrap
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.autoCancelOrderDuration"
+            >
+              {{ 'common.auto_cancel_order_duration' | translate }} ({{ 'common.minutes' | translate }})
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="autoCancelOrderDurationError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.autoCancelOrderDuration"
+                  [id]="eGeneralSettingAuthenticationFormKeys.autoCancelOrderDuration"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="0"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #autoCancelOrderDurationError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.autoCompleteOrder"
+            >
+              {{ 'common.auto_complete_order_duration' | translate }} ({{ 'common.minutes' | translate }})
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="maxProgramValueToReviewError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.autoCompleteOrder"
+                  [id]="eGeneralSettingAuthenticationFormKeys.autoCompleteOrder"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #maxProgramValueToReviewError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.rangeTimeForRatingProduct"
+            >
+              {{ 'common.range_time_for_rating_product_duration' | translate }} ({{ 'common.minutes' | translate }})
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="maxProgramValueToReviewError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.rangeTimeForRatingProduct"
+                  [id]="eGeneralSettingAuthenticationFormKeys.rangeTimeForRatingProduct"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #maxProgramValueToReviewError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+        </section>
+
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------------------------------------------->
+
+        <section class="block-display">
+          <h4 class="heading">{{ 'common.display' | translate }}</h4>
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.intervalForCountingHotProducts"
+            >
+              {{ 'common.interval_for_counting_hot_products' | translate }} ({{ 'common.minutes' | translate }})
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="intervalForCountingHotProductsError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.intervalForCountingHotProducts"
+                  [id]="eGeneralSettingAuthenticationFormKeys.intervalForCountingHotProducts"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #intervalForCountingHotProductsError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.maxProductHot"
+            >
+              {{ 'common.max_product_hot' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="maxProgramValueToReviewError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.maxProductHot"
+                  [id]="eGeneralSettingAuthenticationFormKeys.maxProductHot"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #maxProgramValueToReviewError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.maxProductBestSeller"
+            >
+              {{ 'common.max_product_best_seller' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="maxProgramValueToReviewError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.maxProductBestSeller"
+                  [id]="eGeneralSettingAuthenticationFormKeys.maxProductBestSeller"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #maxProgramValueToReviewError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.maxNewProducts"
+            >
+              {{ 'common.max_new_products' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="maxHotProductsShowingError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.maxNewProducts"
+                  [id]="eGeneralSettingAuthenticationFormKeys.maxNewProducts"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #maxHotProductsShowingError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.maxProductGoodPriceToday"
+            >
+              {{ 'common.max_product_good_price_today' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="maxHotProductsShowingError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.maxProductGoodPriceToday"
+                  [id]="eGeneralSettingAuthenticationFormKeys.maxProductGoodPriceToday"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #maxHotProductsShowingError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.maxFeaturedSeller"
+            >
+              {{ 'common.max_featured_seller' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="maxHotProductsShowingError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.maxFeaturedSeller"
+                  [id]="eGeneralSettingAuthenticationFormKeys.maxFeaturedSeller"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #maxHotProductsShowingError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-------------------------------------------------------------------------------------------------------->
+          <nz-form-item>
+            <nz-form-label
+              mcRequired
+              nzLabelAlign="left"
+              [nzFor]="eGeneralSettingAuthenticationFormKeys.maxProgramShowing"
+            >
+              {{ 'common.max_program_showing' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="maxHotProductsShowingError">
+              <nz-input-number-group>
+                <nz-input-number
+                  class="w-full"
+                  [formControlName]="eGeneralSettingAuthenticationFormKeys.maxProgramShowing"
+                  [id]="eGeneralSettingAuthenticationFormKeys.maxProgramShowing"
+                  [nzPlaceHolder]="'common.input' | translate"
+                  [nzMin]="1"
+                  [nzMax]="300"
+                  [nzReadOnly]="mode === ePageActions.View"
+                ></nz-input-number>
+                <ng-template #maxHotProductsShowingError let-control>
+                  @if (control.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else if (control.hasError('min') || control.hasError('max')) {
+                    {{ 'form.number_must_be_greater_than_x_and_less_than_y' | translate : { x: 0, y: 300 } }}
+                  }
+                </ng-template>
+              </nz-input-number-group>
+            </nz-form-control>
+          </nz-form-item>
+        </section>
+      </form>
+    </div>
+  </div>
+</app-item-detail-master-layout>

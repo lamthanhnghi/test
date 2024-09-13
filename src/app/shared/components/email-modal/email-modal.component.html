@@ -1,0 +1,50 @@
+<form [formGroup]="form" nz-form>
+  <div *nzModalTitle>
+    {{ data.title | translate }}
+  </div>
+  <div class="flex tablet:flex-row tablet:gap-4 flex-col justify-center items-center">
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">
+        {{ 'common.email_type' | translate }}
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_select' | translate) + ('common.email_type' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <nz-select
+          [nzPlaceHolder]="('form.select' | translate) + ' ' + ('common.email_type' | translate)"
+          [formControlName]="formKeys.emailLabel"
+        >
+          <ng-container *ngFor="let item of emailLabelsOptions">
+            <nz-option [nzValue]="item.value" [nzLabel]="item.label | translate"></nz-option>
+          </ng-container>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- ------------------------------------------------------------------------------------------------------------ -->
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">{{ 'common.email' | translate }}</nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_input' | translate) + ' ' + ('common.email' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <input
+          mcRequired
+          nz-input
+          type="email"
+          [placeholder]="'common.email' | translate"
+          [formControlName]="formKeys.emailAddress"
+        />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <label nz-checkbox [nzValue]="eDefaultStatus.Default" [formControlName]="formKeys.isDefault">
+    {{ 'common.set_as_default' | translate }}
+  </label>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="modalRef.close(undefined)">{{ 'common.close' | translate }}</button>
+    <button nz-button nzType="primary" (click)="submit()">{{ 'common.save' | translate }}</button>
+  </div>
+</form>

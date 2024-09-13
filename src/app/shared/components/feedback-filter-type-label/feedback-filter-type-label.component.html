@@ -1,0 +1,16 @@
+<ng-container [ngSwitch]="status">
+  <span *ngSwitchCase="eFeedbackFilterType.New" class="text-blue">
+    {{ 'enums.content_statuses.new' | translate }}
+  </span>
+  <span *ngSwitchCase="eFeedbackFilterType.Reviewing" class="text-orange">
+    {{ 'enums.content_statuses.admin_processing' | translate }}
+  </span>
+  <span *ngSwitchCase="eFeedbackFilterType.Handled" class="text-green">
+    {{ 'enums.content_statuses.admin_processed' | translate }}
+  </span>
+  <span *ngSwitchCase="eFeedbackFilterType.Useful" class="text-green">
+    {{ 'enums.content_statuses.useful' | translate }}
+  </span>
+  <span *ngSwitchDefault>[?] ({{status}})</span>
+
+</ng-container>

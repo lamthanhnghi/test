@@ -1,0 +1,30 @@
+<article class="px-10 max-tablet:px-5 pb-10 h-full animated-fade-in-up">
+  <section class="w-[min(53.5rem_,_100%)] mx-auto">
+    <h4 class="mt-8 text-center">{{ agreement?.title }}</h4>
+    <div
+      class="text-justify !mt-4 whitespace-pre-line html-content"
+      [innerHTML]="agreement?.content | nzSanitizer: 'html'"
+    ></div>
+    <div class="mt-9">
+      <div nz-checkbox [(ngModel)]="checked">
+        {{ 'account_page.i_have_read_and_agree_to_the_above_terms' | translate }}
+      </div>
+    </div>
+    <div class="flex justify-center items-center gap-4 mt-8">
+      <button (click)="clearSession()" nz-button nzSize="default" nzType="default" type="button">
+        {{ 'common.back' | translate }}
+      </button>
+      <button
+        class="ant-btn-warning"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+        type="button"
+        [disabled]="!checked"
+        (click)="submit()"
+      >
+        {{ 'common.next' | translate }}
+      </button>
+    </div>
+  </section>
+</article>

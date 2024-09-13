@@ -1,0 +1,48 @@
+<form [formGroup]="form" nz-form>
+  <div *nzModalTitle>
+    {{ data.title | translate }}
+  </div>
+  <div class="flex flex-col justify-center items-center">
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">
+        {{ 'common.current_login_info' | translate }}
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_input' | translate) + ' ' + ('common.email_or_phone_number' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <input
+          mcRequired
+          nz-input
+          type="tel"
+          [placeholder]="'common.email_or_phone_number' | translate"
+          [formControlName]="manageLoginIdKeys.sellerLoginID"
+        />
+      </nz-form-control>
+    </nz-form-item>
+    <!-- ------------------------------------------------------------------------------------------------------------ -->
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">
+        {{ 'common.new_login_info' | translate }}
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_input' | translate) + ' ' + ('common.email_or_phone_number' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <input
+          mcRequired
+          nz-input
+          type="tel"
+          [placeholder]="'common.email_or_phone_number' | translate"
+          [formControlName]="manageLoginIdKeys.newLoginId"
+        />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="modalRef.close(undefined)">{{ 'common.close' | translate }}</button>
+    <button nz-button nzType="primary" (click)="submit()">{{ 'common.save' | translate }}</button>
+  </div>
+</form>

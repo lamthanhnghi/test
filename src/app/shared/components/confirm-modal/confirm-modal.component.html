@@ -1,0 +1,43 @@
+<!-- <div *nzModalTitle>{{ data.title! | translate }}</div> -->
+<div class="flex flex-col gap-6">
+  <ng-container [ngSwitch]="data.type">
+    <ng-template [ngSwitchCase]="eConfirmModalTypes.Success">
+      <app-icon name="check-success" size="52" class="text-green"></app-icon>
+    </ng-template>
+    <ng-template [ngSwitchCase]="eConfirmModalTypes.Error">
+      <app-icon name="x-circle" size="52" class="text-red"></app-icon>
+    </ng-template>
+    <ng-template [ngSwitchCase]="eConfirmModalTypes.Warning">
+      <app-icon name="warning" size="52" class="text-orange-light"></app-icon>
+    </ng-template>
+    <ng-template [ngSwitchCase]="eConfirmModalTypes.Confirm">
+      <app-icon name="question" size="52" class="text-default-text-dark"></app-icon>
+    </ng-template>
+    <ng-template [ngSwitchCase]="eConfirmModalTypes.Processing">
+      <app-icon name="processing" size="52" class="text-orange"></app-icon>
+    </ng-template>
+  </ng-container>
+  <p class="text-center">{{ data.message! | translate }}</p>
+</div>
+<div *nzModalFooter class="flex justify-center items-center">
+  <button
+    class="flex-1 max-w-[50%]"
+    nz-button
+    nzType="default"
+    nzSize="small"
+    (click)="modalRef.close(undefined)"
+    *ngIf="!data.hideCancel"
+  >
+    {{ data.cancelText! | translate }}
+  </button>
+  <button
+    class="flex-1 max-w-[50%]"
+    nz-button
+    nzType="primary"
+    nzSize="small"
+    (click)="confirm()"
+    *ngIf="!data.hideConfirm"
+  >
+    {{ data.confirmText! | translate }}
+  </button>
+</div>

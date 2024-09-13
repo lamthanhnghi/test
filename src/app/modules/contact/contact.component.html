@@ -1,0 +1,23 @@
+<app-item-list-master-layout
+  [menuItems]="menuItems"
+  menuStyle="multiple"
+  [crumbs]="breadcrumbs"
+  [layout]="eLayouts.Scroll"
+  [shouldBeInSection]="false"
+>
+  <section class="flex flex-col items-stretch bg-white rounded shadow">
+    <nz-tabset class="channel-list-tabset mb-2" nzCentered [nzSelectedIndex]="selectedIndex">
+      <nz-tab
+        class="flex-1"
+        [nzTitle]="'common.for_seller' | translate"
+        (nzClick)="onTabChange(0)"
+      ></nz-tab>
+      <nz-tab
+        class="flex-1"
+        [nzTitle]="'common.for_user' | translate"
+        (nzClick)="onTabChange(1)"
+      ></nz-tab>
+    </nz-tabset>
+    <app-contact-detail [userType]="userTypes[selectedIndex]" [item]="data" (reloadEvent$)="getByType(userTypes[this.selectedIndex])"></app-contact-detail>
+  </section>
+</app-item-list-master-layout>

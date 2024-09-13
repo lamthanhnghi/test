@@ -1,0 +1,279 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="mb-5 flex items-center justify-between gap-4 lg:flex-row flex-col">
+      <div *ngIf="mode !== ePageActions.Create" class="flex items-center gap-3 text-sm">
+        <app-content-status-label-tag [status]="data?.contentStatus"></app-content-status-label-tag>
+        <span>
+          Ngày cập nhật
+          <span class="font-semibold">{{ data?.updatedDate | date: 'shortDate' }}</span>
+        </span>
+      </div>
+      <div class="max-desktop:w-full grow flex gap-3 lg:justify-end lg:order-last">
+        @if (mode !== ePageActions.View) {
+          <button class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24" nz-button (click)="cancel()">
+            {{ 'common.cancel' | translate }}
+          </button>
+        }
+        @if (mode === ePageActions.View) {
+          @if (
+            data?.contentStatus !== eContentStatuses.AdminReviewing &&
+            data?.contentStatus !== eContentStatuses.AdminApproved &&
+            data?.contentStatus !== eContentStatuses.AdminArchived
+          ) {
+            <button
+              class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+              nz-button
+              nzType="default"
+              (click)="edit()"
+            >
+              {{ 'common.edit' | translate }}
+            </button>
+          }
+        }
+        @if ([ePageActions.Edit, ePageActions.Create].includes(mode)) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn !h-9 btn !text-[14px] min-w-24"
+            nz-button
+            nzType="primary"
+            (click)="submit()"
+          >
+            {{ 'common.save' | translate }}
+          </button>
+        }
+      </div>
+    </div>
+    <form nzLayout="vertical" class="wrapper-right" nz-form [nzNoColon]="mode !== ePageActions.View" [formGroup]="form">
+      <!-- product_category_name / product_group -->
+      <div nz-row [nzGutter]="{ lg: 20, xs: 0 }">
+        <!-- product_category_name -->
+        <div nz-col nzLg="12" nzXs="24">
+          <nz-form-item>
+            <nz-form-label mcRequired [isShow]="mode !== ePageActions.View" nzLabelAlign="left">
+              {{ 'common.product_category_name' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="nameError">
+              <nz-input-group [appReadonlySelect]="mode !== ePageActions.Create">
+                <input
+                  [formControlName]="eProductCategoryFormKeys.Name"
+                  [placeholder]="'common.input' | translate"
+                  nz-input
+                  type="text"
+                  [maxlength]="200"
+                  [readonly]="mode === ePageActions.View"
+                />
+              </nz-input-group>
+
+              <ng-template #nameError>
+                @if (form.get(eProductCategoryFormKeys.Name)?.dirty) {
+                  @if (form.get(eProductCategoryFormKeys.Name)?.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else {
+                    {{ 'error_code.MSG0218' | translate }}
+                  }
+                }
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- end product_category_name -->
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-- product_group -->
+        <div nz-col nzLg="12" nzXs="24">
+          <nz-form-item>
+            <nz-form-label mcRequired [isShow]="mode !== ePageActions.View" nzLabelAlign="left">
+              {{ 'common.product_group' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+              <nz-select
+                [formControlName]="eProductCategoryFormKeys.ProductGroup"
+                [nzPlaceHolder]="'form.select' | translate"
+                [appReadonlySelect]="mode === ePageActions.View"
+                (nzOnSearch)="productGroupSelection.searchDebounce$.next($event)"
+                [nzShowSearch]="true"
+                nzServerSearch
+                [nzLoading]="productGroupSelection.isLoading"
+                (nzScrollToBottom)="productGroupSelection.onLoadMore()"
+                [nzDropdownRender]="renderTemplate"
+              >
+                @for (item of productGroupSelection?.data ?? []; track item.productGroupID) {
+                  <nz-option [nzLabel]="item.productGroupName!" [nzValue]="item"></nz-option>
+                }
+                <ng-template #renderTemplate>
+                  <div *ngIf="productGroupSelection.isLoading">
+                    <nz-spin></nz-spin>
+                  </div>
+                </ng-template>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <!-- end product_category_name / product_group -->
+
+      <!-------------------------------------------------------------------------------------------------------->
+      <!-------------------------------------------------------------------------------------------------------->
+
+      <!-- short_name / description -->
+      <div nz-row [nzGutter]="{ lg: 20, xs: 0 }">
+        <!-- short_name -->
+        <div nz-col nzLg="12" nzXs="24">
+          <nz-form-item>
+            <nz-form-label mcRequired [isShow]="mode !== ePageActions.View" nzLabelAlign="left">
+              {{ 'common.short_name' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="shotNameError">
+              <nz-input-group [appReadonlySelect]="mode !== ePageActions.Create">
+                <input
+                  nz-input
+                  [formControlName]="eProductCategoryFormKeys.ShortName"
+                  [placeholder]="'common.input' | translate"
+                  [readonly]="mode === ePageActions.View"
+                />
+              </nz-input-group>
+              <ng-template #shotNameError>
+                @if (form.get(eProductCategoryFormKeys.ShortName)?.dirty) {
+                  @if (form.get(eProductCategoryFormKeys.ShortName)?.hasError('required')) {
+                    {{ 'form.this_field_is_required' | translate }}
+                  } @else {
+                    {{ 'error_code.MSG0220' | translate }}
+                  }
+                }
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- end short_name -->
+        <!-------------------------------------------------------------------------------------------------------->
+        <!-- description -->
+        <div nz-col nzLg="12" nzXs="24">
+          <nz-form-item>
+            <nz-form-label nzLabelAlign="left">
+              {{ 'common.description' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+              <nz-input-group [appReadonlySelect]="mode !== ePageActions.Create">
+                <input
+                  nz-input
+                  [formControlName]="eProductCategoryFormKeys.Description"
+                  [placeholder]="'common.input' | translate"
+                  [readonly]="mode === ePageActions.View"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- end description -->
+        <!-------------------------------------------------------------------------------------------------------->
+      </div>
+      <!-- end short_name / description -->
+
+      <!-------------------------------------------------------------------------------------------------------->
+      <!-------------------------------------------------------------------------------------------------------->
+
+      <!-- sub_category -->
+      <div nz-row [nzGutter]="{ lg: 20, xs: 0 }">
+        <div nz-col nzLg="12" nzXs="24">
+          <nz-form-item class="mb-0">
+            <nz-form-label nzLabelAlign="left">
+              {{ 'common.sub_category' | translate }}
+            </nz-form-label>
+            @if (mode !== ePageActions.View) {
+              <nz-form-control [nzErrorTip]="'error_code.MSG0219' | translate">
+                <nz-input-group [nzSuffix]="btnAddTpl" [appReadonlySelect]="mode !== ePageActions.Create">
+                  <input
+                    class="w-full"
+                    nzSize="large"
+                    nz-input
+                    [formControl]="subCategoryControl"
+                    [placeholder]="'common.input' | translate"
+                    (keydown.enter)="addSubCategory()"
+                  />
+                  <ng-template #btnAddTpl>
+                    <button nz-button nzType="link" nzSize="small" (click)="addSubCategory()">
+                      {{ 'common.add' | translate }}
+                    </button>
+                  </ng-template>
+                </nz-input-group>
+              </nz-form-control>
+            }
+          </nz-form-item>
+          @for (item of form.get(eProductCategoryFormKeys.SubCategories)?.value ?? []; track item) {
+            <nz-tag
+              [class.mt-2]="mode !== ePageActions.View"
+              class="inline-flex justify-start items-center h-10 rounded gap-2 px-3 text-14px border-grey-lighter bg-transparent"
+              [nzMode]="
+                mode !== ePageActions.View && !subBlockList?.includes(item?.categoryName) ? 'closeable' : 'default'
+              "
+              (nzOnClose)="removeSubCategory(item)"
+            >
+              {{ item?.categoryName }}
+            </nz-tag>
+          }
+        </div>
+        <!-- attribute -->
+        <div nz-col nzLg="12" nzXs="24">
+          <nz-form-item
+            [class.mb-0]="
+              !(
+                form.get(eProductCategoryFormKeys.Attributes)?.dirty &&
+                form.get(eProductCategoryFormKeys.Attributes)?.invalid
+              )
+            "
+          >
+            <nz-form-label nzLabelAlign="left">
+              {{ 'common.attribute_name' | translate }}
+            </nz-form-label>
+            @if (mode !== ePageActions.View) {
+              <nz-form-control>
+                <nz-select
+                  [nzPlaceHolder]="'form.select' | translate"
+                  [appReadonlySelect]="mode === ePageActions.View"
+                  (nzOnSearch)="attributeSelection.searchDebounce$.next($event)"
+                  [nzShowSearch]="true"
+                  nzServerSearch
+                  [nzLoading]="attributeSelection.isLoading"
+                  (nzScrollToBottom)="attributeSelection.onLoadMore()"
+                  [nzDropdownRender]="renderTemplate"
+                  [formControl]="attributeControl"
+                >
+                  @for (item of attributeSelection?.data ?? []; track item.attributeID) {
+                    <nz-option
+                      [nzLabel]="item.attributeName!"
+                      [nzValue]="item"
+                      [nzHide]="isHideAttribute(item)"
+                    ></nz-option>
+                  }
+                  <ng-template #renderTemplate>
+                    <div *ngIf="attributeSelection.isLoading">
+                      <nz-spin></nz-spin>
+                    </div>
+                  </ng-template>
+                </nz-select>
+              </nz-form-control>
+              @if (
+                form.get(eProductCategoryFormKeys.Attributes)?.dirty &&
+                form.get(eProductCategoryFormKeys.Attributes)?.invalid
+              ) {
+                <small class="ant-form-item-explain-error text-13px min-h-5 mt-1 inline-flex items-center">
+                  {{ 'form.this_field_is_required' | translate }}
+                </small>
+              }
+            }
+          </nz-form-item>
+          @for (item of form.get(eProductCategoryFormKeys.Attributes)?.value ?? []; track item) {
+            <nz-tag
+              [class.mt-2]="mode !== ePageActions.View"
+              class="inline-flex justify-start items-center h-10 rounded gap-2 px-3 text-14px border-grey-lighter bg-transparent"
+              [nzMode]="
+                mode !== ePageActions.View && !attributeBlockList?.includes(item?.attributeID) ? 'closeable' : 'default'
+              "
+              (nzOnClose)="removeAttribute(item)"
+            >
+              {{ item.attributeName }}
+            </nz-tag>
+          }
+        </div>
+      </div>
+    </form>
+  </div>
+</app-item-detail-master-layout>

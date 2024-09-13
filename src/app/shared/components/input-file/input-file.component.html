@@ -1,0 +1,50 @@
+<div class="wrapper-upload" [class.cursor-not-allowed]="disabled">
+  <ng-container *ngIf="!disabled">
+    <div
+      class="custom-dropzone"
+      [ngClass]="{ default: layout === 'default' }"
+      [disabled]="disabled || loadingCount > 0"
+      ngx-dropzone
+      [accept]="accepts.join(', ')"
+      (change)="onSelect($event)"
+      [multiple]="multiple"
+      *ngIf="multiple || (!multiple && fileList.length <= 0); else selectedTpl"
+    >
+      <ng-container *ngIf="layout === 'default'">
+        <div class="custom-label gap-2 p-5 relative">
+          <nz-spin class="absolute top-4 right-4" *ngIf="loadingCount > 0"></nz-spin>
+          <app-icon name="upload" size="40" class="text-main"></app-icon>
+          <div class="ant-upload-text">{{ 'common.click_or_drag_to_upload' | translate }}</div>
+          <div class="flex flex-col justify-center items-center gap-0.5">
+            <div class="helper-text">
+              {{ 'common.max_file_size' | translate: { value: renderFileSize } }}
+              <span>/ {{ 'common.file' | translate | lowercase }}</span>
+            </div>
+            <div *ngIf="accepts.length" class="helper-text">
+              {{ 'common.extensions' | translate: { value: renderAccepts } }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="layout === 'custom'">
+        <ng-content select=".drop-zone-template"></ng-content>
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="layout === 'default'">
+    <div class="items-zone" *ngIf="multiple">
+      <mc-media-preview [(lstMedia)]="fileList" (lstMediaChange)="fileListChange.emit(fileList)"></mc-media-preview>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="layout === 'custom'">
+    <ng-content select=".preview-template"></ng-content>
+  </ng-container>
+</div>
+
+<ng-template #selectedTpl>
+  <div class="custom-dropzone">
+    <div class="bg-grey-lighter h-full">
+      <img class="object-cover w-full h-full" nz-image [nzSrc]="fileList[0]['preview']"  alt=""/>
+    </div>
+  </div>
+</ng-template>

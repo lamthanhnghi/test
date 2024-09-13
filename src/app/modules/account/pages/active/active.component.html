@@ -1,0 +1,76 @@
+<app-account-master-layout heading="account_page.reset_password">
+  <p class="mb-10 text-center text-grey">Cập nhật mật khẩu mới</p>
+
+  <form [formGroup]="formPassword" nz-form nzLayout="horizontal" (ngSubmit)="createPassword()">
+    <nz-form-item class="mb-4 style-filled">
+      <nz-form-control class="w-full auth-input" [nzErrorTip]="pwdErrors">
+        <nz-input-group [nzSuffix]="suffixTemplate">
+          <input
+            mcAutocompleteOff
+            formControlName="password"
+            nz-input
+            mcRequired
+            [placeholder]="'account_page.new_password' | translate"
+            [type]="passwordVisible ? 'text' : 'password'"
+          />
+          <ng-template #suffixTemplate>
+            <app-icon
+              classes="cursor-pointer"
+              size="20x20"
+              color="text-grey"
+              [name]="passwordVisible ? 'eye-solid-slash' : 'eye-solid'"
+              (click)="passwordVisible = !passwordVisible"
+            ></app-icon>
+          </ng-template>
+          <ng-template #pwdErrors let-control>
+            <ng-container *ngIf="control.hasError('required'); else passwordPattern">
+              {{ 'form.please_input' | translate }} {{ 'form.password' | translate | lowercase }}
+            </ng-container>
+            <ng-template #passwordPattern>
+              <ng-container *ngIf="control.hasError('passwordPattern')">
+                {{ 'account_page.confirm_new_password' | translate }}
+                {{ 'form.must_be_password_pattern' | translate | lowercase }}
+              </ng-container>
+            </ng-template>
+          </ng-template>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item class="mb-0 style-filled">
+      <nz-form-control class="w-full auth-input" [nzErrorTip]="pwdConfirmErrors">
+        <nz-input-group [nzSuffix]="pwdConfirmSuffixTemplate">
+          <input
+            mcAutocompleteOff
+            formControlName="passwordConfirm"
+            nz-input
+            mcRequired
+            [placeholder]="'form.password_confirm' | translate"
+            [type]="passwordConfirmVisible ? 'text' : 'password'"
+          />
+          <ng-template #pwdConfirmSuffixTemplate>
+            <app-icon
+              classes="cursor-pointer"
+              size="20x20"
+              color="text-grey"
+              [name]="passwordConfirmVisible ? 'eye-solid-slash' : 'eye-solid'"
+              (click)="passwordConfirmVisible = !passwordConfirmVisible"
+            ></app-icon>
+          </ng-template>
+          <ng-template #pwdConfirmErrors let-control>
+            <ng-container *ngIf="control.hasError('required'); else pwdNotMatch">
+              {{ 'form.please_confirm_your_password' | translate }}
+            </ng-container>
+            <ng-template #pwdNotMatch>
+              <ng-container *ngIf="control.hasError('pwdNotMatch')">
+                {{ 'form.password_not_match' | translate }}
+              </ng-container>
+            </ng-template>
+          </ng-template>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <button class="mt-5 ant-btn-warning w-full" nz-button nzSize="default" nzType="primary" type="submit">
+      {{ 'account_page.update' | translate }}
+    </button>
+  </form>
+</app-account-master-layout>

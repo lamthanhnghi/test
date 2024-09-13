@@ -1,0 +1,45 @@
+<nz-upload
+  nzType="drag"
+  [nzMultiple]="true"
+  [nzShowUploadList]="false"
+  [nzBeforeUpload]="beforeUpload"
+  [nzAccept]="accept"
+  [nzDisabled]="isDisabled || disabled"
+>
+  <ng-content></ng-content>
+
+</nz-upload>
+<ng-template #cropperModalTpl>
+  <section class="flex flex-col justify-start items-center">
+    <div class="mt-5 w-full relative flex justify-center items-center min-h-10">
+      @if (fileLoading | async) {
+        <nz-spin class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"></nz-spin>
+      }
+      @if (compressedUrl) {
+        <image-cropper
+          class="my-image-cropper"
+          [imageBase64]="compressedUrl"
+          [aspectRatio]="ratio"
+          [maintainAspectRatio]="true"
+          output="blob"
+          format="jpeg"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()"
+          [imageQuality]="100"
+          backgroundColor="white"
+          [cropperMinWidth]="1440"
+        ></image-cropper>
+      }
+    </div>
+    <div class="flex justify-center items-center gap-5 mt-5">
+      <button nz-button nzType="default" class="min-w-48" (click)="removeURL(this.currentCropIndex)">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" class="min-w-48" (click)="confirmCrop(imageDropEvent!)">
+        {{ 'common.confirm' | translate }}
+      </button>
+    </div>
+  </section>
+</ng-template>

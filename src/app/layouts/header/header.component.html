@@ -1,0 +1,97 @@
+<header class="h-16">
+  <a class="logo" routerLink="/">
+    <img alt="logo" src="assets/images/logo.png" />
+    <span class="app-name">{{ role | enumKey : 'roles' | translate }}</span>
+  </a>
+
+  <div class="flex flex-row justify-end items-center gap-2">
+    <!--    <button-->
+    <!--      [nzDropdownMenu]="languageMenu"-->
+    <!--      class="h-16 w-16 flex justify-center items-center uppercase"-->
+    <!--      nz-dropdown-->
+    <!--      nzTrigger="click"-->
+    <!--    >-->
+    <!--      {{ this.currentLanguage }}-->
+    <!--    </button>-->
+    <!--    <nz-dropdown-menu #languageMenu="nzDropdownMenu">-->
+    <!--      <ul nz-menu nzSelectable>-->
+    <!--        <li (click)="changeLanguage('vi')" *ngIf="currentLanguage !== 'vi'" nz-menu-item>VN</li>-->
+    <!--        <li (click)="changeLanguage('en')" *ngIf="currentLanguage !== 'en'" nz-menu-item>EN</li>-->
+    <!--      </ul>-->
+    <!--    </nz-dropdown-menu>-->
+    <ng-container *ngIf="isLoggedIn$ | async">
+      <!--      <button>-->
+      <!--        <app-avatar-->
+      <!--          class="w-6 h-6"-->
+      <!--          [src]="(user$ | async)?.adminAvatar?.avatarLink || ''"-->
+      <!--          shape="circle"-->
+      <!--          size="24"-->
+      <!--        ></app-avatar>-->
+      <!--      </button>-->
+      <!--      <nz-divider class="h-[30px] border-l-dark" nzType="vertical"></nz-divider>-->
+      <div [nzDropdownMenu]="menu" class="profile" nz-dropdown nzOverlayClassName="my-2" nzTrigger="click">
+        <div class="w-11 h-11 rounded-full bg-grey-lighter">
+          <app-avatar
+            class="w-11 h-11"
+            [src]="(user$ | async)?.adminAvatar?.avatarLink || ''"
+            shape="circle"
+            size="44"
+          ></app-avatar>
+        </div>
+      </div>
+    </ng-container>
+    <!--    <button-->
+    <!--      class="inline-flex justify-center items-center w-7 h-7 text-[1.75rem] leading-none"-->
+    <!--      routerLink="design-system"-->
+    <!--      type="button"-->
+    <!--    >-->
+    <!--      <i class="text-main" nz-icon nzTheme="outline" nzType="question-circle"></i>-->
+    <!--    </button>-->
+  </div>
+
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <div *ngIf="isLoggedIn$ | async" class="profile-dropdown bg-white rounded-lg shadow-md p-0" nz-menu>
+      <div class="flex justify-start items-start gap-3 p-4">
+        <div class="w-11 h-11 rounded-full bg-grey-lighter">
+          <app-avatar
+            class="w-11 h-11"
+            [src]="(user$ | async)?.adminAvatar?.avatarLink || ''"
+            shape="circle"
+            size="44"
+          ></app-avatar>
+        </div>
+        <div>
+          <!--          Temporarily disabled for demo-->
+          <div class="h-full flex flex-col justify-center items-start gap-3 text-14px">
+            <div class="text-grey-dark">
+              {{ (user$ | async)?.adminFullName || (user$ | async)?.contactFullName }}
+            </div>
+            <!--                      <div class="text-grey">-->
+            <!--                        {{ 'account_page.id' | translate }}: {{ user.businessName || user.sellerLoginID }}-->
+            <!--                      </div>-->
+
+            <div nz-menu-item class="mt-6 rounded-full p-0">
+              <a
+                [routerLink]="[RouteUtils.ProfilePage.Base, RouteUtils.ProfilePage.AccountInfo]"
+                nz-button
+                nzShape="round"
+                nzSize="small"
+                nzType="default"
+                type="button"
+              >
+                {{ 'Quản lý tài khoản' | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        (click)="logout()"
+        class="btn-style-none flex !justify-start items-center gap-3 w-full h-10 bg-background rounded-b-lg px-8"
+      >
+        <app-icon color="text-grey-dark" name="logout-outline" size="20"></app-icon>
+        <span>{{ 'account_page.logout' | translate }}</span>
+      </button>
+    </div>
+  </nz-dropdown-menu>
+</header>

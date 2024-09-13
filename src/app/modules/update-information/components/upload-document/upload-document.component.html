@@ -1,0 +1,53 @@
+<article class="px-10 max-tablet:px-5 pb-10 h-full overflow-y-auto">
+  <section class="w-[min(53.5rem_,_100%)] mx-auto">
+    <h4 class="text-left text-18px mt-4">{{ 'account_page.upload_document' | translate | uppercase }}</h4>
+    <p class="mt-4">
+      {{ 'account_page.business_license' | translate }} (*)
+      <span class="text-12px text-grey-neutral">({{ 'account_page.max_n_file' | translate: { value: 5 } }})</span>
+    </p>
+    <div class="mt-4">
+      <app-input-file
+        [maxSize]="limitSize"
+        [(fileList)]="licenseFiles"
+        [accepts]="['.jpg', '.png', '.jpeg']"
+        [multiple]="true"
+        [limit]="5"
+        [listenProgress]="true"
+        (fileListChange)="licenseUploaded($event)"
+        (fileAdded)="licenseAdded($event)"
+      ></app-input-file>
+    </div>
+    <p class="mt-8">
+      {{ 'account_page.other_certificates_if_any' | translate }}
+      <span class="text-12px text-grey-neutral">({{ 'account_page.max_n_file' | translate: { value: 5 } }})</span>
+    </p>
+    <div class="mt-4">
+      <app-input-file
+        [maxSize]="limitSize"
+        [(fileList)]="otherFiles"
+        [accepts]="['.pdf', '.doc', '.docx', '.xls', '.xlsx']"
+        [multiple]="true"
+        [limit]="5"
+        [listenProgress]="true"
+        (fileListChange)="certificatesUploaded($event)"
+        (fileAdded)="certificateAdded($event)"
+      ></app-input-file>
+    </div>
+  </section>
+  <div class="flex justify-center items-center gap-4">
+    <button [routerLink]="['/']" class="mt-8" nz-button nzSize="default" nzType="default" type="button">
+      {{ 'common.back' | translate }}
+    </button>
+    <button
+      [disabled]="!isValid || isUploading"
+      class="mt-8 ant-btn-warning"
+      nz-button
+      nzSize="default"
+      nzType="primary"
+      type="submit"
+      (click)="upload()"
+    >
+      {{ 'common.next' | translate }}
+    </button>
+  </div>
+</article>

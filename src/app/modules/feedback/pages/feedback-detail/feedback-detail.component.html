@@ -1,0 +1,43 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <section class="rounded bg-white mb-4 p-5 flex flex-col gap-4">
+    <div *ngIf="data?.contentStatus !== eFeedbackFilterType.Handled" class="flex gap-2 items-center justify-end">
+      <button
+        *ngIf="data?.contentStatus === eFeedbackFilterType.New"
+        class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+        nz-button
+        nzType="default"
+        (click)="setStatus(eFeedbackFilterType.Reviewing)"
+      >
+        {{ 'enums.content_statuses.admin_processing' | translate }}
+      </button>
+      <button
+        *ngIf="data?.contentStatus === eFeedbackFilterType.Reviewing"
+        class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+        nz-button
+        nzType="default"
+        (click)="setStatus(eFeedbackFilterType.Handled)"
+      >
+        {{ 'enums.content_statuses.admin_processed' | translate }}
+      </button>
+    </div>
+    <div class="flex items-center mb-4">
+      <div class="flex items-center gap-2 grow">
+        <app-icon
+          [name]="titleConfig['icon']"
+          size="24"
+          [color]="titleConfig['color']"
+        ></app-icon>
+        <span class="font-semibold text-grey-darkness">{{data?.topic | enumKey: "feedback_topic" | translate}}</span>
+      </div>
+      <app-feedback-filter-type-label [status]="data?.contentStatus"></app-feedback-filter-type-label>
+    </div>
+    <app-comment-box
+      [canReact]="!isReacting && data?.contentStatus !== eFeedbackFilterType.Handled"
+      [isReplying]="isReplying"
+      [withReply]="data?.contentStatus !== eFeedbackFilterType.Handled"
+      [data]="getInfo()"
+      (reply)="reply($event)"
+      (react)="toggleUseful($event)"
+    ></app-comment-box>
+  </section>
+</app-item-detail-master-layout>

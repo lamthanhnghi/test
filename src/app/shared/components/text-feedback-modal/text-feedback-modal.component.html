@@ -1,0 +1,31 @@
+<form [formGroup]="form" nz-form id="feedbackForm" (ngSubmit)="submit()">
+  <div *nzModalTitle>
+    {{ config.title | translate }}
+  </div>
+  <p class="mb-2 text-default-text">{{ config.message }}</p>
+  <nz-form-item class="w-full mb-0">
+    <nz-form-control [nzSpan]="24" class="w-full" [nzErrorTip]="messageError">
+      <textarea
+        [nzAutosize]="{ minRows: 4, maxRows: 6 }"
+        nz-input
+        [placeholder]="config.inputPlaceholder || 'common.enter' | translate"
+        [formControlName]="formKeys.feedbackInput"
+      ></textarea>
+    </nz-form-control>
+    <ng-template #messageError let-control>
+      <ng-container *ngIf="control.hasError('required')">
+        {{ 'common.please_input' | translate }} {{ 'common.reason' | translate }}
+      </ng-container>
+    </ng-template>
+  </nz-form-item>
+  <div *nzModalFooter>
+    <div class="flex justify-stretch gap-5">
+      <button class="grow" nz-button nzType="default" (click)="modalRef.close(undefined)">
+        {{ config.textBtnCancel || 'common.cancel' | translate }}
+      </button>
+      <button class="grow !ml-0" nz-button nzType="primary" form="feedbackForm" [nzDanger]="config.isDangerAction">
+        {{ config.textBtnOk || 'common.ok' | translate }}
+      </button>
+    </div>
+  </div>
+</form>

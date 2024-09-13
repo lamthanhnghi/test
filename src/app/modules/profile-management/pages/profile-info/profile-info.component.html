@@ -1,0 +1,225 @@
+<app-profile-master-layout>
+  <article>
+    <div class="image-cover">
+      <img
+        class="object-cover w-full h-full"
+        nz-image
+        [nzSrc]="this.data?.adminCover?.coverLink || 'https://placehold.co/1920x960'"
+        alt="profile-cover"
+      />
+      <button nz-button nzType="default" class="btn-icon" (click)="updateCover()">
+        <app-icon name="camera" size="20" class="animated-fade-in"></app-icon>
+      </button>
+    </div>
+    <div class="relative h-16">
+      <app-avatar
+        class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2"
+        [hasShadow]="true"
+        [allowChange]="true"
+        [src]="this.data?.adminAvatar?.avatarLink || ''"
+        shape="circle"
+        size="128"
+      ></app-avatar>
+    </div>
+  </article>
+
+  <div class="p-10">
+    <!-- ACCOUNT INFO -->
+    <article class="text-grey-dark">
+      <h3 class="uppercase text-default-text mb-5">Thông tin tài khoản</h3>
+      <div class="flex flex-col items-stretch gap-6 mt-4">
+        <div class="flex flex-col gap-4">
+          <!--   Basic info     -->
+          <div class="flex justify-between items-center gap-4">
+            <div class="group-title">{{ 'Tên tài khoản' | translate }}</div>
+          </div>
+          <input nz-input disabled [value]="data?.adminFullName || ''" class="!bg-[#F4F4F4] border-none !text-grey-darkness"/>
+
+          <div class="flex justify-between items-center gap-4">
+            <div class="group-title">{{ 'Vai trò' | translate }}</div>
+          </div>
+          <div class="ant-input border-none flex items-center ant-input-disabled !bg-[#F4F4F4] ">
+            <app-role-label [type]="data?.adminRole"></app-role-label>
+          </div>
+          <!--        <input nz-input readonly [value]="data?.adminRole || ''" />-->
+        </div>
+
+        <!--   Phone   -->
+        <div class="flex flex-col gap-4">
+          <!--   title     -->
+          <div class="flex items-center gap-2">
+            <div class="group-title">{{ 'Số điện thoại' | translate }}</div>
+            <button nz-button nzType="link" (click)="addPhone()">
+              <app-icon name="plus-circle" size="24"></app-icon>
+            </button>
+          </div>
+          <!--   row content     -->
+          <ng-container *ngIf="(data?.phones?.length || 0) > 0">
+            <div class="grid lg:grid-cols-2 gap-4">
+              <ng-container *ngFor="let item of data?.phones!">
+                <ng-container
+                  [ngTemplateOutlet]="rowContentTpl"
+                  [ngTemplateOutletContext]="{
+                    icon: 'phone-voice',
+                    text: item.phoneNo,
+                    label: (item.phoneLabel | enumKey: 'phone_labels' | translate),
+                    subTextIcon: 'check',
+                    subTextFn: null,
+                    editFn: editPhone.bind(this, item),
+                    delFn: deletePhone.bind(this, item)
+                  }"
+                ></ng-container>
+              </ng-container>
+            </div>
+          </ng-container>
+          <nz-empty *ngIf="(data?.phones?.length || 0) < 1"></nz-empty>
+        </div>
+
+        <!--   Address   -->
+        <div class="flex flex-col gap-4">
+          <!--   title     -->
+          <div class="flex items-center gap-2">
+            <div class="group-title">{{ 'profile_page.address' | translate }}</div>
+            <button nz-button nzType="link" (click)="addAddress()">
+              <app-icon name="plus-circle" size="24"></app-icon>
+            </button>
+          </div>
+          <!--   row content     -->
+          <ng-container *ngIf="(data?.addresses?.length || 0) > 0">
+            <ng-container *ngFor="let item of data?.addresses!">
+              <ng-container
+                [ngTemplateOutlet]="rowContentTpl"
+                [ngTemplateOutletContext]="{
+                  icon: 'location',
+                  text: item?.addressString,
+                  label: (item.addressLabel | enumKey: 'address_labels' | translate),
+                  subTextIcon: '',
+                  subTextFn: null,
+                  editFn: editAddress.bind(this, item),
+                  delFn: deleteAddress.bind(this, item)
+                }"
+              ></ng-container>
+            </ng-container>
+          </ng-container>
+          <nz-empty *ngIf="(data?.addresses?.length || 0) < 1"></nz-empty>
+        </div>
+        <!--   Email   -->
+        <div class="flex flex-col gap-4">
+          <!--   title     -->
+          <div class="flex items-center gap-2">
+            <div class="group-title">{{ 'profile_page.email' | translate }}</div>
+            <button nz-button nzType="link" (click)="addEmail()">
+              <app-icon name="plus-circle" size="24"></app-icon>
+            </button>
+          </div>
+          <!--   row content     -->
+          <ng-container *ngIf="(data?.emails?.length || 0) > 0">
+            <ng-container *ngFor="let item of data?.emails!">
+              <ng-container
+                [ngTemplateOutlet]="rowContentTpl"
+                [ngTemplateOutletContext]="{
+                  icon: 'outline-mail',
+                  text: item.emailAddress,
+                  label: (item.emailLabel | enumKey: 'email_labels' | translate),
+                  subTextIcon: 'check',
+                  subTextFn: null,
+                  editFn: editEmail.bind(this, item),
+                  delFn: deleteEmail.bind(this, item)
+                }"
+              ></ng-container>
+            </ng-container>
+          </ng-container>
+          <nz-empty *ngIf="(data?.emails?.length || 0) < 1"></nz-empty>
+        </div>
+
+        <!--      URL-->
+        <div class="flex flex-col gap-4">
+          <!--   title     -->
+          <div class="flex items-center gap-2">
+            <div class="group-title">{{ 'profile_page.url' | translate }}</div>
+            <button nz-button nzType="link" (click)="addUrl()">
+              <app-icon name="plus-circle" size="24"></app-icon>
+            </button>
+          </div>
+          <!--   row content     -->
+          <ng-container *ngIf="(data?.urls?.length || 0) > 0">
+            <ng-container *ngFor="let item of data?.urls!">
+              <ng-container
+                [ngTemplateOutlet]="rowContentTpl"
+                [ngTemplateOutletContext]="{
+                  icon: 'link-alt',
+                  text: item.urlString,
+                  subTextIcon: 'check',
+                  subTextFn: null,
+                  delFn: item.isDefault ? null : deleteUrl.bind(this, item),
+                  editFn: editUrl.bind(this, item)
+                }"
+              ></ng-container>
+            </ng-container>
+          </ng-container>
+          <nz-empty *ngIf="(data?.urls?.length || 0) < 1"></nz-empty>
+        </div>
+
+        <!--   Website   -->
+        <!--      <div class="flex flex-col gap-4">-->
+        <!--        &lt;!&ndash;   title     &ndash;&gt;-->
+        <!--        <div class="flex justify-between items-center gap-4">-->
+        <!--          <div class="group-title">{{ 'URL' | translate }}</div>-->
+        <!--          &lt;!&ndash;                <button nz-button nzType="link" (click)="addUrl()">&ndash;&gt;-->
+        <!--          &lt;!&ndash;                  <app-icon name="plus-circle" size="24"></app-icon>&ndash;&gt;-->
+        <!--          &lt;!&ndash;                </button>&ndash;&gt;-->
+        <!--        </div>-->
+        <!--        &lt;!&ndash;   row content     &ndash;&gt;-->
+        <!--        <ng-container *ngIf="data?.urls?.length">-->
+        <!--          <ng-container *ngFor="let item of data?.urls!">-->
+        <!--            <ng-container-->
+        <!--              [ngTemplateOutlet]="rowContentTpl"-->
+        <!--              [ngTemplateOutletContext]="{-->
+        <!--                icon: 'link-alt',-->
+        <!--                text: item.urlString,-->
+        <!--                label: '',-->
+        <!--                subTextIcon: '',-->
+        <!--                subTextFn: null-->
+        <!--              }"-->
+        <!--            ></ng-container>-->
+        <!--          </ng-container>-->
+        <!--        </ng-container>-->
+        <!--      </div>-->
+      </div>
+    </article>
+  </div>
+</app-profile-master-layout>
+
+<ng-template
+  #rowContentTpl
+  let-icon="icon"
+  let-text="text"
+  let-label="label"
+  let-subTextIcon="subTextIcon"
+  let-subTextFn="subTextFn"
+  let-editFn="editFn"
+  let-delFn="delFn"
+  let-item="item"
+  let-isSecondary="isSecondary"
+>
+  <ng-template #rowActionTmp>
+    <div class="flex gap-2">
+      <button *ngIf="!!editFn" nz-button nzType="link" type="button" (click)="editFn?.()">
+        <app-icon name="pencil-simple-line" size="20"></app-icon>
+      </button>
+      <button *ngIf="!!delFn" nz-button nzType="link" type="button" (click)="delFn?.()">
+        <app-icon name="trash" size="20"></app-icon>
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-col gap-3">
+    <div *ngIf="label" class="flex gap-2 text-[14px] leading-5">
+      <app-icon [name]="icon" size="20"></app-icon>
+      <span>{{ label }}</span>
+    </div>
+    <nz-input-group class="!bg-white" [nzSuffix]="rowActionTmp">
+      <input nz-input readonly [value]="text || ''" />
+    </nz-input-group>
+  </div>
+</ng-template>

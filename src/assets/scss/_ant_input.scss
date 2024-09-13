@@ -1,0 +1,202 @@
+/*****************************************************
+************************ input ************************
+******************************************************/
+
+.ant-input,
+.ant-input-number,
+.ant-input-affix-wrapper,
+.ant-input-group {
+  @apply min-h-[var(--input-height-default)];
+  // height
+  @apply rounded border-1 border-background;
+  @apply bg-white text-grey-darkness;
+
+  &[aria-readonly="true"] {
+    @apply bg-background-table border-1 border-grey-lighter;
+    @apply rounded #{'!important'};
+
+    > input {
+      @apply bg-background-table border-0;
+      @apply rounded #{'!important'};
+    }
+  }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    @apply bg-white;
+  }
+
+  &::placeholder,
+  &::-ms-input-placeholder {
+    @apply text-grey-neutral font-light;
+    opacity: 1;
+  }
+
+  &:focus,
+  &:active {
+    @apply border-1 border-solid border-main;
+    @apply bg-white;
+  }
+
+  &.ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+  .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+    @apply bg-white;
+  }
+
+  &.ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+      .ant-input-affix-wrapper-borderless
+    ).ant-input-affix-wrapper,
+  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+      .ant-input-affix-wrapper-borderless
+    ).ant-input-affix-wrapper:hover {
+    @apply bg-white;
+
+    input {
+      @apply bg-white;
+    }
+  }
+
+  &.ant-input-disabled,
+  &.ant-input-affix-wrapper-disabled {
+    /** input disable color */
+    @apply border-1 border-grey-lighter bg-background;
+  }
+
+  .ant-input-suffix {
+    @apply text-grey-neutral;
+  }
+}
+
+.ant-input-number input {
+  @apply h-[var(--input-height-default)] text-14px;
+}
+
+nz-input-group.ant-input-affix-wrapper {
+  @apply rounded;
+  @apply h-[var(--input-height-default)];
+
+  .ant-input {
+    min-height: calc(100% - 0.125rem);
+  }
+
+  .ant-form-item-feedback-icon {
+    @apply inline-flex justify-center items-center;
+  }
+
+  &.ant-input-affix-wrapper-focused {
+    @apply min-h-[var(--input-height-default)];
+    @apply border-1 border-solid border-main;
+    @apply bg-white text-grey-neutral;
+  }
+}
+
+.ant-form-item.style-filled {
+  .ant-input-affix-wrapper, .ant-input-group, .ant-input-affix-wrapper-status-error {
+    @apply border-0 bg-background;
+
+    input.ant-input {
+      @apply text-grey-dark font-normal rounded;
+
+      @apply bg-background #{'!important'};
+
+      &::placeholder, &::-ms-input-placeholder, &::-webkit-input-placeholder, &:-moz-placeholder, &:-ms-input-placeholder {
+        @apply text-grey-neutral font-normal;
+      }
+    }
+  }
+
+  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+      .ant-input-affix-wrapper-borderless
+    ).ant-input-affix-wrapper,
+  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+      .ant-input-affix-wrapper-borderless
+    ).ant-input-affix-wrapper:hover {
+    @apply bg-background border-1 border-red-light;
+
+    input.ant-input {
+      @apply bg-background text-red;
+    }
+  }
+}
+
+.ant-form-item-with-help .ant-form-item-explain {
+  min-height: unset;
+  @apply mt-1 text-13px mb-2;
+}
+
+/*****************************************************
+*********************** Select ***********************
+******************************************************/
+
+.multiple-select-with-selected-tags {
+  .ant-select-selection-item {
+    @apply hidden;
+  }
+}
+
+.multiple-select-with-selected-tags-dropdown {
+  .ant-select-item-option-selected {
+    @apply bg-transparent text-grey-dark #{!important};
+  }
+}
+
+.ant-select:not(.ant-select-customize-input) {
+  .ant-select-selector {
+    @apply rounded bg-white border-background;
+    min-height: var(--input-height-default);
+    .ant-select-selection-search-input {
+      @apply min-h-[var(--input-height-default)];
+    }
+
+    .ant-select-selection-item,
+    .ant-select-selection-placeholder {
+      line-height: calc(var(--input-height-default) - 0.25rem);
+    }
+
+    @apply transition-none;
+  }
+
+  nz-select-clear {
+    @apply inline-flex;
+  }
+}
+
+.ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input) .ant-select-selector {
+  @apply bg-white;
+}
+
+.ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  @apply border-1 border-grey-lighter bg-background;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  @apply bg-main text-white;
+}
+
+.ant-select[aria-readonly="true"] {
+  .ant-select-selector {
+    @apply bg-background-table border-1 border-grey-lighter;
+    @apply rounded #{'!important'};
+  }
+}
+
+/*****************************************************
+*********************** DatePicker ***********************
+******************************************************/
+
+.ant-picker {
+  @apply py-0 rounded border-background;
+  &.ant-picker-borderless {
+    @apply bg-white;
+  }
+  .ant-picker-input {
+    @apply min-h-[var(--input-height-default)];
+    @apply rounded border-transparent text-grey-darkness;
+  }
+
+  &[aria-readonly="true"] {
+    @apply bg-background-table border-1 border-grey-lighter;
+    @apply rounded #{'!important'};
+  }
+}

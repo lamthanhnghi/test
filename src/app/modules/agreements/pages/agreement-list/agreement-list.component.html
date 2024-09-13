@@ -1,0 +1,98 @@
+<app-item-list-master-layout
+  heading="Thỏa thuận"
+  [menuItems]="menuItems"
+  (searchInputChange)="onSearchKeywordChange($event)"
+>
+  <section class="rounded flex flex-col items-stretch lg:px-5">
+    <div class="flex-grow block">
+      <div class="flex justify-end gap-4 mb-4">
+        <button (click)="createOrEditWithType()" nz-button nzType="primary" nzShape="circle">
+          <span nz-icon nzType="plus"></span>
+        </button>
+      </div>
+      <nz-table
+        [nzData]="data" nzBordered class="mc-table"
+        [nzShowPagination]="false"
+        [nzScroll]="{ x: '1280px', y: 'calc(100dvh - var(--footer-height) - 358px)' }"
+      >
+        <thead>
+        <tr>
+          <th nzAlign="center" nzWidth="auto">
+            <span class="font-semibold">{{ 'common.agreement_name' | translate }}</span>
+          </th>
+          <th nzWidth="20ch">
+            <span class="font-semibold">{{ 'common.agreement_type' | translate }}</span>
+          </th>
+          <th nzWidth="20ch">
+            <span class="font-semibold">{{ 'common.version' | translate }}</span>
+          </th>
+          <th nzWidth="20ch">
+            <span class="font-semibold">{{ 'common.applied_date' | translate }}</span>
+          </th>
+          <th nzWidth="10rem">
+            <span class="font-semibold">{{ 'common.in_effect' | translate }}</span>
+          </th>
+          <th nzWidth="10rem">
+            <span class="font-semibold">{{ 'common.status' | translate }}</span>
+          </th>
+          <th nzWidth="8rem">{{ '' | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of data">
+          <tr>
+            <td>
+              {{ item.agreementName }}
+            </td>
+            <td class="text-center">
+              <div class="">{{ item.agreementType | enumKey: 'agreement_types' | translate }}</div>
+            </td>
+            <td class="text-center">
+              <div>{{ item.version }}</div>
+            </td>
+            <td class="text-center">
+              <div>{{ item.applyDate | date: DATE_FORMAT }}</div>
+            </td>
+            <td class="text-center">
+              <nz-radio-group [ngModel]="item.isDefault" class="flex justify-center items-center">
+                <div nz-radio [nzValue]="1" aria-readonly="true"></div>
+              </nz-radio-group>
+            </td>
+            <td nzAlign="center">
+              <app-content-status-label [status]="item.contentStatus"></app-content-status-label>
+            </td>
+            <td>
+              <div class="flex gap-3 justify-center">
+                <button
+                  class="ant-btn-link flex justify-center items-center"
+                  nzType="link"
+                  (click)="createOrEditWithType(item, false)"
+                >
+                  {{ 'common.view' | translate }}
+                </button>
+                <button
+                  class="ant-btn-link flex justify-center items-center text-blue hover:text-blue-dark focus:text-blue"
+                  nzType="link"
+                  (click)="createOrEditWithType(item, true)"
+                >
+                  {{ 'common.edit' | translate }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+    <nz-pagination
+      nzShowSizeChanger
+      nzResponsive
+      [nzPageSizeOptions]="[10, 20, 30, 40, 50]"
+      [(nzPageSize)]="filterObject.pageSize"
+      [(nzPageIndex)]="filterObject.pageIndex"
+      [nzTotal]="filterObject.total"
+      (nzPageSizeChange)="onPageSizeChange()"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+    ></nz-pagination>
+  </section>
+</app-item-list-master-layout>

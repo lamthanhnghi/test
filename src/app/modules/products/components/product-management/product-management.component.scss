@@ -1,0 +1,13 @@
+:host {
+  nz-form-item {
+    @apply mb-5;
+  }
+  nz-form-label {
+    @apply font-medium pb-1.5;
+  }
+
+  .helper-text {
+    color: #FFA463;
+    @apply text-13px mt-1;
+  }
+}

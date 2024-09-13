@@ -1,0 +1,8 @@
+:host {
+  @apply inline-flex justify-center items-center;
+  button.btn-camera {
+    @apply absolute shadow-sm;
+    @apply w-8 h-8;
+    @apply rounded-full bg-pink text-white hover:bg-pink-500 #{'!important'};
+  }
+}

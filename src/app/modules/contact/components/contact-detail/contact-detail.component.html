@@ -1,0 +1,278 @@
+<div class="px-5 lg:px-10 mb-10">
+  <form (ngSubmit)="saveContactName()" [formGroup]="form" class="wrapper-right" nz-form nzNoColon>
+    <!-- --------------------------------------------------------------------------------------------------------- -->
+    <div class="row-content">
+      <nz-form-item>
+        <nz-form-label [nzFor]="eContactFormKeys.ContactName" [nzSm]="24" nzLabelAlign="left" nzLabelWrap nzRequired>
+          {{ 'common.company' | translate | uppercase }}
+        </nz-form-label>
+        <nz-form-control [nzErrorTip]="nameError" [nzXs]="24">
+          <input
+            #inputContactName
+            (blur)="onBlurContactName()"
+            [formControlName]="eContactFormKeys.ContactName"
+            [id]="eContactFormKeys.ContactName"
+            [placeholder]="'common.input' | translate"
+            [readonly]="!isEdit"
+            class="w-full pr-16"
+            nz-input
+            nzSize="large"
+          />
+          <div class="inline-flex gap-2 absolute right-0 top-1/2 -translate-y-1/2 px-3">
+            @if (isEdit) {
+              <button nz-button nzType="link" type="submit">
+                {{ 'common.save' | translate }}
+              </button>
+            } @else {
+              <button nz-button nzType="link" type="button" (click)="isEdit = true; inputContactName?.focus()">
+                <app-icon name="pencil-simple-line" size="20"></app-icon>
+              </button>
+            }
+          </div>
+          <ng-template #nameError let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              {{ 'common.please_input' | translate }} {{ 'common.company' | translate }}
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+  <!-- ----------------------------------------------------------------------------------------------------------- -->
+  @if (!data) {
+    <section class="opacity-40 pointer-events-none">
+      <h5 class="uppercase mb-1">{{ 'common.phone' | translate }}</h5>
+      <section class="grid grid-cols-1 gap-4 w-full">
+        @for (item of [ePhoneLabels.Home, ePhoneLabels.Work]; track item) {
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="24">
+              {{ item | enumKey: 'phone_labels' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzXs]="24">
+              <input
+                class="w-full pr-16"
+                nzSize="large"
+                nz-input
+                [placeholder]="'common.input' | translate"
+                [readonly]="true"
+              />
+              <div class="inline-flex gap-2 absolute right-0 top-1/2 -translate-y-1/2 px-3">
+                <button nz-button nzType="link" type="button">
+                  <app-icon name="pencil-simple-line" size="20"></app-icon>
+                </button>
+                <button nz-button nzType="link" type="button">
+                  <app-icon name="trash" size="20"></app-icon>
+                </button>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        }
+      </section>
+      <h5 class="uppercase mb-1 mt-6">{{ 'common.email' | translate }}</h5>
+      <section class="grid grid-cols-1 gap-4 w-full">
+        @for (item of [eEmailLabels.Private, ePhoneLabels.Work]; track item) {
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="24">
+              {{ item | enumKey: 'email_labels' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzXs]="24">
+              <input
+                class="w-full pr-16"
+                nzSize="large"
+                nz-input
+                [placeholder]="'common.input' | translate"
+                [readonly]="true"
+              />
+              <div class="inline-flex gap-2 absolute right-0 top-1/2 -translate-y-1/2 px-3">
+                <button nz-button nzType="link" type="button">
+                  <app-icon name="pencil-simple-line" size="20"></app-icon>
+                </button>
+                <button nz-button nzType="link" type="button">
+                  <app-icon name="trash" size="20"></app-icon>
+                </button>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        }
+      </section>
+      <h5 class="uppercase mb-1 mt-6">{{ 'common.address' | translate }}</h5>
+      @for (item of [eAddressLabels.Home, ePhoneLabels.Work]; track item) {
+        <nz-form-item class="mb-0">
+          <nz-form-label nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="24">
+            {{ item | enumKey: 'address_labels' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzXs]="24">
+            <input
+              class="w-full pr-16"
+              nzSize="large"
+              nz-input
+              [placeholder]="'common.input' | translate"
+              [readonly]="true"
+            />
+            <div class="inline-flex gap-2 absolute right-0 top-1/2 -translate-y-1/2 px-3">
+              <button nz-button nzType="link" type="button">
+                <app-icon name="pencil-simple-line" size="20"></app-icon>
+              </button>
+              <button nz-button nzType="link" type="button">
+                <app-icon name="trash" size="20"></app-icon>
+              </button>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      }
+    </section>
+  } @else {
+    <section>
+      <div class="mb-1 flex items-center gap-2">
+        <h5 class="uppercase">{{ 'common.phone' | translate }}</h5>
+        <button nz-button nzType="link" (click)="addOrEditPhone()">
+          <app-icon name="plus-circle" size="24"></app-icon>
+        </button>
+      </div>
+      <section class="grid grid-cols-1 gap-4 w-full">
+        @if (data?.phones?.length! > 0) {
+          @for (item of data?.phones; track item.phoneID) {
+            <nz-form-item class="mb-0">
+              <nz-form-label [nzRequired]="item.isDefault === 1" nzLabelAlign="left" nzLabelWrap [nzSm]="24">
+                <div class="flex items-center gap-1">
+                  <app-icon
+                    name="phone"
+                    size="20"
+                  ></app-icon>
+                  {{ item?.phoneLabel | enumKey: 'phone_labels' | translate }}
+                </div>
+              </nz-form-label>
+              <nz-form-control [nzXs]="24">
+                <input
+                  class="w-full pr-16"
+                  nzSize="large"
+                  nz-input
+                  [value]="item?.phoneNo"
+                  [placeholder]="'common.input' | translate"
+                  [readonly]="true"
+                />
+                <div class="inline-flex gap-2 absolute right-0 top-1/2 -translate-y-1/2 px-3">
+                  <button nz-button nzType="link" type="button" (click)="addOrEditPhone(item)">
+                    <app-icon name="pencil-simple-line" size="20"></app-icon>
+                  </button>
+                  <button nz-button nzType="link" type="button" (click)="deletePhone(item)">
+                    <app-icon name="trash" size="20"></app-icon>
+                  </button>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          }
+        } @else {
+          <ng-container *ngTemplateOutlet="empty"></ng-container>
+        }
+      </section>
+      <div class="mb-1 mt-6 flex items-center gap-2">
+        <h5 class="uppercase">{{ 'common.email' | translate }}</h5>
+        <button nz-button nzType="link" (click)="addOrEditEmail()">
+          <app-icon name="plus-circle" size="24"></app-icon>
+        </button>
+      </div>
+      <section class="grid grid-cols-1 gap-4 w-full">
+        @if (data?.emails?.length! > 0) {
+          @for (item of data?.emails; track item.emailID) {
+            <nz-form-item class="mb-0">
+              <nz-form-label [nzRequired]="item.isDefault === 1" nzLabelAlign="left" nzLabelWrap [nzSm]="24">
+                <div class="flex items-center gap-1">
+                  <app-icon
+                    name="outline-mail"
+                    size="20"
+                  ></app-icon>
+                  {{ item?.emailLabel | enumKey: 'email_labels' | translate }}
+                </div>
+              </nz-form-label>
+              <nz-form-control [nzXs]="24">
+                <input
+                  class="w-full pr-16"
+                  nzSize="large"
+                  nz-input
+                  [value]="item?.emailAddress"
+                  [placeholder]="'common.input' | translate"
+                  [readonly]="true"
+                />
+                <div class="inline-flex gap-2 absolute right-0 top-1/2 -translate-y-1/2 px-3">
+                  <button nz-button nzType="link" type="button" (click)="addOrEditEmail(item)">
+                    <app-icon name="pencil-simple-line" size="20"></app-icon>
+                  </button>
+                  <button nz-button nzType="link" type="button" (click)="deleteEmail(item)">
+                    <app-icon name="trash" size="20"></app-icon>
+                  </button>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          }
+        } @else {
+          <ng-container *ngTemplateOutlet="empty"></ng-container>
+        }
+      </section>
+      <div class="mb-1 mt-6 flex items-center gap-2">
+        <h5 class="uppercase">{{ 'common.address' | translate }}</h5>
+        <button nz-button nzType="link" (click)="addOrEditAddress()">
+          <app-icon name="plus-circle" size="24"></app-icon>
+        </button>
+      </div>
+      @if (data?.addresses?.length! > 0) {
+        @for (item of data?.addresses; track item.addressID) {
+          <nz-form-item class="mb-0">
+            <nz-form-label [nzRequired]="item.isDefault === 1" nzLabelAlign="left" nzLabelWrap [nzSm]="24">
+              <div class="flex items-center gap-1">
+                <app-icon
+                  name="location"
+                  size="20"
+                ></app-icon>
+                {{ item?.addressLabel | enumKey: 'address_labels' | translate }}
+              </div>
+            </nz-form-label>
+            <nz-form-control [nzXs]="24">
+              <input
+                class="w-full pr-16"
+                nzSize="large"
+                nz-input
+                [value]="item?.addressString"
+                [placeholder]="'common.input' | translate"
+                [readonly]="true"
+              />
+              <div class="inline-flex gap-2 absolute right-0 top-1/2 -translate-y-1/2 px-3">
+                <button nz-button nzType="link" type="button">
+                  <app-icon name="pencil-simple-line" size="20" (click)="addOrEditAddress(item)"></app-icon>
+                </button>
+                <button nz-button nzType="link" type="button" (click)="deleteAddress(item)">
+                  <app-icon name="trash" size="20"></app-icon>
+                </button>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+
+          @if (item.latitude && item.longitude) {
+            <div class="mt-2" *ngIf="item.addressUrl">
+              <app-dynamic-google-map [iframe]="item.addressUrl"></app-dynamic-google-map>
+            </div>
+          }
+        }
+      } @else {
+        <ng-container *ngTemplateOutlet="empty"></ng-container>
+      }
+    </section>
+  }
+</div>
+
+<ng-template #inputAction let-deleteFn="deleteFn" let-editFn="editFn">
+  <div class="inline-flex gap-2">
+    <button (click)="editFn?.()" nz-button nzType="link" type="button">
+      <app-icon name="pencil-simple-line" size="20"></app-icon>
+    </button>
+    <button (click)="deleteFn?.()" nz-button nzType="link" type="button">
+      <app-icon name="trash" size="20"></app-icon>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #empty>
+  <div class="col-span-2 text-center text-grey py-5 rounded bg-gray-100 mt-2">
+    {{ 'common.data_not_updated' | translate }}
+  </div>
+</ng-template>

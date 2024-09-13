@@ -1,0 +1,19 @@
+:host {
+  .main-layout-container {
+    height: 100%;
+    .ant-layout-sider {
+      transition: none;
+      &:not(.ant-layout-sider-collapsed) {
+        @apply px-4;
+      }
+    }
+
+    .main-content-section {
+      @apply h-full;
+    }
+
+    .inner-content.ant-layout-content {
+      //@apply p-10;
+    }
+  }
+}

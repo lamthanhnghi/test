@@ -1,0 +1,6 @@
+<section
+  *ngIf="(loading$ | async) || (loadingCount$ | async)"
+  class="fixed w-screen h-screen z-[9999] bg-background/10 backdrop-blur-[4px] top-0 left-0 flex flex-col justify-center items-center gap-10 cursor-progress"
+>
+  <nz-spin nzSize="large"></nz-spin>
+</section>

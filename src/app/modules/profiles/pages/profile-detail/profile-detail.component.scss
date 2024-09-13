@@ -1,0 +1,16 @@
+:host {
+  .image-cover {
+    @apply relative;
+    @apply aspect-[343/205] rounded-lg lg:aspect-[1000/316] overflow-hidden object-cover bg-grey-lighter;
+
+    button {
+      @apply absolute right-2 bottom-2 shadow-sm;
+      @apply w-8 h-8;
+      @apply rounded-full bg-grey-dark text-white;
+    }
+  }
+
+  .group-title {
+    @apply text-grey-dark;
+  }
+}

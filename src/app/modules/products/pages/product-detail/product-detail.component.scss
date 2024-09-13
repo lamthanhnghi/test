@@ -1,0 +1,22 @@
+:host {
+  nz-card {
+    background: none;
+  }
+
+  .row-content {
+    @apply laptop:flex flex-nowrap;
+    gap: 0.75rem;
+
+    .col-left {
+      @apply w-[12rem] min-w-[12rem];
+    }
+
+    .col-right {
+      @apply grow;
+
+      .grow-2 {
+        flex-grow: 2;
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+:host {
+  nz-layout {
+    background: initial;
+    @apply bg-background-white;
+    margin-top: var(--header-height);
+    min-height: calc(100% - var(--header-height));
+    height: auto;
+
+    &.layout-fixed {
+      height: calc(100% - var(--header-height));
+    }
+
+    nz-content {
+      router-outlet ::ng-deep + * {
+        @apply w-full;
+        height: calc(100% - var(--footer-height));
+      }
+    }
+  }
+
+  app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 50;
+  }
+}

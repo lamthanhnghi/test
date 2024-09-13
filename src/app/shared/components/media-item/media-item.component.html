@@ -1,0 +1,98 @@
+@switch (layout) {
+  @default {
+    <div class="inline-flex justify-center items-center w-full h-full bg-background relative group">
+      @if (file?.status === 'done') {
+        @if (file?.type?.includes('image')) {
+          <img
+            nz-image
+            class="object-scale-down w-full h-full"
+            [ngClass]="imageClasses"
+            [nzSrc]="file?.thumbUrl || FALLBACK_IMAGE"
+            [alt]="file?.uid"
+            [nzPlaceholder]="PLACEHOLDER_IMAGE"
+            [nzFallback]="FALLBACK_IMAGE"
+          />
+        } @else {
+          <app-icon name="color:file-pdf" size="48"></app-icon>
+        }
+      } @else if (file?.status === 'uploading') {
+        <div class="w-full h-full flex justify-center items-center p-2">
+          <nz-progress class="w-full" [nzPercent]="file?.percent" [nzShowInfo]="false" nzSize="small"></nz-progress>
+        </div>
+      } @else {
+        <div class="flex flex-col justify-center items-center gap-2 p-2">
+          <app-icon name="picture" size="24"></app-icon>
+          <div>{{ 'common.add_image' | translate }}</div>
+        </div>
+      }
+      <div
+        class="absolute top-0 left-0 justify-center items-center gap-4 w-full h-full z-10 bg-grey-darkness/30 hidden group-hover:flex"
+      >
+        <div class="flex justify-end items-start gap-2 p-2">
+          <button
+            nz-button
+            nzType="link"
+            nzSize="small"
+            (click)="imgRef.onPreview()"
+            *ngIf="file?.type?.includes('image')"
+          >
+            <img #imgRef="nzImage" class="hidden" nz-image [nzSrc]="file?.thumbUrl || FALLBACK_IMAGE" alt="." />
+            <app-icon name="eye" size="20" class="text-white hover:text-white/80"></app-icon>
+          </button>
+          @if (!disabled) {
+            <button nz-button nzType="link" nzSize="small" (click)="remove()">
+              <app-icon name="trash" size="20" class="text-white hover:text-white/80"></app-icon>
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+  @case ('list') {
+    <div class="w-full flex justify-start items-center gap-3 rounded p-3 border-1 border-background">
+      <!-- thumbnail -->
+      <div class="w-8 h-8 shrink-0 inline-flex justify-center items-center">
+        @if (file?.status === 'done') {
+          @if (file?.type?.includes('image')) {
+            <!-- upload image success -->
+            <img
+              class="object-scale-down w-full h-full cursor-pointer"
+              [ngClass]="imageClasses"
+              nz-image
+              [nzPlaceholder]="PLACEHOLDER_IMAGE"
+              [nzFallback]="FALLBACK_IMAGE"
+              [nzSrc]="file?.thumbUrl || ''"
+              [alt]="file?.uid"
+            />
+          } @else {
+            <!-- upload file success -->
+            <a [href]="file?.thumbUrl" target="_blank">
+              <app-icon name="color:file-pdf" size="32"></app-icon>
+            </a>
+          }
+        } @else if (file?.status === 'uploading') {
+          <!-- uploading -->
+          <nz-spin></nz-spin>
+        } @else {
+          <!-- error -->
+          <app-icon name="color:file-pdf" size="32"></app-icon>
+        }
+      </div>
+      <!-- file info -->
+      <div class="flex-grow flex flex-col justify-center gap-2">
+        <div class="text-14px flex justify-between items-center gap-4">
+          <span class="line-clamp-1" [nz-tooltip]="file?.name">{{ file?.name }}</span>
+          <button *ngIf="!disabled" nz-button nzType="link" class="!text-grey-light text-14px" (click)="remove()">
+            {{ 'common.delete' | translate }}
+          </button>
+        </div>
+        <nz-progress
+          class="w-full media-progress"
+          [nzPercent]="file?.percent"
+          [nzShowInfo]="false"
+          nzSize="small"
+        ></nz-progress>
+      </div>
+    </div>
+  }
+}

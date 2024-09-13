@@ -1,0 +1,17 @@
+<app-header></app-header>
+
+<app-toast></app-toast>
+<app-loading-overlay></app-loading-overlay>
+<!-- <app-header></app-header> -->
+<nz-layout [class.layout-fixed]="layout === eLayouts.Fixed" class="!bg-background">
+  <!--    <nz-sider class="bg-background-white !w-80 !max-w-full !min-w-80" *ngIf="isShowMenu">-->
+  <!--      <app-main-menu [menuItems]="menuItems"></app-main-menu>-->
+  <!--    </nz-sider>-->
+
+  <!--[ngClass]="{ 'overflow-auto': layout === eLayouts.Fixed }"-->
+  <nz-content class="flex justify-start items-stretch flex-wrap">
+    <router-outlet></router-outlet>
+    <app-footer class="w-full lg:block hidden" *ngIf="layout === eLayouts.Fixed"></app-footer>
+  </nz-content>
+</nz-layout>
+<app-footer *ngIf="layout === eLayouts.Scroll"></app-footer>

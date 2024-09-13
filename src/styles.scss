@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add global styles to this file, and also import other style files */
+@import 'assets/scss/theme.scss';
+@import 'assets/scss/_ant_design.scss';
+@import 'assets/scss/common.scss';
+@import 'assets/scss/_animation.scss';
+@import 'assets/scss/modal.scss';

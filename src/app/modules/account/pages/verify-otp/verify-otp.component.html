@@ -1,0 +1,48 @@
+<app-account-master-layout
+  [heading]="page === verifyOtpPage.Signup ? 'account_page.verify_signup' : 'account_page.forgot_password'"
+>
+  <p class="mb-6 text-center">{{ 'account_page.input_verify_code' | translate }}</p>
+  <form [formGroup]="form" (ngSubmit)="$event.preventDefault(); verifyOtp()">
+    <app-input-otp
+      formControlName="otp"
+      [length]="4"
+      [countdownFrom]="30"
+      (isTimeout)="isTimeout = $event"
+      (resend)="onResend()"
+      [triggerSubject]="resendSubject"
+    ></app-input-otp>
+    <button
+      class="mt-6 ant-btn-warning w-full"
+      nz-button
+      nzSize="default"
+      nzType="primary"
+      type="submit"
+      [disabled]="form.invalid || isTimeout"
+    >
+      {{ (page === verifyOtpPage.ForgotPassword ? 'account_page.send_verify_code' : 'common.next') | translate }}
+    </button>
+    <div class="text-center mt-9">
+      <button
+        *ngIf="page === verifyOtpPage.ForgotPassword"
+        [routerLink]="['../', RouteUtils.AccountPage.ForgotPassword]"
+        nz-button
+        nzSize="default"
+        nzType="link"
+        type="button"
+      >
+        {{ 'common.back' | translate }}
+      </button>
+      <button
+        *ngIf="page === verifyOtpPage.Signup"
+        [routerLink]="['../', RouteUtils.AccountPage.Signup]"
+        nz-button
+        nzSize="default"
+        nzType="link"
+        type="button"
+      >
+        {{ 'common.back' | translate }}
+      </button>
+    </div>
+    <div class="flex justify-center items-center gap-4"></div>
+  </form>
+</app-account-master-layout>

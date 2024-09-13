@@ -1,0 +1,65 @@
+<ng-container *ngIf="layout === 'default'">
+  <section
+    class="flex flex-row justify-between items-stretch gap-3 p-3 rounded border-1 border-background"
+    [class.border-red]="_media.status === 'error'"
+    *ngIf="_media"
+  >
+    <div class="shrink-0 aspect-square">
+      <app-icon *ngIf="_media?.['icon']" [name]="_media['icon']" size="32"></app-icon>
+      <img
+        class="w-8 h-8 object-cover"
+        nz-image
+        *ngIf="_media?.['preview'] && !_media?.['icon']"
+        [nzSrc]="_media['preview']"
+       alt=""/>
+    </div>
+    <div class="flex-grow flex flex-col justify-between" *ngIf="showInfo">
+      <div class="text-14px flex justify-between items-center gap-4">
+        <span class="line-clamp-1" [nz-tooltip]="_media.name">{{ _media.name }}</span>
+        <button *ngIf="!disabled" nz-button nzType="link" class="!text-default-text" (click)="onRemove()">
+          <app-icon name="x-close" size="18"></app-icon>
+        </button>
+      </div>
+      <small class="text-12px text-grey-light">{{ _media.originFileObj?.size | mcFileSize }}</small>
+      <ng-container *ngIf="_media?.status === 'uploading'">
+        <nz-progress [nzPercent]="_media.percent || 0"></nz-progress>
+      </ng-container>
+    </div>
+  </section>
+</ng-container>
+
+<ng-container *ngIf="layout === 'square'">
+  <section
+    class="flex w-full h-full justify-center items-center rounded border-background bg-background-white relative drop-shadow"
+    [class.border-red]="_media.status === 'error'"
+    *ngIf="_media"
+  >
+    <button
+      *ngIf="!disabled"
+      nz-button
+      nzType="link"
+      class="!text-default-text absolute -top-2 -right-2"
+      (click)="onRemove()"
+    >
+      <app-icon name="conner-close" class="text-default-text" size="18"></app-icon>
+    </button>
+    <ng-container *ngIf="['done', 'success'].includes(_media.status || 'error')">
+      <a *ngIf="_media?.['icon']" [href]="_media['preview']" target="_blank">
+        <app-icon [name]="_media['icon']" size="56"></app-icon>
+      </a>
+      <img
+        class="w-full h-full object-cover rounded"
+        nz-image
+        *ngIf="_media?.['preview'] && !_media?.['icon']"
+        [nzSrc]="_media['preview']"
+       alt=""/>
+    </ng-container>
+    <div
+      class="absolute top-0 flex flex-col justify-center items-center p-1 w-full h-full rounded backdrop-blur-sm"
+      *ngIf="_media.status === 'uploading'"
+    >
+      <span>{{ 'common.uploading' | translate }}</span>
+      <nz-progress class="w-full" [nzPercent]="_media.percent || 0" nzSize="small" [nzShowInfo]="false"></nz-progress>
+    </div>
+  </section>
+</ng-container>

@@ -1,0 +1,313 @@
+<article>
+  <div class="image-cover">
+    <img
+      *ngIf="this.form.get(UpdateInformationFormKeys.SellerCover)?.value"
+      class="object-cover w-full h-full"
+      nz-image
+      [nzSrc]="this.form.get(UpdateInformationFormKeys.SellerCover)?.value"
+      alt="profile-cover"
+    />
+    <button nz-button nzType="primary" class="btn-icon" (click)="updateCover()">
+      <app-icon name="camera" size="20" class="animated-fade-in"></app-icon>
+    </button>
+  </div>
+  <div class="relative h-16">
+    <app-avatar
+      class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2"
+      [hasShadow]="true"
+      [allowChange]="true"
+      [src]="''"
+      shape="circle"
+      size="128"
+    ></app-avatar>
+  </div>
+</article>
+<form [formGroup]="form" class="w-full mt-10" nz-form nzLayout="horizontal" nzNoColon>
+  <h3 class="mb-4 text-18px">{{ 'account_page.company_info' | translate | uppercase }}</h3>
+  <!-- company code -->
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label [nzSpan]="8" class="text-left" nzRequired>
+      {{ 'account_page.company_code' | translate }}
+    </nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('account_page.company_code' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <input
+        [placeholder]="'account_page.company_code' | translate"
+        mcAutocompleteOff
+        nz-input
+        type="text"
+        [formControlName]="UpdateInformationFormKeys.BusinessCode"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- company name ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label [nzSpan]="8" class="text-left" nzRequired>
+      {{ 'account_page.company_name' | translate }}
+    </nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('account_page.company_name' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <input
+        [placeholder]="'account_page.company_name' | translate"
+        mcAutocompleteOff
+        nz-input
+        type="text"
+        [formControlName]="UpdateInformationFormKeys.BusinessName"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- phone ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.phone' | translate }}</nz-form-label>
+    <nz-form-control [nzErrorTip]="phoneError" [nzSpan]="16" class="w-full">
+      <input
+        mcAutocompleteOff
+        [placeholder]="'common.phone' | translate"
+        nz-input
+        type="tel"
+        [formControlName]="UpdateInformationFormKeys.Phone"
+      />
+      <ng-template #phoneError let-control>
+        <ng-container *ngIf="control.hasError('required'); else invalidPhone">
+          {{ 'common.please_input' | translate }} {{ 'common.phone' | translate }}
+        </ng-container>
+        <ng-template #invalidPhone>
+          <ng-container *ngIf="control.hasError('phonePattern')">
+            {{ 'form.phone' | translate }} {{ 'form.invalid' | translate | lowercase }}
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- email ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.email' | translate }}</nz-form-label>
+    <nz-form-control [nzErrorTip]="emailError" [nzSpan]="16" class="w-full">
+      <input
+        mcAutocompleteOff
+        [placeholder]="'common.email' | translate"
+        nz-input
+        type="email"
+        [formControlName]="UpdateInformationFormKeys.Email"
+      />
+      <ng-template #emailError let-control>
+        <ng-container *ngIf="control.hasError('required'); else invalidEmail">
+          {{ 'common.please_input' | translate }} {{ 'common.email' | translate }}
+        </ng-container>
+        <ng-template #invalidEmail>
+          <ng-container *ngIf="control.hasError('emailPattern')">
+            {{ 'form.email' | translate }} {{ 'form.invalid' | translate | lowercase }}
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- address ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.address' | translate }}</nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_select' | translate) + ('common.province_city' | translate)"
+      [nzSpan]="16"
+      class="w-full max-mobile:mb-6"
+    >
+      <nz-select
+        [nzPlaceHolder]="('form.select' | translate) + ' ' + ('common.province_city' | translate)"
+        nzAllowClear
+        nzShowSearch
+        nzServerSearch
+        [formControlName]="UpdateInformationFormKeys.CityID"
+        (nzOnSearch)="onSearchCity($event)"
+        [nzLoading]="isLoadingCity"
+      >
+        <ng-container *ngFor="let item of cities | search: ['name'] : searchCitiesTerm; trackBy: trackByCityId">
+          <nz-option [nzValue]="item.cityID" [nzLabel]="item.name"></nz-option>
+        </ng-container>
+      </nz-select>
+    </nz-form-control>
+    <nz-form-control
+      [nzErrorTip]="('common.please_select' | translate) + ('common.district' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <nz-select
+        [nzPlaceHolder]="('form.select' | translate) + ' ' + ('common.district' | translate)"
+        nzAllowClear
+        nzShowSearch
+        nzServerSearch
+        [formControlName]="UpdateInformationFormKeys.DistrictID"
+        (nzOnSearch)="onSearchDistrict($event)"
+        [nzLoading]="isLoadingDistrict"
+        [nzDisabled]="!this.form.value[this.UpdateInformationFormKeys.CityID] || isLoadingDistrict"
+      >
+        <ng-container *ngFor="let item of districts; trackBy: trackByDistrictId">
+          <nz-option [nzValue]="item.districtID" [nzLabel]="item.name"></nz-option>
+        </ng-container>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired class="text-left invisible max-mobile:hidden" [nzSpan]="8"></nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('common.address' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <textarea
+        mcRequired
+        [placeholder]="'common.address' | translate"
+        nz-input
+        [nzAutosize]="{ minRows: 2, maxRows: 3 }"
+        [formControlName]="UpdateInformationFormKeys.Address"
+      ></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- website ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.website' | translate }}</nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('common.website' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <input
+        mcAutocompleteOff
+        [placeholder]="'common.website' | translate"
+        nz-input
+        type="url"
+        [formControlName]="UpdateInformationFormKeys.Website"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- post_code ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.post_code' | translate }}</nz-form-label>
+    <nz-form-control [nzErrorTip]="postalCodeError" [nzSpan]="16" class="w-full">
+      <input
+        mcAutocompleteOff
+        [placeholder]="'common.post_code' | translate"
+        nz-input
+        type="tel"
+        [formControlName]="UpdateInformationFormKeys.PostalCode"
+      />
+      <ng-template #postalCodeError let-control>
+        <ng-container *ngIf="control.hasError('required'); else invalidPostCode">
+          {{ 'common.please_input' | translate }} {{ 'common.post_code' | translate }}
+        </ng-container>
+        <ng-template #invalidPostCode>
+          <ng-container *ngIf="control.hasError('postalCodePattern')">
+            {{ 'common.post_code' | translate }} {{ 'form.invalid' | translate | lowercase }}
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- DUNs ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label class="text-left" [nzSpan]="8">{{ 'common.duns' | translate }}</nz-form-label>
+    <nz-form-control [nzSpan]="16" class="w-full">
+      <input
+        mcAutocompleteOff
+        [placeholder]="'common.duns_code' | translate"
+        nz-input
+        type="tel"
+        [formControlName]="UpdateInformationFormKeys.Duns"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <h3 class="mb-4 text-18px">{{ 'account_page.representative' | translate | uppercase }}</h3>
+  <!-- ---------------------------------------------- representative_name ---------------------------------------------- -->
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired [nzSpan]="8" class="text-left">
+      {{ 'account_page.representative_name' | translate }}
+    </nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('account_page.representative_name' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <input
+        [placeholder]="'account_page.representative_name' | translate"
+        mcAutocompleteOff
+        nz-input
+        type="text"
+        [formControlName]="UpdateInformationFormKeys.ContactFullName"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- representative_phone ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired [nzSpan]="8" class="text-left">
+      {{ 'common.phone' | translate }}
+    </nz-form-label>
+    <nz-form-control [nzErrorTip]="contactPhoneError" [nzSpan]="16" class="w-full">
+      <input
+        [placeholder]="'account_page.representative_phone' | translate"
+        mcAutocompleteOff
+        nz-input
+        type="tel"
+        [formControlName]="UpdateInformationFormKeys.ContactPhone"
+      />
+      <ng-template #contactPhoneError let-control>
+        <ng-container *ngIf="control.hasError('required'); else invalidContactPhone">
+          {{ 'common.please_input' | translate }} {{ 'common.phone' | translate }}
+        </ng-container>
+        <ng-template #invalidContactPhone>
+          <ng-container *ngIf="control.hasError('phonePattern')">
+            {{ 'form.phone' | translate }} {{ 'form.invalid' | translate | lowercase }}
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- ---------------------------------------------- representative_email ---------------------------------------------- -->
+
+  <nz-form-item class="w-full gap-4">
+    <nz-form-label nzRequired [nzSpan]="8" class="text-left">
+      {{ 'common.email' | translate }}
+    </nz-form-label>
+    <nz-form-control [nzErrorTip]="contactEmailError" [nzSpan]="16" class="w-full">
+      <input
+        [placeholder]="'account_page.representative_email' | translate"
+        mcAutocompleteOff
+        nz-input
+        type="email"
+        [formControlName]="UpdateInformationFormKeys.ContactEmail"
+      />
+
+      <ng-template #contactEmailError let-control>
+        <ng-container *ngIf="control.hasError('required'); else invalidContactEmail">
+          {{ 'common.please_input' | translate }} {{ 'common.email' | translate }}
+        </ng-container>
+        <ng-template #invalidContactEmail>
+          <ng-container *ngIf="control.hasError('emailPattern')">
+            {{ 'form.email' | translate }} {{ 'form.invalid' | translate | lowercase }}
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -1,0 +1,114 @@
+<app-item-list-master-layout [heading]="'Users' | translate" [menuItems]="menuItems"
+                             (searchInputChange)="onSearchKeywordChange($event)">
+  <section>
+    <div>
+      <div class="lg:block hidden px-5">
+        <div class="flex justify-end gap-4 mb-4">
+          <button (click)="openAddUserModal()" nz-button nzType="primary" nzShape="circle">
+            <span nz-icon nzType="plus"></span>
+          </button>
+        </div>
+        <nz-table
+          nzBordered
+          [nzData]="data"
+          [nzLoading]="loading"
+          [(nzPageSize)]="filterObject.pageSize"
+          [(nzPageIndex)]="filterObject.pageIndex"
+          [nzShowPagination]="false"
+          (nzQueryParams)="tableQueryParamsChange$.next($event)"
+          [nzScroll]="{ x: '1280px', y: 'calc(100dvh - var(--footer-height) - 372px)' }"
+        >
+          <thead>
+          <tr>
+            <th nzColumnKey="name" nzWidth="300px">{{ 'requesting_profiles_page.name' | translate }}</th>
+            <th nzColumnKey="role">{{ 'Vai trò' | translate }}</th>
+            <th nzColumnKey="createdAt" [nzSortFn]="true">{{ 'Ngày tham gia' | translate }}</th>
+            <th nzColumnKey="type">{{ 'common.status' | translate }}</th>
+            <th nzColumnKey="action"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of data; index as i">
+            <td>
+              <div class="flex justify-start items-center gap-3">
+                <app-avatar
+                  [hasShadow]="true"
+                  [allowChange]="false"
+                  [src]="item.avatar?.avatarLink || ''"
+                  shape="circle"
+                  size="52"
+                ></app-avatar>
+                <div class="flex flex-col justify-center items-start gap-0.5">
+                  <h5 class="font-semibold text-[14px] text-grey-dark line-clamp-1">
+                    {{ item.adminFullName }}
+                  </h5>
+                  <p class="text-grey line-clamp-1">
+                    {{ item.adminCode }}
+                  </p>
+                </div>
+              </div>
+            </td>
+
+            <td class="text-center">
+              <app-role-label [type]="item.adminRole"></app-role-label>
+            </td>
+            <td class="text-center">{{ item.createdDate | date: 'shortDate' }}</td>
+
+            <td class="text-center">
+              <app-account-status-label [status]="item.accountStatus"></app-account-status-label>
+            </td>
+            <td>
+              <div class="flex gap-3 justify-center">
+                <button
+                  class="ant-btn-link flex justify-center items-center"
+                  nzType="link"
+                  [routerLink]="item.adminID"
+                >
+                  Xem
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <ul class="flex lg:hidden flex-col gap-5 p-5 pb-0">
+        <ng-container *ngFor="let item of data">
+          <li>
+            <a [routerLink]="item.adminID" class="card block p-4 bg-white hover:shadow transition rounded-lg">
+              <div class="flex justify-start items-center gap-3 mb-2">
+                <app-avatar [hasShadow]="true" [allowChange]="false" [src]="''" shape="circle" size="52"></app-avatar>
+                <div class="flex flex-col justify-center items-start gap-0.5">
+                  <h5 class="font-semibold text-[14px] text-grey-dark line-clamp-2 break-all">
+                    {{ item.adminFullName }}
+                  </h5>
+                  <p class="text-grey line-clamp-1">
+                    {{ item.adminCode }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex flex-nowrap justify-between mb-2">
+                <span class="text-grey-default">{{ 'Ngày tham gia' | translate }}</span>
+                <span>{{ item.createdDate | date: 'shortDate' }}</span>
+              </div>
+              <div class="flex flex-nowrap justify-between mb-2">
+                <span class="text-grey-default">{{ 'common.status' | translate }}</span>
+                <app-account-status-label [status]="item.accountStatus"></app-account-status-label>
+              </div>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <nz-pagination
+      nzShowSizeChanger
+      nzResponsive
+      [nzPageSizeOptions]="[10, 20, 30, 40, 50]"
+      [(nzPageSize)]="filterObject.pageSize"
+      [(nzPageIndex)]="filterObject.pageIndex"
+      [nzTotal]="filterObject.total"
+      (nzPageSizeChange)="onPageSizeChange()"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+    ></nz-pagination>
+  </section>
+</app-item-list-master-layout>

@@ -1,0 +1,298 @@
+<!--@if (role === eRoles.SuperAdmin || role === eRoles.OperationAdmin) {-->
+<!--  <section class="px-4 py-3 bg-white rounded">-->
+<!--    <div class="flex justify-between flex-wrap-reverse gap-4">-->
+<!--      <div class="flex justify-between items-center gap-3 md:basis-[20rem] basis-[100%]">-->
+<!--        <app-content-status-label-tag [status]="data?.contentStatus"></app-content-status-label-tag>-->
+<!--        <div class="flex justify-start items-center gap-2">-->
+<!--          <span class="text-grey whitespace-nowrap">Ngày gửi duyệt</span>-->
+<!--          <span class="font-semibold">{{ data?.submittedDate | date: DATE_FORMAT }}</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="flex gap-3 grow">-->
+<!--        <button-->
+<!--          class="first:ml-auto md:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"-->
+<!--          nz-button-->
+<!--          nzType="default"-->
+<!--          type="button"-->
+<!--          *ngIf="data?.contentStatus === eContentStatuses.AdminPending"-->
+<!--          (click)="btnClicked.emit(eBtnActions.Reviewing)"-->
+<!--        >-->
+<!--          {{ 'enums.content_statuses.admin_reviewing' | translate }}-->
+<!--        </button>-->
+
+<!--        &lt;!&ndash;    Approving &ndash;&gt;-->
+<!--        <button-->
+<!--          class="first:ml-auto md:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9"-->
+<!--          nz-button-->
+<!--          nzType="primary"-->
+<!--          nzDanger-->
+<!--          type="button"-->
+<!--          *ngIf="data?.contentStatus === eContentStatuses.AdminReviewing"-->
+<!--          (click)="btnClicked.emit(eBtnActions.Reject)"-->
+<!--        >-->
+<!--          {{ 'enums.content_statuses.admin_rejected' | translate }}-->
+<!--        </button>-->
+<!--        &lt;!&ndash;  Approving / Rejected &ndash;&gt;-->
+<!--        <button-->
+<!--          class="first:ml-auto md:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"-->
+<!--          nz-button-->
+<!--          nzType="default"-->
+<!--          type="button"-->
+<!--          *ngIf="-->
+<!--            data?.contentStatus === eContentStatuses.AdminReviewing ||-->
+<!--            data?.contentStatus === eContentStatuses.AdminRejected-->
+<!--          "-->
+<!--          (click)="btnClicked.emit(eBtnActions.Approve)"-->
+<!--        >-->
+<!--          {{ 'common.approve' | translate }}-->
+<!--        </button>-->
+
+<!--        &lt;!&ndash;&lt;!&ndash;    Approved &ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;<button&ndash;&gt;-->
+<!--        &lt;!&ndash;  class="first:ml-auto md:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9"&ndash;&gt;-->
+<!--        &lt;!&ndash;  nz-button&ndash;&gt;-->
+<!--        &lt;!&ndash;  nzType="primary"&ndash;&gt;-->
+<!--        &lt;!&ndash;  *ngIf="data?.contentStatus === eContentStatuses.AdminApproved"&ndash;&gt;-->
+<!--        &lt;!&ndash;  (click)="hide()"&ndash;&gt;-->
+<!--        &lt;!&ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;  {{ 'enums.content_statuses.hidden' | translate }}&ndash;&gt;-->
+<!--        &lt;!&ndash;</button>&ndash;&gt;-->
+<!--        &lt;!&ndash;<button&ndash;&gt;-->
+<!--        &lt;!&ndash;  class="first:ml-auto md:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"&ndash;&gt;-->
+<!--        &lt;!&ndash;  nz-button&ndash;&gt;-->
+<!--        &lt;!&ndash;  nzType="default"&ndash;&gt;-->
+<!--        &lt;!&ndash;  *ngIf="data?.contentStatus === eContentStatuses.AdminApproved"&ndash;&gt;-->
+<!--        &lt;!&ndash;  (click)="archive()"&ndash;&gt;-->
+<!--        &lt;!&ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;  {{ 'enums.content_statuses.admin_archived' | translate }}&ndash;&gt;-->
+<!--        &lt;!&ndash;</button>&ndash;&gt;-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    @if (data?.contentStatus === eContentStatuses.AdminRejected) {-->
+<!--      <div class="text-red bg-red-lighter p-3 rounded mt-4 text-14px">-->
+<!--        <span class="font-bold">{{ 'common.reason' | translate }}:&nbsp;</span>-->
+<!--        <span>{{ data?.status?.reason }}</span>-->
+<!--      </div>-->
+<!--    }-->
+<!--  </section>-->
+<!--} @else if (role === eRoles.SuperAdmin || role === eRoles.DataAdmin) {-->
+<!--  -->
+<!--}-->
+
+<section class="flex items-center justify-between mb-5 flex-wrap-reverse">
+  @if (data && mode === ePageActions.View) {
+    <div class="flex items-center gap-3 justify-start basis-[100%] shrink-0 mt-4 md:basis-0 md:mt-0">
+      <app-content-status-label-tag [status]="data?.contentStatus"></app-content-status-label-tag>
+        @if(data?.contentStatus === eContentStatuses.New) {
+          <ng-container *ngTemplateOutlet="contentStatusNew"></ng-container>
+        }
+        @else if(data?.contentStatus === eContentStatuses.AdminPending) {
+          <ng-container *ngTemplateOutlet="contentStatusPending"></ng-container>
+        }
+        @else if(data?.contentStatus === eContentStatuses.AdminReviewing) {
+          <ng-container *ngTemplateOutlet="contentStatusReviewing"></ng-container>
+        }
+        @else if(data?.contentStatus === eContentStatuses.AdminApproved) {
+          <ng-container *ngTemplateOutlet="contentStatusApproved"></ng-container>
+        }
+        @else if(data?.contentStatus === eContentStatuses.AdminRejected) {
+          <ng-container *ngTemplateOutlet="contentStatusRejected"></ng-container>
+        }
+        @else if(data?.contentStatus === eContentStatuses.AdminArchived) {
+          <ng-container *ngTemplateOutlet="contentStatusArchived"></ng-container>
+        }
+    </div>
+  }
+
+  <div [class.ml-auto]="mode !== ePageActions.View" class="grow md:grow-0 flex gap-3 lg:justify-end">
+    @if (isReviewer) {
+      <!-- Super Admin / Operation Admin -->
+      @if (data?.contentStatus === eContentStatuses.AdminPending) {
+        <ng-container *ngTemplateOutlet="btnReviewing"></ng-container>
+      } @else if (data?.contentStatus === eContentStatuses.AdminReviewing) {
+        <ng-container *ngTemplateOutlet="btnReject"></ng-container>
+        <ng-container *ngTemplateOutlet="btnApprove"></ng-container>
+      } @else if (data?.contentStatus === eContentStatuses.AdminRejected) {
+        <ng-container *ngTemplateOutlet="btnApprove"></ng-container>
+      }
+      <!-- Only Super Admin can Archive / UnArchive -->
+      @if (role === eRoles.SuperAdmin) {
+        @if (data?.contentStatus === eContentStatuses.AdminApproved) {
+          <ng-container *ngTemplateOutlet="btnArchive"></ng-container>
+        } @else if (data?.contentStatus === eContentStatuses.AdminArchived) {
+          <ng-container *ngTemplateOutlet="btnUnArchive"></ng-container>
+        }
+      }
+    } @else {
+      <!-- Data Admin -->
+      @if (mode === ePageActions.Create) {
+        <ng-container *ngTemplateOutlet="btnCancel"></ng-container>
+        <ng-container *ngTemplateOutlet="btnSave"></ng-container>
+      } @else if (mode === ePageActions.View) {
+        @if (data?.contentStatus === eContentStatuses.New) {
+          <ng-container *ngTemplateOutlet="btnDelete"></ng-container>
+          <ng-container *ngTemplateOutlet="btnSendApproval"></ng-container>
+          <ng-container *ngTemplateOutlet="btnEdit"></ng-container>
+        } @else if (data?.contentStatus === eContentStatuses.AdminPending) {
+          <ng-container *ngTemplateOutlet="btnDelete"></ng-container>
+          <ng-container *ngTemplateOutlet="btnEdit"></ng-container>
+        } @else if (data?.contentStatus === eContentStatuses.AdminRejected) {
+          <ng-container *ngTemplateOutlet="btnDelete"></ng-container>
+          <ng-container *ngTemplateOutlet="btnEdit"></ng-container>
+        }
+      } @else if (mode === ePageActions.Edit) {
+        <ng-container *ngTemplateOutlet="btnDelete"></ng-container>
+        <ng-container *ngTemplateOutlet="btnCancel"></ng-container>
+        <ng-container *ngTemplateOutlet="btnSave"></ng-container>
+      }
+    }
+  </div>
+</section>
+
+<ng-template #btnDelete>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Delete)"
+    class="lg:flex-grow-0 flex-grow ant-btn btn !bg-transparent hover:!bg-red-50 !border-red !border !text-red !text-[14px] !h-9 min-w-24"
+    nz-button
+    nzDanger
+    nzSize="small"
+    nzType="primary"
+  >
+    {{ 'common.delete' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnSendApproval>
+  <button
+    (click)="btnClicked.emit(eBtnActions.SendApproval)"
+    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+    nz-button
+    nzType="primary"
+  >
+    {{ 'common.send_for_review' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnEdit>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Edit)"
+    class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter hover:!bg-main-light/50 !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+    nz-button
+    nzType="primary"
+  >
+    {{ 'common.edit' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnCancel>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Cancel)"
+    class="lg:flex-grow-0 flex-grow !text-[14px] min-w-24"
+    nz-button
+    nzSize="small"
+    nzType="default"
+    type="button"
+  >
+    {{ 'common.cancel' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnSave>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Save)"
+    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+    nz-button
+    nzType="primary"
+  >
+    {{ 'common.save' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnArchive>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Cancel)"
+    class="lg:flex-grow-0 flex-grow !text-[14px] min-w-24"
+    nz-button
+    nzSize="small"
+    nzType="default"
+    type="button"
+  >
+    {{ 'common.archive' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnUnArchive>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Cancel)"
+    class="lg:flex-grow-0 flex-grow !text-[14px] min-w-24"
+    nz-button
+    nzSize="small"
+    nzType="default"
+    type="button"
+  >
+    {{ 'common.un_archive' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnReviewing>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Reviewing)"
+    class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter hover:!bg-main-light/50 !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+    nz-button
+    nzType="primary"
+  >
+    {{ 'common.reviewing' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnApprove>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Approve)"
+    class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter hover:!bg-main-light/50 !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+    nz-button
+    nzType="primary"
+  >
+    {{ 'common.approve' | translate }}
+  </button>
+</ng-template>
+<ng-template #btnReject>
+  <button
+    (click)="btnClicked.emit(eBtnActions.Reject)"
+    class="lg:flex-grow-0 flex-grow min-w-24"
+    nz-button
+    nzDanger
+    nzSize="small"
+    nzType="primary"
+  >
+    {{ 'common.reject' | translate }}
+  </button>
+</ng-template>
+
+<ng-template #contentStatusNew>
+  <div class="flex justify-start items-center gap-2">
+      <span class="text-grey whitespace-nowrap">Ngày cập nhật</span>
+      <span class="font-semibold">{{ data?.updatedDate | date: DATE_FORMAT }}</span>
+  </div>
+</ng-template>
+<ng-template #contentStatusPending>
+  <div class="flex justify-start items-center gap-2">
+      <span class="text-grey whitespace-nowrap">Ngày gửi duyệt</span>
+      <span class="font-semibold">{{ data?.updatedDate | date: DATE_FORMAT }}</span>
+  </div>
+</ng-template>
+<ng-template #contentStatusReviewing>
+  <div class="flex justify-start items-center gap-2">
+      <span class="text-grey whitespace-nowrap">Ngày gửi duyệt</span>
+      <span class="font-semibold">{{ data?.updatedDate | date: DATE_FORMAT }}</span>
+  </div>
+</ng-template>
+<ng-template #contentStatusApproved>
+  <div class="flex justify-start items-center gap-2">
+      <span class="text-grey whitespace-nowrap">Ngày duyệt</span>
+      <span class="font-semibold">{{ data?.updatedDate | date: DATE_FORMAT }}</span>
+  </div>
+</ng-template>
+<ng-template #contentStatusRejected>
+  <div class="flex justify-start items-center gap-2">
+      <span class="text-grey whitespace-nowrap">Ngày từ chối</span>
+      <span class="font-semibold">{{ data?.updatedDate | date: DATE_FORMAT }}</span>
+  </div>
+</ng-template>
+<ng-template #contentStatusArchived>
+  <div class="flex justify-start items-center gap-2">
+      <span class="text-grey whitespace-nowrap">Ngày lưu trữ</span>
+      <span class="font-semibold">{{ data?.updatedDate | date: DATE_FORMAT }}</span>
+  </div>
+</ng-template>

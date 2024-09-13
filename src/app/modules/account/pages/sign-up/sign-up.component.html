@@ -1,0 +1,144 @@
+<app-account-master-layout heading="account_page.sign-up">
+  <ng-container [ngSwitch]="screen">
+    <ng-template ngSwitchCase="input-seller-login">
+      <form [formGroup]="form" nz-form nzLayout="horizontal" (ngSubmit)="signup()">
+        <nz-form-item class="mb-4">
+          <nz-form-control class="w-full" [nzErrorTip]="sellerLoginErrors"
+                           [nzValidateStatus]="form.controls[SignUpFormKeys.sellerLogin] | ctrlValidateStatus">
+            <input
+              [formControlName]="SignUpFormKeys.sellerLogin"
+              nz-input
+              mcRequired
+              mcAutocompleteOff
+              [placeholder]="'form.input_phone_number_or_email' | translate"
+              type="email"
+            />
+            <ng-template #sellerLoginErrors let-control>
+              <ng-container *ngIf="control.hasError('required'); else invalidEmailOrPhone">
+                {{ 'form.please_input' | translate }} {{ 'form.phone_or_email' | translate | lowercase }}
+              </ng-container>
+              <ng-template #invalidEmailOrPhone>
+                <ng-container *ngIf="control.hasError('phoneOrMailPattern')">
+                  {{ 'form.email_or_phone_number' | translate }} {{ 'form.invalid' | translate | lowercase }}
+                </ng-container>
+              </ng-template>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <button class="mt-2 ant-btn-warning w-full" nz-button nzSize="default" nzType="primary" type="submit">
+          {{ 'account_page.sign-up' | translate }}
+        </button>
+      </form>
+    </ng-template>
+    <ng-template ngSwitchCase="input-otp">
+      <form [formGroup]="formOtp" (ngSubmit)="$event.preventDefault(); verifyOtp()">
+        <h4 class="text-16px font-semibold text-center mb-6">
+          {{ 'common.input_otp_sent_to_number_n' | translate: { value: sellerLogin } }}
+        </h4>
+        <app-input-otp
+          formControlName="otp"
+          [length]="4"
+          [countdownFrom]="countdownFrom"
+          (isTimeout)="isTimeout = $event"
+          (resend)="onResend()"
+          [triggerSubject]="resendSubject"
+        ></app-input-otp>
+        <button
+          class="mt-6 ant-btn-warning w-full"
+          nz-button
+          nzSize="default"
+          nzType="primary"
+          type="submit"
+          [disabled]="formOtp.invalid || isTimeout"
+        >
+          {{ 'common.confirm' | translate }}
+        </button>
+      </form>
+    </ng-template>
+    <ng-template ngSwitchCase="input-password">
+      <form [formGroup]="formPassword" nz-form nzLayout="horizontal" (ngSubmit)="createPassword()">
+        <nz-form-item class="mb-4">
+          <nz-form-control class="w-full" [nzErrorTip]="pwdErrors"
+                           [nzValidateStatus]="form.controls['password'] | ctrlValidateStatus">
+            <nz-input-group [nzSuffix]="suffixTemplate">
+              <input
+                mcAutocompleteOff
+                formControlName="password"
+                nz-input
+                mcRequired
+                [placeholder]="'form.password' | translate"
+                [type]="passwordVisible ? 'text' : 'password'"
+              />
+              <ng-template #suffixTemplate>
+                <app-icon
+                  classes="cursor-pointer"
+                  size="20x20"
+                  color="text-grey"
+                  [name]="passwordVisible ? 'eye-solid-slash' : 'eye-solid'"
+                  (click)="passwordVisible = !passwordVisible"
+                ></app-icon>
+              </ng-template>
+              <ng-template #pwdErrors let-control>
+                <ng-container *ngIf="control.hasError('required'); else passwordPattern">
+                  {{ 'form.please_input' | translate }} {{ 'form.password' | translate | lowercase }}
+                </ng-container>
+                <ng-template #passwordPattern>
+                  <ng-container *ngIf="control.hasError('passwordPattern')">
+                    {{ 'form.password' | translate }} {{ 'form.must_be_password_pattern' | translate | lowercase }}
+                  </ng-container>
+                </ng-template>
+              </ng-template>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="mb-0">
+          <nz-form-control class="w-full" [nzErrorTip]="pwdConfirmErrors"
+                           [nzValidateStatus]="form.controls['passwordConfirm'] | ctrlValidateStatus">
+            <nz-input-group [nzSuffix]="pwdConfirmSuffixTemplate">
+              <input
+                mcAutocompleteOff
+                formControlName="passwordConfirm"
+                nz-input
+                mcRequired
+                [placeholder]="'form.password_confirm' | translate"
+                [type]="passwordConfirmVisible ? 'text' : 'password'"
+              />
+              <ng-template #pwdConfirmSuffixTemplate>
+                <app-icon
+                  classes="cursor-pointer"
+                  size="20x20"
+                  color="text-grey"
+                  [name]="passwordConfirmVisible ? 'eye-solid-slash' : 'eye-solid'"
+                  (click)="passwordConfirmVisible = !passwordConfirmVisible"
+                ></app-icon>
+              </ng-template>
+              <ng-template #pwdConfirmErrors let-control>
+                <ng-container *ngIf="control.hasError('required'); else pwdNotMatch">
+                  {{ 'form.please_confirm_your_password' | translate }}
+                </ng-container>
+                <ng-template #pwdNotMatch>
+                  <ng-container *ngIf="control.hasError('pwdNotMatch')">
+                    {{ 'form.password_not_match' | translate }}
+                  </ng-container>
+                </ng-template>
+              </ng-template>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <button class="mt-2 ant-btn-warning w-full" nz-button nzSize="default" nzType="primary" type="submit">
+          {{ 'common.next' | translate }}
+        </button>
+      </form>
+    </ng-template>
+  </ng-container>
+  <div class="flex justify-center items-center gap-1 mt-6">
+    <span>{{ 'account_page.already_a_member' | translate }}</span>
+    <button [routerLink]="['../', RouteUtils.AccountPage.Login]" nz-button nzSize="default" nzType="link" type="button">
+      {{ 'account_page.login' | translate }}
+    </button>
+  </div>
+  <a class="flex justify-center items-center text-grey-neutral gap-1 mt-6">
+    <app-icon name="privacy-tip" size="24"></app-icon>
+    <div class="underline underline-offset-2">{{ 'common.privacy_policy' | translate }}</div>
+  </a>
+</app-account-master-layout>

@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+  <div class="flex flex-col justify-center items-center text-center">
+    <p class="mt-8">
+      {{ 'profile_page.otp_sent_to_x' | translate }}
+      <b>{{ data.objectValue }}</b>
+    </p>
+    <p class="mt-4">{{ 'profile_page.please_input_otp' | translate }}</p>
+    <div class="w-[22.5rem] mt-12 flex flex-col items-center">
+      <app-input-otp
+        formControlName="otp"
+        [length]="4"
+        [countdownFrom]="30"
+        (isTimeout)="isTimeout = $event"
+        (resend)="onResend()"
+        [triggerSubject]="resendSubject"
+      ></app-input-otp>
+    </div>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="modalRef.close(undefined)">{{ 'common.close' | translate }}</button>
+    <button nz-button nzType="primary" (click)="submit()" [disabled]="form.invalid || isTimeout">
+      {{ 'common.save' | translate }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,43 @@
+:host {
+  .nav-section {
+    @apply sticky top-0 z-[1000] bg-background-white;
+    ::ng-deep {
+      .ant-tabs-nav {
+        @apply mb-0;
+        &:before {
+          border-bottom: 0;
+        }
+      }
+      .ant-tabs-nav-operations {
+        @apply shrink-0;
+      }
+      .product-tabset {
+        .ant-tabs-tab {
+          @apply p-4 min-w-[9rem] flex justify-center items-center line-clamp-1;
+        }
+      }
+    }
+
+    .button-group {
+      @apply relative;
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 1.875rem;
+        @apply bg-grey-neutral;
+      }
+    }
+
+    button {
+      @apply w-6 h-6 justify-center;
+
+      &.active {
+        @apply bg-main-lighter;
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+:host {
+  //@apply sticky top-0 z-50;
+  header {
+    @apply bg-background-white shadow-md;
+    @apply flex justify-between items-center px-10 max-tablet:px-5;
+    .logo {
+      height: 2rem;
+      float: left;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      img {
+        width: auto;
+        height: 31px;
+        object-fit: contain;
+      }
+
+      span {
+        font-size: 20px;
+        font-weight: 600;
+        margin-left: 10px;
+
+        &.app-name {
+          @apply text-main max-tablet:hidden;
+        }
+
+        &.app-title {
+          @apply text-main lg:hidden;
+        }
+      }
+    }
+
+    .profile {
+      @apply flex items-center gap-4 h-full;
+      @apply leading-normal cursor-pointer;
+    }
+  }
+
+  .sider-menu {
+    height: 100%;
+    border-right: 0;
+  }
+
+  .inner-layout {
+    padding: 0 24px 24px;
+  }
+
+  nz-breadcrumb {
+    margin: 16px 0;
+  }
+
+  nz-content {
+    background: #fff;
+    padding: 24px;
+    min-height: 280px;
+  }
+}
+
+.profile-dropdown {
+  @apply rounded-lg;
+}

@@ -1,0 +1,685 @@
+//@import 'node_modules/ng-zorro-antd/ng-zorro-antd.variable.css';
+@import "ant_input";
+
+// mixin px2rem
+@function px2rem($px) {
+  @return $px / 16 * 1rem;
+}
+
+:root {
+  --ant-primary-color: var(--main-default);
+  --ant-primary-color-hover: var(--main-light);
+  --ant-primary-color-active: var(--main-dark);
+  --ant-primary-color-outline: rgb(var(--main-default-rgb) / 0.2);
+  --ant-primary-1: var(--main-lighten);
+  --ant-primary-2: var(--main-lightest);
+  --ant-primary-3: var(--main-lighter);
+  --ant-primary-4: var(--main-neutral);
+  --ant-primary-5: var(--main-light);
+  --ant-primary-6: var(--main-default);
+  --ant-primary-7: var(--main-dark);
+  --ant-primary-color-deprecated-pure: var(--main-default);
+  --ant-primary-color-deprecated-l-35: var(--main-lighter);
+  --ant-primary-color-deprecated-l-20: var(--main-light);
+  --ant-primary-color-deprecated-t-20: var(--main-default);
+  --ant-primary-color-deprecated-t-50: var(--main-neutral);
+  --ant-primary-color-deprecated-f-12: rgb(var(--main-darkness-rgb) / 0.2);
+  --ant-primary-color-active-deprecated-f-30: rgba(var(--main-dark-rgb), 0.3);
+  --ant-primary-color-active-deprecated-d-02: var(--main-lightest);
+  --ant-success-color: var(--green-default);
+  --ant-success-color-hover: var(--green-light);
+  --ant-success-color-active: var(--green-dark);
+  --ant-success-color-outline: rgb(var(--green-default-rgb) / 0.2);
+  --ant-success-color-deprecated-bg: var(--green-lighter);
+  --ant-success-color-deprecated-border: var(--green-default);
+  --ant-error-color: var(--red-default);
+  --ant-error-color-hover: var(--red-light);
+  --ant-error-color-active: var(--red-dark);
+  --ant-error-color-outline: rgb(var(--red-default-rgb) / 0.2);
+  --ant-error-color-deprecated-bg: var(--red-lighter);
+  --ant-error-color-deprecated-border: var(--red-default);
+  --ant-warning-color: var(--orange-default);
+  --ant-warning-color-hover: var(--orange-light);
+  --ant-warning-color-active: var(--orange-dark);
+  --ant-warning-color-outline: rgb(var(--orange-default-rgb) / 0.2);
+  --ant-warning-color-deprecated-bg: var(--orange-lighter);
+  --ant-warning-color-deprecated-border: var(--orange-default);
+  --ant-info-color: var(--blue-default);
+  --ant-info-color-deprecated-bg: var(--blue-lighter);
+  --ant-info-color-deprecated-border: var(--blue-default);
+  --ant-default-color-hover: var(--grey-lighter);
+
+  --input-height-default: 2.75rem;
+  --input-rounded-border-radius: 0.25rem;
+
+  --input-border-radius: 0.25rem;
+
+  // button
+  --button-height-sm: 2.375rem;
+  --button-height-default: 2.75rem;
+  --button-height-lg: 3rem;
+}
+
+a:hover {
+  app-icon {
+    svg {
+      transition: color ease-in-out 0.2s;
+      color: var(--ant-primary-color-hover);
+    }
+  }
+}
+
+.ant-switch {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+    linear-gradient(to right, #fff, #fff) !important;
+
+  &.ant-switch-checked {
+    background-image: none !important;
+    background-color: var(--ant-primary-color) !important;
+  }
+}
+
+/*****************************************************
+************************ form ************************
+******************************************************/
+.ant-form.ant-form-horizontal {
+  @apply text-default-text transition-all duration-300;
+  &.ant-form {
+    .ant-form-item {
+      &.ant-form-item-with-help {
+        @apply mb-2;
+
+        .ant-form-item-explain {
+          @apply mt-1;
+        }
+      }
+
+      .ant-form-item-label {
+        @apply max-mobile:pb-0;
+      }
+
+      .ant-form-item-label > label {
+        @apply min-h-[var(--input-height-default)];
+        &.ant-form-item-required::before {
+          content: '';
+          display: none;
+        }
+
+        &.ant-form-item-required::after {
+          content: '*';
+          @apply ml-0.5 mb-1 text-red #{'!important'};
+        }
+      }
+
+      @apply w-full;
+      .ant-form-item-control {
+        max-width: initial;
+
+        .ant-form-item-control-input {
+          @apply min-h-[var(--input-height-default)];
+          .ant-form-item-control-input-content {
+          }
+        }
+      }
+
+      // handle for mobile
+      @apply max-mobile:flex-col max-mobile:gap-0;
+
+      .ant-input-textarea-show-count {
+        textarea {
+          @apply pb-5;
+        }
+
+        &:after {
+          width: calc(100% - 2px);
+          // background image gradient from transparent to white, 90deg
+          background-image: linear-gradient(
+            180deg,
+            transparent 0%,
+            var(--background-default) 20%,
+            var(--background-default) 100%
+          );
+          @apply rounded-b text-right px-2;
+          @apply absolute bottom-[1px] right-[1px] text-default-text;
+          content: '| ' attr(data-count);
+        }
+      }
+    }
+  }
+}
+
+// start backup
+
+///*****************************************************
+//************************ input ************************
+//******************************************************/
+//
+//.ant-input,
+//.ant-input-number,
+//.ant-input-affix-wrapper,
+//.ant-input-number-input {
+//  @apply min-h-[var(--input-height-default)] cursor-text;
+//  // height
+//  @apply rounded border-1 border-background;
+//  //@apply bg-background text-grey-darkness;
+//
+//  //&:-webkit-autofill,
+//  //&:-webkit-autofill:hover,
+//  //&:-webkit-autofill:focus {
+//  //  @apply bg-background;
+//  //}
+//
+//  //&::placeholder,
+//  //&::-ms-input-placeholder {
+//  //  @apply text-grey-neutral font-light;
+//  //  opacity: 1;
+//  //}
+//  //
+//  //&:focus,
+//  //&:active {
+//  //  @apply border-1 border-solid border-main;
+//  //  @apply bg-background;
+//  //}
+//
+//  //&.ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+//  //.ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+//  //  @apply bg-background;
+//  //}
+//
+//  //&.ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+//  //    .ant-input-affix-wrapper-borderless
+//  //  ).ant-input-affix-wrapper,
+//  //.ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+//  //    .ant-input-affix-wrapper-borderless
+//  //  ).ant-input-affix-wrapper:hover {
+//  //  @apply bg-background;
+//  //
+//  //  input {
+//  //    @apply bg-background;
+//  //  }
+//  //}
+//}
+//
+//.auth-input {
+//  .ant-input-affix-wrapper,
+//  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+//      .ant-input-affix-wrapper-borderless
+//    ).ant-input-affix-wrapper,
+//  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+//      .ant-input-affix-wrapper-borderless
+//    ).ant-input-affix-wrapper:hover {
+//    @apply bg-[#F4F4F4];
+//  }
+//
+//  input,
+//  .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+//  .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+//    @apply bg-[#F4F4F4];
+//  }
+//}
+//
+//nz-input-group.ant-input-affix-wrapper {
+//  @apply py-0;
+//  @apply rounded;
+//  @apply h-[var(--input-height-default)];
+//
+//  .ant-input {
+//    min-height: calc(100% - 0.125rem);
+//  }
+//
+//  .ant-form-item-feedback-icon {
+//    @apply inline-flex justify-center items-center;
+//  }
+//
+//  &.ant-input-affix-wrapper-focused {
+//    @apply min-h-[var(--input-height-default)];
+//    @apply border-1 border-solid border-main;
+//    @apply bg-background text-grey-neutral;
+//  }
+//}
+//
+///** --------------------------- Form --------------------------- */
+//
+//.ant-form-item.style-filled {
+//  .ant-input-affix-wrapper, .ant-input-group, .ant-input-affix-wrapper-status-error {
+//    @apply border-0 bg-background;
+//
+//    input.ant-input {
+//      @apply text-grey-dark font-normal rounded;
+//
+//      @apply bg-background #{'!important'};
+//
+//      &::placeholder, &::-ms-input-placeholder, &::-webkit-input-placeholder, &:-moz-placeholder, &:-ms-input-placeholder {
+//        @apply text-grey-neutral font-normal;
+//      }
+//    }
+//  }
+//
+//  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+//      .ant-input-affix-wrapper-borderless
+//    ).ant-input-affix-wrapper,
+//  .ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(
+//      .ant-input-affix-wrapper-borderless
+//    ).ant-input-affix-wrapper:hover {
+//    @apply bg-background border-1 border-red-light;
+//
+//    input.ant-input {
+//      @apply bg-background text-red;
+//    }
+//  }
+//}
+
+// end backup
+
+/*****************************************************
+*********************** button ***********************
+******************************************************/
+a.ant-btn {
+  @apply px-4 py-1.5 #{'!important'};
+  line-height: 1.5;
+}
+
+.ant-btn:not(.ant-btn-circle) {
+  @apply inline-flex justify-center items-center;
+
+  &:not(.ant-btn-round) {
+    @apply rounded;
+  }
+
+  @apply px-5 py-2;
+  @apply max-h-[var(--button-height-default)];
+  @apply h-[var(--button-height-default)];
+  @apply transition-all ease-in-out duration-300;
+  &:not(.ant-btn-link):not(.btn-outline):not(.ant-btn-primary) {
+    @apply bg-background hover:bg-[var(--ant-default-color-hover)] active:bg-[var(--ant-default-color-active)] border-0 text-grey-darkness;
+
+    &.white-theme {
+      @apply bg-white hover:bg-grey-lighter active:bg-grey-lighter border-0 text-grey-darkness;
+    }
+  }
+
+  &.btn-main:not(.ant-btn-link):not(.btn-outline) {
+    @apply bg-main hover:bg-main-light active:bg-main-dark border-0 text-white;
+  }
+
+  &.btn-outline {
+    @apply bg-transparent hover:bg-[var(--ant-primary-color-outline)] active:bg-[var(--ant-primary-color-outline)] border-1 border-solid border-[var(--ant-primary-color-outline)] text-[var(--ant-primary-color)];
+    &.btn-main {
+      @apply bg-main-lighter hover:bg-main-light/20 active:bg-main-light/20 border-1 border-solid border-[var(--ant-primary-color-outline)] text-[var(--ant-primary-color)];
+    }
+
+    &.ant-btn-dangerous {
+      @apply bg-transparent hover:bg-white border-1 border-solid border-[var(--ant-error-color-outline)] text-[var(--ant-error-color)];
+      @apply hover:bg-neutral-100 hover:border-red hover:text-red #{'!important'};
+    }
+  }
+
+  &:disabled {
+    @apply opacity-50 border-0 hover:text-grey-darkness;
+  }
+
+  // types
+  &.ant-btn-primary {
+    @apply bg-[var(--ant-primary-color)];
+    @apply hover:bg-[var(--ant-primary-color-hover)];
+    @apply active:bg-[var(--ant-primary-color-active)];
+    @apply text-white hover:text-white;
+
+    &:disabled {
+      @apply opacity-30 border-0 text-white hover:text-white;
+    }
+  }
+
+  &.ant-btn-link {
+    @apply inline-flex items-center gap-2;
+    @apply p-0 leading-[var(--default-line-height)] #{'!important'};
+    height: initial;
+    border: none;
+    @apply text-[var(--ant-primary-color)];
+    @apply hover:text-[var(--ant-primary-color-hover)];
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    //@apply active:text-[var(--ant-primary-color-active)];
+
+    &.ant-btn-dangerous {
+      @apply text-[var(--ant-error-color)];
+      @apply hover:text-[var(--ant-error-color-hover)];
+      @apply active:text-[var(--ant-error-color-active)];
+    }
+  }
+
+  // sizes
+  &.ant-btn-lg:not(.ant-btn-link) {
+    @apply px-6 py-3;
+    @apply max-h-[var(--button-height-lg)];
+    @apply h-[var(--button-height-lg)];
+    @apply min-h-[var(--button-height-lg)];
+  }
+
+  &.ant-btn-sm:not(.ant-btn-link) {
+    @apply px-6 py-2;
+    @apply max-h-[var(--button-height-sm)];
+    @apply h-[var(--button-height-sm)];
+    @apply text-14px;
+  }
+
+  // colors
+  &.ant-btn-dangerous:not(.ant-btn-link):not(.btn-outline) {
+    @apply bg-[var(--ant-error-color)];
+    @apply hover:bg-[var(--ant-error-color-hover)];
+  }
+
+  .ant-btn-warning {
+    @apply bg-[var(--ant-warning-color)];
+    @apply hover:bg-[var(--ant-warning-color-hover)];
+  }
+
+  &.ant-btn-icon-only {
+    &.ant-btn-sm {
+      width: 1.5rem;
+      height: 1.5rem;
+      max-width: 1.5rem;
+      max-height: 1.5rem;
+    }
+
+    padding: 0 !important;
+    @apply inline-flex justify-center items-center aspect-square;
+  }
+
+  &.btn-icon {
+    @apply inline-flex justify-center items-center p-2;
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.ant-btn-primary {
+  &:focus {
+    @apply bg-[var(--ant-primary-color)];
+  }
+}
+
+/*****************************************************
+*********************** Upload ***********************
+*****************************************************/
+
+nz-upload {
+  .ant-upload.ant-upload-drag {
+    @apply rounded-lg border-1 border-solid;
+    .ant-upload.ant-upload-btn {
+      @apply p-5;
+    }
+  }
+}
+
+/*****************************************************
+*********************** Table ************************
+*****************************************************/
+
+.ant-table-column-title,
+th:not(th:first-child).ant-table-cell {
+  @apply text-center #{"!important"};
+}
+
+.ant-table-thead {
+  th {
+    @apply font-semibold #{"!important"};
+  }
+}
+
+.mc-table {
+  .ant-table-thead {
+    @apply bg-table-highlight;
+    th {
+      @apply px-4 py-2.5 font-semibold;
+      @apply text-14px leading-5;
+      &:before {
+        display: none;
+      }
+    }
+  }
+
+  .ant-table-tbody {
+    tr {
+      @apply last:rounded-b;
+
+      &:nth-child(even) {
+        td {
+          @apply px-4 py-3 bg-table-highlight;
+        }
+      }
+
+      &:hover {
+        td {
+          @apply bg-background;
+        }
+      }
+
+      &:last-child {
+        td {
+          @apply first:rounded-bl last:rounded-br;
+        }
+      }
+    }
+
+    td {
+      @apply px-4 py-3 text-14px leading-5;
+    }
+  }
+}
+
+.ant-pagination-prev,
+.ant-pagination-next {
+  @apply inline-flex justify-center items-center;
+  .ant-pagination-item-link {
+    @apply inline-flex justify-center items-center border-0 bg-background-white;
+  }
+}
+
+.ant-pagination-item {
+  @apply border-0 rounded bg-background-white mr-3 last:mr-0;
+  min-width: 2.375rem;
+}
+
+.ant-pagination-item-active {
+  @apply border-1 bg-main-lighter;
+}
+
+.ant-pagination-options {
+  @apply inline-flex items-center;
+  //@apply hidden; // remove to show more options
+}
+
+.ant-pagination-jump-next,
+.ant-pagination-jump-prev {
+  .anticon.ant-pagination-item-link-icon {
+    @apply inline-flex;
+  }
+}
+
+.ant-pagination {
+  @apply flex justify-center mt-6;
+  @apply mb-0;
+}
+
+/*****************************************************
+*********************** Drawer ************************
+*****************************************************/
+.side-menu-drawer {
+  .ant-drawer-body {
+    padding: var(--header-height) 0;
+  }
+}
+
+.ant-image-preview-img {
+  display: initial;
+}
+
+/*****************************************************
+*********************** Menu ************************
+*****************************************************/
+
+.mc-main-menu {
+  border: none;
+
+  .ant-menu-submenu {
+    &.ant-menu-submenu-active {
+      @apply text-default-text;
+    }
+
+    &.mc-submenu-active {
+      @apply text-default-text;
+
+      .ant-menu-submenu-arrow {
+        @apply text-default-text;
+      }
+    }
+
+    //&:not(:first-child) {
+    //  @apply mt-4;
+    //}
+
+    .ant-menu-submenu-title {
+      @apply leading-6 px-0 font-semibold my-0 w-full rounded text-default-text;
+      @apply pl-4 #{'!important'};
+      //transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+
+    &.ant-menu-submenu-open {
+      @apply mb-2;
+
+      .ant-menu-submenu-title {
+        @apply text-white bg-main;
+      }
+
+      .ant-menu-submenu-arrow {
+        @apply text-white;
+      }
+    }
+
+    .ant-menu-submenu-title:active {
+      @apply bg-background-white;
+    }
+
+    .ant-menu-sub {
+      @apply bg-background-white;
+
+      .ant-menu-item-without-icon {
+        @apply pr-4;
+        @apply pl-[3.25rem] #{'!important'};
+      }
+    }
+  }
+
+  .ant-menu-item {
+    @apply h-auto mt-0 py-2 leading-6 w-full rounded mb-0 pl-5 #{"!important"};
+
+    &:after {
+      display: none;
+    }
+
+    &.ant-menu-item-selected {
+      @apply bg-main-lighter;
+      a {
+        @apply text-white;
+      }
+    }
+
+    &.ant-menu-item-without-icon {
+    }
+
+    a {
+      flex: 1;
+      @apply flex items-center justify-between;
+    }
+  }
+}
+
+/*****************************************************
+*********************** Tabset ***********************
+*****************************************************/
+.mc-tabset {
+  .ant-tabs-nav {
+    @apply mb-0;
+    &:before {
+      border-bottom: 0;
+    }
+  }
+
+  .ant-tabs-nav-operations {
+    @apply shrink-0;
+  }
+
+  .ant-tabs-tab {
+    @apply p-4 min-w-[9rem] flex justify-center items-center line-clamp-1;
+  }
+}
+
+/*****************************************************
+*********************** DatePicker ***********************
+******************************************************/
+
+.ant-picker {
+  &[aria-readonly='true'] {
+    pointer-events: none;
+  }
+
+  @apply py-0 rounded border-background;
+  &.ant-picker-borderless {
+    @apply bg-white;
+  }
+
+  .ant-picker-input {
+    @apply min-h-[var(--input-height-default)];
+    @apply rounded border-transparent text-grey-darkness;
+  }
+}
+
+.row-content[aria-readonly='true'] {
+  .ant-form-item-label > label.ant-form-item-no-colon::after {
+    display: none !important;
+  }
+}
+
+.side-menu-portal {
+  .ant-menu-submenu-title {
+    @apply p-0 h-12 #{"!important"};
+    @apply rounded-md leading-normal;
+
+    .ant-menu-submenu-arrow {
+      display: none;
+    }
+  }
+
+  .ant-menu-item {
+    @apply p-0 h-9 #{"!important"};
+    @apply rounded;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .ant-menu-sub {
+    background-color: transparent;
+  }
+}
+
+
+/** tag */
+.ant-tag-close-icon.anticon-close {
+  @apply bg-grey-light rounded-full w-3.5 h-3.5 inline-flex justify-center items-center;
+
+  svg {
+    @apply w-1.5 h-1.5 text-white;
+  }
+}
+
+/** checkbox */
+.ant-checkbox-inner {
+  @apply border-1 border-solid border-grey-neutral bg-background;
+}

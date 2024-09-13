@@ -1,0 +1,15 @@
+<ng-container [ngSwitch]="status">
+  <span *ngSwitchCase="eProgramGiftTypes.Amount">
+    {{ 'Sản phẩm (Amount)' | translate }}
+  </span>
+  <span *ngSwitchCase="eProgramGiftTypes.Any">
+    {{ 'Sản phẩm bất kì' | translate }}
+  </span>
+  <span *ngSwitchCase="eProgramGiftTypes.Percent">
+    {{ 'Sản phẩm (Percent)' | translate }}
+  </span>
+  <span *ngSwitchCase="eProgramGiftTypes.SimilarProduct">
+    {{ 'Sản phẩm cùng loại' | translate }}
+  </span>
+  <span *ngSwitchDefault>[?]</span>
+</ng-container>

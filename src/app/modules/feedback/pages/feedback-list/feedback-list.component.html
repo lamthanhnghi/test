@@ -1,0 +1,180 @@
+<app-item-list-master-layout [menuItems]="menu"
+                             menuStyle="multiple"
+                             heading="feedback_page.title"
+                             title="feedback_page.title"
+                             [shouldBeInSection]="false"
+                             (searchInputChange)="onSearchKeywordChange($event)">
+  <section>
+    <div class="px-4 lg:px-0">
+      <form class="grid grid-cols-3 gap-4 px-5 py-4 bg-background-white rounded">
+        <nz-form-control
+          class="w-full"
+          [nzErrorTip]="('program_page.start_valid_date' | translate) + ' ' + ('form.is_required_field' | translate)"
+        >
+          <nz-range-picker
+            class="w-full"
+            [ngModelOptions]="{standalone: true}"
+            [(ngModel)]="filterObject.dateRange"
+            (ngModelChange)="getItems()"
+          ></nz-range-picker>
+        </nz-form-control>
+        <nz-form-control>
+          <nz-select
+            class="w-full"
+            [nzPlaceHolder]="'Góp ý từ' | translate"
+            [nzCustomTemplate]="reportingUserTypeSelector"
+            [ngModelOptions]="{standalone: true}"
+            [(ngModel)]="filterObject.fromUserType"
+            (ngModelChange)="getItems()"
+          >
+            <ng-container *ngFor="let item of userTypeOptions">
+              <nz-option [nzValue]="item.value" [nzLabel]="item.label | translate"></nz-option>
+            </ng-container>
+            <ng-template #reportingUserTypeSelector let-selected>
+              <div class="flex justify-start items-center gap-1">
+                <span class="font-semibold">{{ 'Góp ý từ' | translate }}:</span>
+                <span>{{ selected['nzLabel'] | translate }}</span>
+              </div>
+            </ng-template>
+          </nz-select>
+        </nz-form-control>
+        <nz-form-control>
+          <nz-select
+            class="w-full"
+            [nzPlaceHolder]="'Chủ đề' | translate"
+            [nzCustomTemplate]="topicOptionSelector"
+            [ngModelOptions]="{standalone: true}"
+            [(ngModel)]="filterObject.topic"
+            (ngModelChange)="getItems()"
+          >
+            <ng-container *ngFor="let item of topicOptions">
+              <nz-option [nzValue]="item.value" [nzLabel]="item.label | translate"></nz-option>
+            </ng-container>
+            <ng-template #topicOptionSelector let-selected>
+              <div class="flex justify-start items-center gap-1">
+                <span class="font-semibold">{{ 'Chủ đề' | translate }}:</span>
+                <span>{{ selected['nzLabel'] | translate}}</span>
+              </div>
+            </ng-template>
+          </nz-select>
+        </nz-form-control>
+      </form>
+      <section class="bg-white shadow p-4">
+        <div class="lg:block hidden ">
+          <nz-table
+            nzBordered
+            [nzData]="data"
+            [nzLoading]="isLoading"
+            [(nzPageSize)]="filterObject.pageSize"
+            [(nzPageIndex)]="filterObject.pageIndex"
+            [nzShowPagination]="false"
+            (nzQueryParams)="tableQueryParamsChange$.next($event)"
+            [nzScroll]="{ x: '1280px', y: 'calc(100dvh - var(--footer-height) - 408px)' }"
+          >
+            <thead>
+            <tr>
+              <th nzColumnKey="name" nzWidth="250px" class="!text-center">{{ 'Người dùng' | translate }}</th>
+              <th nzColumnKey="type">{{ 'Góp ý từ' | translate }}</th>
+              <th nzWidth="300px">{{ 'Chủ đề' | translate }}</th>
+              <th nzColumnKey="type">{{ 'Ngày' | translate }}</th>
+              <th nzColumnKey="type">{{ 'Trạng thái' | translate }}</th>
+              <th nzColumnKey="action">{{ 'common.actions' | translate }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of data; index as i">
+              <td>
+                <div class="flex justify-start items-center gap-3">
+                  <app-avatar [hasShadow]="true" [allowChange]="false"
+                              [src]="item.creator?.creatorAvatar || ''"
+                              shape="circle" size="32"></app-avatar>
+                  <div class="flex flex-col justify-center items-start gap-0.5">
+                    <h5 class="font-medium text-[14px] text-grey-dark line-clamp-1 break-all">
+                      {{ item.creator?.creatorName || "[?]" }}
+                    </h5>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center">{{ item.creator?.creatorType | enumKey: "report_user_type" | translate}}</td>
+              <td class="text-center">
+                <span>{{ item.topic | enumKey: "feedback_topic" | translate }}</span>
+              </td>
+              <td class="text-center">{{ item.createdDate | date: DATE_TIME_FORMAT }}</td>
+              <td class="text-center">
+                <app-feedback-filter-type-label [status]="item.contentStatus"></app-feedback-filter-type-label>
+              </td>
+              <td>
+                <div class="flex gap-3 justify-center">
+                  <button
+                    (click)="review(item)"
+                    *ngIf="item.contentStatus === eFeedbackFilterType.New"
+                    class="!text-[14px] ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn"
+                    nz-button
+                    nzType="default"
+                  >
+                    {{ 'enums.content_statuses.admin_processing' | translate }}
+                  </button>
+                  <button
+                    class="flex justify-center items-center text-main"
+                    nzType="link"
+                    [routerLink]="item.feedbackID"
+                  >
+                    {{ 'common.view' | translate }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </nz-table>
+        </div>
+        <!--        <ul class="flex lg:hidden flex-col gap-5">-->
+        <!--          <ng-container *ngFor="let item of data">-->
+        <!--            <li class="first:mt-4">-->
+        <!--              <a [routerLink]="item.productID" class="card block p-4 bg-white hover:shadow transition rounded-lg">-->
+        <!--                <div class="flex justify-start items-center gap-3 mb-2">-->
+        <!--                  <app-avatar [hasShadow]="true" [allowChange]="false" [src]="''" shape="circle" size="52"></app-avatar>-->
+        <!--                  <div class="flex flex-col justify-center items-start gap-0.5">-->
+        <!--                    <h5 class="font-semibold text-[14px] text-grey-dark line-clamp-2 break-all">-->
+        <!--                      {{ item.productPublishName }}-->
+        <!--                    </h5>-->
+        <!--                    <p class="text-grey line-clamp-1">-->
+        <!--                      {{ item.productShortDescription }}-->
+        <!--                    </p>-->
+        <!--                  </div>-->
+        <!--                </div>-->
+        <!--                <div class="flex flex-nowrap justify-between mb-2">-->
+        <!--                  <span-->
+        <!--                    class="text-grey-default">{{ 'requesting_profiles_page.request_review_date' | translate }}</span>-->
+        <!--                  <span>{{ item.updatedDate | date: 'shortDate' }}</span>-->
+        <!--                </div>-->
+        <!--                <div class="flex flex-nowrap justify-between mb-2">-->
+        <!--                  <span class="text-grey-default">{{ 'common.actions' | translate }}</span>-->
+        <!--                  <app-content-status-label [status]="item.productVersionContentStatus"></app-content-status-label>-->
+        <!--                </div>-->
+        <!--                <button-->
+        <!--                  (click)="setStatus(item.productID || '', item.productVersionID || '')"-->
+        <!--                  *ngIf="item.productVersionContentStatus === eReportContentStatus.AdminPending"-->
+        <!--                  class="!text-[14px] ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn w-full"-->
+        <!--                  nz-button-->
+        <!--                  nzType="default"-->
+        <!--                >-->
+        <!--                  {{ 'enums.content_statuses.admin_reviewing' | translate }}-->
+        <!--                </button>-->
+        <!--              </a>-->
+        <!--            </li>-->
+        <!--          </ng-container>-->
+        <!--        </ul>-->
+        <nz-pagination
+          nzShowSizeChanger
+          nzResponsive
+          [nzPageSizeOptions]="[10, 20, 30, 40, 50]"
+          [(nzPageSize)]="filterObject.pageSize"
+          [(nzPageIndex)]="filterObject.pageIndex"
+          [nzTotal]="filterObject.total"
+          (nzPageSizeChange)="onPageSizeChange()"
+          (nzPageIndexChange)="onPageIndexChange($event)"
+        ></nz-pagination>
+      </section>
+    </div>
+  </section>
+</app-item-list-master-layout>

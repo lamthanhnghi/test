@@ -1,0 +1,81 @@
+<ng-container *ngIf="lstMedia.length">
+  <section class="relative" *ngIf="layout === eMediaPreview.Swiper">
+    <swiper-container
+      #swiper
+      slides-per-view="4.2"
+      space-between="16"
+      threshold="50"
+      allow-touch-move="false"
+      scrollbar="true"
+    >
+      <swiper-slide class="w-fit" *ngFor="let file of lstMedia">
+        <div class="aspect-square w-36 bg-white border-1 rounded-md relative">
+          <button class="absolute top-0 right-0 btn-icon" (click)="remove(file)">
+            <app-icon color="text-grey" name="conner-close" size="16"></app-icon>
+          </button>
+          <img
+            [alt]="file.name"
+            (click)="preview(file)"
+            [src]="file['preview']"
+            class="aspect-square w-full h-auto object-contain"
+          />
+        </div>
+      </swiper-slide>
+    </swiper-container>
+    <button
+      nz-button
+      nzType="default"
+      nzShape="circle"
+      (click)="prev()"
+      class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 z-10"
+    >
+      <app-icon name="caret-left"></app-icon>
+    </button>
+    <button
+      nz-button
+      nzType="default"
+      nzShape="circle"
+      (click)="next()"
+      class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2 z-10"
+    >
+      <app-icon name="caret-right"></app-icon>
+    </button>
+  </section>
+  <section
+    *ngIf="layout === eMediaPreview.SortGrid"
+    [ngClass]="'preview dndList ' + customGridClasses"
+    [class.cursor-not-allowed]="disabled"
+    dndDropzone
+    [dndHorizontal]="true"
+    dndEffectAllowed="move"
+    (dndDrop)="onDrop($event, lstMedia)"
+    [class.horizontal]="true"
+    [dndDisableIf]="disabled"
+  >
+    <div dndPlaceholderRef class="upload-preview-item-placeholder"></div>
+    <div
+      class="upload-preview-item"
+      [class.cursor-not-allowed]="disabled"
+      *ngFor="let item of lstMedia; index as i"
+      [dndDraggable]="item"
+      [dndEffectAllowed]="'move'"
+      [dndDisableIf]="disabled"
+      (dndStart)="onStart(item)"
+      (dndMoved)="onDragged(item, lstMedia, 'move')"
+      (dndCanceled)="onDragged(item, lstMedia, 'none')"
+    >
+      <mc-media [disabled]="disabled" [media]="item" (removeClicked)="remove(item)"></mc-media>
+    </div>
+  </section>
+</ng-container>
+<nz-modal
+  [nzVisible]="previewVisible"
+  [nzContent]="modalContent"
+  [nzCentered]="true"
+  [nzFooter]="undefined"
+  (nzOnCancel)="previewVisible = false"
+>
+  <ng-template #modalContent>
+    <img nz-image [nzSrc]="filePreview?.['preview']" [ngStyle]="{ width: '100%' }" alt="preview" />
+  </ng-template>
+</nz-modal>

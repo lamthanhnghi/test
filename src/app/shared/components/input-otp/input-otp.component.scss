@@ -1,0 +1,7 @@
+:host {
+  .ant-input {
+    @apply w-12 h-12 p-1;
+    @apply rounded;
+    @apply justify-center items-center text-center;
+  }
+}

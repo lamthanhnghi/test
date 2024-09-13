@@ -1,0 +1,12 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="min-h-screen flex flex-col items-stretch">
+    <div class="h-full flex-col lg:flex-row flex gap-5 flex-grow max-w-screen">
+      <div class="bg-white p-4 shadow rounded w-80 flex-shrink-0">
+        <app-main-menu [menuItems]="menuItems" (clickEvent)="onClickEvent($event)"></app-main-menu>
+      </div>
+      <div class="grow lg:max-w-[calc(100%_-_300px)] lg:shadow rounded bg-white">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</app-item-detail-master-layout>

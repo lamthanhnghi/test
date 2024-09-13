@@ -1,0 +1,19 @@
+.mc-toast {
+  padding: 0;
+  background: transparent;
+
+  .ant-alert {
+    @apply bg-green/20 border-1 border-green/70;
+    min-height: 5rem;
+    backdrop-filter: blur(1rem);
+  }
+
+  .ant-notification-notice-close {
+    @apply inline-flex justify-center items-center;
+    @apply top-2 right-2;
+
+    .ant-notification-notice-close-x {
+      @apply inline-flex justify-center items-center;
+    }
+  }
+}

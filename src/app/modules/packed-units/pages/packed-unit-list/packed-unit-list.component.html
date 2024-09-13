@@ -1,0 +1,102 @@
+<app-item-list-master-layout
+  heading="Đơn vị sản phẩm"
+  [menuItems]="menuItems"
+  (searchInputChange)="onSearchKeywordChange($event)"
+>
+  <section class="rounded flex flex-col items-stretch lg:px-5">
+    <div class="flex-grow block">
+      <div class="flex justify-end gap-4 mb-4">
+        <button (click)="openAddModal()" nz-button nzType="primary" nzShape="circle">
+          <span nz-icon nzType="plus"></span>
+        </button>
+      </div>
+      <nz-table
+        [nzData]="data" nzBordered class="mc-table" [nzShowPagination]="false"
+        [nzScroll]="{ x: '1280px', y: 'calc(100dvh - var(--footer-height) - 358px)' }"
+      >
+        <thead>
+          <tr>
+            <th nzAlign="center" nzColumnKey="label" nzWidth="auto">
+              <span class="font-semibold">{{ 'Đơn vị bán' | translate }}</span>
+            </th>
+            <th nzColumnKey="quantity" nzWidth="20ch">
+              <span class="font-semibold">{{ 'Số lượng' | translate }}</span>
+            </th>
+            <th nzColumnKey="updatedAt" nzWidth="20ch">
+              <span class="font-semibold">{{ 'Ngày cập nhật' | translate }}</span>
+            </th>
+            <th nzColumnKey="shouldShowSKU" nzWidth="10rem">
+              <span class="font-semibold">{{ 'Hiển thị SKU' | translate }}</span>
+            </th>
+            <th nzWidth="8rem">{{ '' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of data">
+            <tr>
+              <td>
+                {{ item.attributeName }}
+              </td>
+              <td class="text-center">
+                <div class="">{{ item.countAttributeValue }}</div>
+              </td>
+              <td class="text-center">
+                <div>{{ item.updatedDate | date: 'shortDate' }}</div>
+              </td>
+              <td class="text-center">
+                <div class="flex justify-center items-center">
+                  <button
+                    class="inline-flex justify-center items-center"
+                    (click)="toggleShowList(item)"
+                    [disabled]="item.isShowList === 1"
+                  >
+                    <nz-switch
+                      [attr.aria-readonly]="item.isShowList === 1"
+                      nzSize="small"
+                      [ngModel]="item.isShowList"
+                    ></nz-switch>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <div class="flex gap-3 justify-center">
+                  <button
+                    class="ant-btn-link flex justify-center items-center"
+                    nzType="link"
+                    [routerLink]="item.attributeID"
+                  >
+                    {{ 'common.view' | translate }}
+                  </button>
+                  <button
+                    class="ant-btn-link flex justify-center items-center text-blue hover:text-blue-dark focus:text-blue"
+                    nzType="link"
+                    (click)="openAddModal(item)"
+                  >
+                    {{ 'common.edit' | translate }}
+                  </button>
+                  <button
+                    class="ant-btn-link flex justify-center items-center text-red hover:text-red-dark focus:text-red"
+                    nzType="link"
+                    (click)="delete()"
+                  >
+                    {{ 'common.delete' | translate }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+    <nz-pagination
+      nzShowSizeChanger
+      nzResponsive
+      [nzPageSizeOptions]="[10, 20, 30, 40, 50]"
+      [(nzPageSize)]="filterObject.pageSize"
+      [(nzPageIndex)]="filterObject.pageIndex"
+      [nzTotal]="filterObject.total"
+      (nzPageSizeChange)="onPageSizeChange()"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+    ></nz-pagination>
+  </section>
+</app-item-list-master-layout>

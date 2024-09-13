@@ -1,0 +1,18 @@
+<ng-container [ngSwitch]="status">
+  <span *ngSwitchCase="eAccountStatus.Activated" class="text-green">
+    {{ 'enums.user_statuses.active' | translate }}
+  </span>
+  <span *ngSwitchCase="eAccountStatus.Hidden" class="text-red">
+    {{ 'enums.user_statuses.hidden' | translate }}
+  </span>
+  <span *ngSwitchCase="eAccountStatus.Disabled" class="text-red">
+    {{ 'enums.user_statuses.locked' | translate }}
+  </span>
+  <span *ngSwitchCase="eAccountStatus.NeedInfo" class="text-orange">
+    {{ 'Cần cập nhật' | translate }}
+  </span>
+  <span *ngSwitchCase="eAccountStatus.InActivated" class="text-grey-neutral">
+    {{ 'Chưa kích hoạt' | translate }}
+  </span>
+  <span *ngSwitchDefault>[?]</span>
+</ng-container>

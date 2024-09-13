@@ -1,0 +1,64 @@
+<ul class="flex flex-col gap-4">
+  <li class="flex gap-4 items-start w-full">
+    <app-avatar [src]="data?.avatar || ''" size="52" shape="circle" class="shrink-0"></app-avatar>
+    <div class="flex flex-col gap-2 grow">
+      <div>
+        <h5 class="mb-1 text-sm font-semibold text-grey-dark line-clamp-2 break-all">{{data?.name || "[?]"}}</h5>
+        <p class="text-grey text-sm line-clamp-2">{{data?.feedbackDate | date: DATE_TIME_FORMAT}} - {{data?.fromUserType | enumKey: "report_user_type" | translate}}</p>
+      </div>
+      <div>
+        <p class="mb-2">
+          {{data?.content || ""}}
+        </p>
+      </div>
+            <button
+              [disabled]="!canReact"
+              (click)="toggleUseful()" class="w-fit flex items-center gap-2 text-sm font-semibold text-grey-dark">
+              <app-icon [name]="data?.isUseful ? 'filled-thumbs-up' : 'outline-thumbs-up'"
+                        size="24" [color]="data?.isUseful ? 'text-green' : 'text-grey-dark'"
+              ></app-icon>
+              {{"feedback_page.useful" | translate}}
+            </button>
+            <ul *ngIf="data?.medias" class="flex gap-2">
+              <ng-container
+                *ngFor="let media of data?.medias; let i = index"
+              >
+                <li class="shrink-0 w-[80px] h-[80px]">
+                  <img nz-image [nzSrc]="media.linkString" alt="" class="w-full h-full object-cover">
+                </li>
+              </ng-container>
+            </ul>
+            <ul class="flex flex-col gap-4 w-full my-2">
+              <li *ngIf="data?.adminReply" class="p-4 flex flex-col rounded bg-[#f4f4f4]">
+                <div class="mb-3">
+                  <h5 class="text-sm font-semibold text-grey-dark line-clamp-2 break-all">{{"feedback_page.admin_reply_name" | translate}}</h5>
+                  <p class="text-grey text-sm line-clamp-2">{{data?.adminReplyDate | date: DATE_TIME_FORMAT}}</p>
+                </div>
+                <p>{{data?.adminReply || ""}}</p>
+              </li>
+            </ul>
+            <form *ngIf="withReply" nz-form [formGroup]="form"  class="flex flex-col gap-2" >
+              <nz-form-item class="w-full mb-2">
+                <nz-form-control class="w-full"  [nzErrorTip]="replyError">
+                  <textarea
+                    [formControlName]="eFeedbackReplyFormKeys.Reply"
+                    [nzAutosize]="{ minRows: 3, maxRows: 7 }"
+                    [disabled]="isReplying"
+                    placeholder="Nhập câu trả lời"
+                    nz-input ></textarea>
+                  <ng-template #replyError let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                      {{ 'common.please_input' | translate }} {{ 'common.reply' | translate }}
+                    </ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+              <div class="items-center justify-end flex">
+                <button
+                  [nzLoading]="isReplying"
+                  (click)="submit()" nz-button nzType="primary" class="!h-fit py-2 text-xs max-w-[110px] w-full">{{"common.send" | translate}}</button>
+              </div>
+            </form>
+    </div>
+  </li>
+</ul>

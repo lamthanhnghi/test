@@ -1,0 +1,19 @@
+.ck {
+  --ck-border-radius: 0.25rem;
+  --ck-focus-ring: 1px solid var(--main-default);
+}
+.ck-editor__editable_inline {
+  border: 1px solid var(--background-default);
+  padding: 10px;
+  min-height: 200px;
+  background: var(--background-default);
+  @apply rounded-lg;
+}
+
+.ck-powered-by-balloon {
+  @apply hidden #{'!important'};
+}
+
+.ck-read-only {
+  color: rgba(0, 0, 0, 0.25);
+}

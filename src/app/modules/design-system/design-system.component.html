@@ -1,0 +1,550 @@
+<article class="p-5">
+  <h1 class="mb-5">Upload file</h1>
+  <p>minImageWidth = 0 to allow upload without check dimension</p>
+  <nz-form-item>
+    <nz-form-label nzXs="24" nzLabelAlign="left" mcRequired [isShow]="true">
+      {{ 'program_page.program_cover' | translate }}
+    </nz-form-label>
+    <div class="col-right flex items-start gap-x-4 justify-start flex-wrap">
+      <div class="w-[11.25rem] h-[11.25rem] flex-shrink-0">
+        <app-upload-file [formControl]="coverControl" accept="image/*" [limit]="1" [ratio]="1" [minImageWidth]="0">
+          <div
+            class="h-full border-1 border-dashed border-main bg-main-lighter text-main rounded flex flex-col justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <app-icon name="picture" size="24"></app-icon>
+            <div>{{ 'common.add_image' | translate }}</div>
+          </div>
+        </app-upload-file>
+      </div>
+      <div class="grow flex justify-start items-center gap-4 flex-wrap">
+        @for (item of covers; track item.uid) {
+          <div
+            class="w-auto h-[11.25rem] rounded border-1 border-main-lighter/80 bg-background overflow-hidden relative"
+          >
+            <app-media-item
+              [file]="item"
+              [disabled]="false"
+              (successEvent)="uploadCoverSuccess(item)"
+              (removeEvent)="removeCover(item)"
+              imageClasses="!object-cover"
+            ></app-media-item>
+          </div>
+        }
+      </div>
+      @if (true) {
+        <div class="text-13px text-grey-light w-full mt-2">
+          {{ 'common.program_cover_upload_helpers' | translate }}
+        </div>
+      }
+    </div>
+  </nz-form-item>
+</article>
+
+<section class="container mx-auto">
+  <h4 class="mb-5">Container max width: 1536px</h4>
+</section>
+<section class="container - mx-auto h-[500px] bg-background"></section>
+
+<section class="container mt-5 mx-auto">
+  <h4 class="mb-5">Form Style Filled</h4>
+  <form nz-form nzLayout="vertical">
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzMd="4" nzSm="24">
+        {{ 'product_page.sub_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="subNameSuffix">
+          <input placeholder="placeholder" mcAutocompleteOff nz-input type="text" maxlength="150" #inputElement />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!--  -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzMd="4" nzSm="24">Readonly</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            readonly
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- readonly with value -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzMd="4" nzSm="24">Readonly with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            value="12345"
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            readonly
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- disabled -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzMd="4" nzSm="24">Disabled with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            disabled
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- disabled with value -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzMd="4" nzSm="24">Disabled with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            value="12345"
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            disabled
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- error -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzMd="4" nzSm="24">
+        {{ 'product_page.sub_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="errorTpl" [nzValidateStatus]="'error'">
+        <nz-input-group [nzSuffix]="subNameSuffix">
+          <input placeholder="placeholder" mcAutocompleteOff nz-input type="text" maxlength="150" #inputElement />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+        <ng-template #errorTpl let-control>
+          Lorem ipsum dolor sit amet.
+          <!-- <ng-container *ngIf="control.hasError('required'); else invalidEmailOrPhone"> -->
+          <!--   {{ 'form.please_input' | translate }} {{ 'form.phone_or_email' | translate | lowercase }} -->
+          <!-- </ng-container> -->
+          <!-- <ng-template #invalidEmailOrPhone> -->
+          <!--   <ng-container *ngIf="control.hasError('phoneOrMailPattern')"> -->
+          <!--     {{ 'form.email_or_phone_number' | translate }} {{ 'form.invalid' | translate | lowercase }} -->
+          <!--   </ng-container> -->
+          <!-- </ng-template> -->
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</section>
+<nz-divider></nz-divider>
+<section class="container mt-5 mx-auto">
+  <h4 class="mb-5">Form Style Filled Horizontal</h4>
+  <form nz-form nzLayout="horizontal">
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">
+        {{ 'product_page.sub_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="subNameSuffix">
+          <input placeholder="placeholder" mcAutocompleteOff nz-input type="text" maxlength="150" #inputElement />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!--  -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Readonly</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            readonly
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- readonly with value -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Readonly with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            value="12345"
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            readonly
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- disabled -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Disabled with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            disabled
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- disabled with value -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Disabled with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            value="12345"
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            disabled
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- error -->
+    <nz-form-item class="style-filled">
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">
+        {{ 'product_page.sub_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="errorTpl" [nzValidateStatus]="'error'">
+        <nz-input-group [nzSuffix]="subNameSuffix">
+          <input placeholder="placeholder" mcAutocompleteOff nz-input type="text" maxlength="150" #inputElement />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+        <ng-template #errorTpl let-control>
+          Lorem ipsum dolor sit amet.
+          <!-- <ng-container *ngIf="control.hasError('required'); else invalidEmailOrPhone"> -->
+          <!--   {{ 'form.please_input' | translate }} {{ 'form.phone_or_email' | translate | lowercase }} -->
+          <!-- </ng-container> -->
+          <!-- <ng-template #invalidEmailOrPhone> -->
+          <!--   <ng-container *ngIf="control.hasError('phoneOrMailPattern')"> -->
+          <!--     {{ 'form.email_or_phone_number' | translate }} {{ 'form.invalid' | translate | lowercase }} -->
+          <!--   </ng-container> -->
+          <!-- </ng-template> -->
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</section>
+<nz-divider></nz-divider>
+<section class="container mt-5 mx-auto">
+  <h4 class="mb-5">Form Default Vertical</h4>
+  <form nz-form nzLayout="vertical">
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">
+        {{ 'product_page.sub_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="subNameSuffix">
+          <input placeholder="placeholder" mcAutocompleteOff nz-input type="text" maxlength="150" #inputElement />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!--  -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Readonly</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            readonly
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- readonly with value -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Readonly with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            value="12345"
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            readonly
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- disabled -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Disabled with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            disabled
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- disabled with value -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Disabled with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            value="12345"
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            disabled
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- error -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">
+        {{ 'product_page.sub_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="errorTpl" [nzValidateStatus]="'error'">
+        <nz-input-group [nzSuffix]="subNameSuffix">
+          <input placeholder="placeholder" mcAutocompleteOff nz-input type="text" maxlength="150" #inputElement />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+        <ng-template #errorTpl let-control>
+          Lorem ipsum dolor sit amet.
+          <!-- <ng-container *ngIf="control.hasError('required'); else invalidEmailOrPhone"> -->
+          <!--   {{ 'form.please_input' | translate }} {{ 'form.phone_or_email' | translate | lowercase }} -->
+          <!-- </ng-container> -->
+          <!-- <ng-template #invalidEmailOrPhone> -->
+          <!--   <ng-container *ngIf="control.hasError('phoneOrMailPattern')"> -->
+          <!--     {{ 'form.email_or_phone_number' | translate }} {{ 'form.invalid' | translate | lowercase }} -->
+          <!--   </ng-container> -->
+          <!-- </ng-template> -->
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</section>
+<nz-divider></nz-divider>
+<section class="container mt-5 mx-auto">
+  <h4 class="mb-5">Form Default Horizontal</h4>
+  <form nz-form nzLayout="horizontal">
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">
+        {{ 'product_page.sub_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="subNameSuffix">
+          <input placeholder="placeholder" mcAutocompleteOff nz-input type="text" maxlength="150" #inputElement />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!--  -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Readonly</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            readonly
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- readonly with value -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Readonly with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            value="12345"
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            readonly
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- disabled -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Disabled with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            disabled
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- disabled with value -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">Disabled with value</nz-form-label>
+      <nz-form-control [nzErrorTip]="'form.this_field_is_required' | translate">
+        <nz-input-group [nzSuffix]="isReadOnly ? '' : subNameSuffix">
+          <input
+            value="12345"
+            placeholder="placeholder"
+            mcAutocompleteOff
+            nz-input
+            type="text"
+            maxlength="150"
+            #inputElement
+            disabled
+          />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- error -->
+    <nz-form-item>
+      <nz-form-label mcRequired nzNoColon nzLabelAlign="left" nzLg="6" nzSm="24">
+        {{ 'product_page.sub_name' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="errorTpl" [nzValidateStatus]="'error'">
+        <nz-input-group [nzSuffix]="subNameSuffix">
+          <input placeholder="placeholder" mcAutocompleteOff nz-input type="text" maxlength="150" #inputElement />
+        </nz-input-group>
+        <ng-template #subNameSuffix>
+          <span>|&nbsp;{{ inputElement?.value | mcCharCount }}/150</span>
+        </ng-template>
+        <ng-template #errorTpl let-control>
+          Lorem ipsum dolor sit amet.
+          <!-- <ng-container *ngIf="control.hasError('required'); else invalidEmailOrPhone"> -->
+          <!--   {{ 'form.please_input' | translate }} {{ 'form.phone_or_email' | translate | lowercase }} -->
+          <!-- </ng-container> -->
+          <!-- <ng-template #invalidEmailOrPhone> -->
+          <!--   <ng-container *ngIf="control.hasError('phoneOrMailPattern')"> -->
+          <!--     {{ 'form.email_or_phone_number' | translate }} {{ 'form.invalid' | translate | lowercase }} -->
+          <!--   </ng-container> -->
+          <!-- </ng-template> -->
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</section>

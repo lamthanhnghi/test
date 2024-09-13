@@ -1,0 +1,172 @@
+<form [formGroup]="form">
+  <div *nzModalTitle>
+    {{ data.title | translate }}
+  </div>
+  <div class="flex tablet:flex-row tablet:gap-4 flex-col justify-center items-center">
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">
+        {{ 'common.address_type' | translate }}
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_select' | translate) + ' ' + ('common.address_type' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <nz-select
+          [nzPlaceHolder]="('form.select' | translate) + ' ' + ('common.address_type' | translate)"
+          [formControlName]="formKeys.addressLabel"
+        >
+          <ng-container *ngFor="let item of addressLabelsOptions">
+            <nz-option [nzValue]="item" [nzLabel]="item.label | translate"></nz-option>
+          </ng-container>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- ------------------------------------------------------------------------------------------------------------ -->
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">
+        {{ 'common.province_city' | translate }}
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_select' | translate) + ' ' + ('common.province_city' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <nz-select
+          [nzPlaceHolder]="('form.select' | translate) + ' ' + ('common.province_city' | translate)"
+          nzAllowClear
+          nzShowSearch
+          nzServerSearch
+          [formControlName]="formKeys.city"
+          (nzOnSearch)="onSearchCity($event)"
+          [nzLoading]="isLoadingCity"
+        >
+          <ng-container *ngFor="let item of cities | search: ['name'] : searchCitiesTerm; trackBy: trackByCityId">
+            <nz-option [nzValue]="item" [nzLabel]="item.name"></nz-option>
+          </ng-container>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- ------------------------------------------------------------------------------------------------------------ -->
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">
+        {{ 'common.district' | translate }}
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_select' | translate) + ' ' +('common.district' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <nz-select
+          [nzPlaceHolder]="('form.select' | translate) + ' ' + ('common.district' | translate)"
+          nzAllowClear
+          nzShowSearch
+          nzServerSearch
+          [formControlName]="formKeys.district"
+          (nzOnSearch)="onSearchDistrict($event)"
+          [nzLoading]="isLoadingCity"
+          [nzDisabled]="!selectedCity"
+        >
+          <ng-container
+            *ngFor="let item of districts | search: ['name'] : searchDistrictsTerm; trackBy: trackByDistrictId"
+          >
+            <nz-option [nzValue]="item" [nzLabel]="item.name"></nz-option>
+          </ng-container>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div>
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">{{ 'common.address' | translate }}</nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_input' | translate) + ' ' + ('common.address' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <textarea
+          mcRequired
+          nz-input
+          [placeholder]="'common.address' | translate"
+          [nzAutosize]="{ minRows: 2, maxRows: 3 }"
+          [formControlName]="formKeys.addressString"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div class="row-content col-2">
+    <nz-form-item class="w-full">
+      <nz-form-label class="pr-5" nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="24" [nzFor]="formKeys.longitude">
+        {{ 'common.longitude' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="longitudeError">
+        <nz-input-number
+          class="w-full"
+          nzSize="large"
+          [formControlName]="formKeys.longitude"
+          [id]="formKeys.longitude"
+          [nzPlaceHolder]="'common.input' | translate"
+          [nzMin]="0"
+        ></nz-input-number>
+        <ng-template #longitudeError let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            {{ 'common.please_input' | translate }} {{ 'common.longitude' | translate }}
+          </ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item class="w-full">
+      <nz-form-label class="!pl-0" nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="24" [nzFor]="formKeys.latitude">
+        {{ 'common.latitude' | translate }}
+      </nz-form-label>
+      <nz-form-control [nzErrorTip]="latitudeError">
+        <nz-input-number
+          class="w-full"
+          [formControlName]="formKeys.latitude"
+          [id]="formKeys.latitude"
+          [nzPlaceHolder]="'common.input' | translate"
+          [nzMin]="0"
+        ></nz-input-number>
+        <ng-template #latitudeError let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            {{ 'common.please_input' | translate }} {{ 'common.latitude' | translate }}
+          </ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+    <div>
+      <nz-form-item>
+        <nz-form-label
+          nzRequired
+          nzLabelAlign="left"
+          nzLabelWrap
+          [nzSm]="24"
+          [nzFor]="formKeys.addressUrl"
+        >
+          {{ 'common.addressUrl' | translate }}
+        </nz-form-label>
+        <nz-form-control [nzErrorTip]="addressUrlError">
+          <input
+            class="w-full"
+            nz-input
+            [formControlName]="formKeys.addressUrl"
+            [id]="formKeys.addressUrl"
+            [placeholder]="addressUrlPlaceholder"
+          />
+          <ng-template #addressUrlError let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              {{ 'common.please_input' | translate }} {{ 'common.addressUrl' | translate }}
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  <label nz-checkbox [nzValue]="eDefaultStatus.Default" [formControlName]="formKeys.isDefault">
+    {{ 'common.set_as_default' | translate }}
+  </label>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="modalRef.close(undefined)">{{ 'common.close' | translate }}</button>
+    <button nz-button nzType="primary" (click)="submit()">{{ 'common.save' | translate }}</button>
+  </div>
+</form>

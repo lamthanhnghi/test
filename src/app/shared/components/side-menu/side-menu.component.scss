@@ -1,0 +1,26 @@
+:host {
+  .sider-menu {
+    background: transparent;
+    @apply py-5 h-full;
+
+    .ant-menu-item {
+      @apply py-1 leading-5 h-fit;
+
+      &.ant-menu-item-selected {
+        background: var(--ant-primary-6);
+        a {
+          @apply text-grey-dark;
+        }
+      }
+
+      &.ant-menu-item-without-icon {
+        @apply px-4 #{!important};
+      }
+
+      a {
+        flex: 1;
+        @apply flex items-center justify-between;
+      }
+    }
+  }
+}

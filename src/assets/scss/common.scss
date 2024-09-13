@@ -1,0 +1,244 @@
+//h1 is 32px (2em)
+//h2 is 24px (1.5em)
+//h3 is 20.8px (1.3em)
+//h4 is 16px (1em)
+//h5 is 12.8px (0.8em)
+//h6 is 11.2px (0.7em)
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+h1 {
+  font-size: 2em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 1.3em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h4 {
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h5 {
+  font-size: 0.8em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h6 {
+  font-size: 0.7em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+html,
+body {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  @apply font-main;
+  @apply text-default-text;
+  width: initial;
+  font-size: 16px;
+  min-height: 100%;
+}
+
+html {
+  overflow: auto;
+  height: 100%;
+}
+
+body {
+  height: calc(100% - var(--header-height));
+}
+
+@media screen and (max-width: 768px) {
+  html,
+  body {
+    font-size: 14px;
+  }
+}
+
+//@media screen and (min-width: 1024px) {
+//  html,
+//  body {
+//    font-size: 15px;
+//  }
+//}
+//
+//@media screen and (min-width: 1280px) {
+//  html,
+//  body {
+//    font-size: 16px;
+//  }
+//}
+
+mulstore-base-root {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.layout-padding {
+  @apply px-20 max-tablet:px-5;
+}
+
+.container {
+  width: 100%;
+}
+
+.container-sm {
+  max-width: 40rem; // 640px
+  margin: 0 auto;
+}
+
+.container-md {
+  max-width: 60rem; // 960px
+  margin: 0 auto;
+}
+
+.container-lg {
+  max-width: 80rem; // 1280px
+  margin: 0 auto;
+}
+
+.container-xl {
+  max-width: 100rem; // 1600px
+  margin: 0 auto;
+}
+
+.container-2xl {
+  max-width: 120rem; // 1920px
+  margin: 0 auto;
+}
+
+.container-fluid {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.break-word {
+  word-break: break-word;
+}
+
+.btn-style-none {
+  @apply inline-flex justify-center items-center border-0 bg-none outline-none;
+}
+
+.html-content {
+  * {
+    @apply max-w-full;
+  }
+}
+
+.ql-toolbar.ql-snow {
+  @apply flex flex-row flex-wrap gap-2 rounded-t;
+
+  .ql-formats {
+    @apply flex-shrink-0 flex flex-row flex-wrap gap-2 m-0;
+  }
+}
+
+.ql-container.ql-snow {
+  @apply rounded-b;
+}
+
+/** Custom class for form with 2 columns */
+.row-content {
+  @apply flex justify-between items-center max-desktop:flex-wrap;
+
+  &.col-2 {
+    nz-form-item {
+      &:first-child {
+        nz-form-control {
+          @apply desktop:pr-5;
+        }
+      }
+
+      &:last-child {
+        nz-form-label {
+          @apply desktop:pl-5;
+        }
+      }
+    }
+  }
+
+  &[aria-readonly='true'] {
+    @apply block;
+    nz-form-item {
+      @apply mb-0 #{'!important'};
+
+      nz-form-label {
+        .ant-form-item-required:after {
+          display: none;
+        }
+
+        label {
+          @apply flex-row-reverse;
+        }
+
+        label::before {
+          content: ':' !important;
+          display: block !important;
+          height: fit-content;
+          width: fit-content;
+          @apply text-default-text #{'!important'};
+        }
+      }
+
+      &:first-child {
+        nz-form-control {
+          @apply desktop:pr-0;
+        }
+      }
+
+      &:last-child {
+        nz-form-label {
+          @apply desktop:pl-0;
+        }
+      }
+    }
+  }
+}
+
+// switch
+nz-switch {
+  &[aria-readonly='true'] {
+    pointer-events: none;
+  }
+}
+
+// checkbox
+.ant-checkbox-wrapper {
+  &[aria-readonly='true'] {
+    pointer-events: none;
+  }
+}
+
+.stretch-tabset {
+
+  .ant-tabs-nav:before {
+    display: none;
+  }
+  .ant-tabs-nav-wrap {
+    .ant-tabs-nav-list {
+      @apply w-full justify-center;
+
+      .ant-tabs-tab {
+        @apply flex-1 m-0 justify-center;
+      }
+    }
+  }
+}

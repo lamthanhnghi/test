@@ -1,0 +1,13 @@
+<ng-container [ngSwitch]="status">
+  <span *ngSwitchCase="eReportContentStatus.New" class="text-blue">
+    {{ 'enums.content_statuses.new' | translate }}
+  </span>
+  <span *ngSwitchCase="eReportContentStatus.Reviewing" class="text-orange">
+    {{ 'enums.content_statuses.admin_processing' | translate }}
+  </span>
+  <span *ngSwitchCase="eReportContentStatus.Handled" class="text-green">
+    {{ 'enums.content_statuses.admin_processed' | translate }}
+  </span>
+  <span *ngSwitchDefault>[?] ({{status}})</span>
+
+</ng-container>

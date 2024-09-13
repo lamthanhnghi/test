@@ -1,0 +1,123 @@
+<app-item-list-master-layout heading="Nhóm" [menuItems]="menuItems">
+  <section class="rounded flex flex-col items-stretch lg:px-5">
+    <div class="flex-grow lg:block hidden">
+      <div class="flex justify-end gap-4 mb-4">
+        <!--        <a nz-button nzType="link" class="gap-2">-->
+        <!--          <app-icon name="import" size="16"></app-icon>-->
+        <!--          Nhập từ danh sách-->
+        <!--        </a>-->
+        <button nz-button nzType="primary" nzShape="circle"><span nz-icon nzType="plus"></span></button>
+      </div>
+      <nz-table [nzData]="groups" nzBordered class="mc-table" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th nzColumnKey="name">
+              <span class="font-semibold">{{ 'Tên danh mục' | translate }}</span>
+            </th>
+            <th nzColumnKey="desc">
+              <span class="font-semibold">{{ 'Mô tả' | translate }}</span>
+            </th>
+            <th nzColumnKey="createdAt">
+              <span class="font-semibold">{{ 'Ngày cập nhật' | translate }}</span>
+            </th>
+            <th nzColumnKey="status">
+              <span class="font-semibold">{{ 'Trạng thái' | translate }}</span>
+            </th>
+            <th>{{ '' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let g of groups">
+            <tr>
+              <td>
+                <div class="flex justify-start items-center gap-3">
+                  <div class="aspect-square w-[3.75rem] shrink-0" (click)="$event.stopPropagation()">
+                    <img
+                      class="w-full h-full object-contain cursor-pointer rounded"
+                      nz-image
+                      [nzSrc]="g.thumbnailUrl"
+                    />
+                  </div>
+                  <div class="flex flex-col justify-center items-start gap-0.5">
+                    <h5 class="font-medium text-14px text-grey-dark line-clamp-1">
+                      {{ g.name }}
+                    </h5>
+                    <p class="text-grey line-clamp-1">
+                      <span>Gọi tắt:</span>
+                      {{ g.shortName }}
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="text-center">{{ g.desc }}</div>
+              </td>
+              <td>
+                <div class="text-center">{{ g.createdAt }}</div>
+              </td>
+              <td class="text-center">
+                <app-content-status-label [status]="g.contentStatus"></app-content-status-label>
+              </td>
+              <td>
+                <div class="flex gap-3 justify-center">
+                  <button class="ant-btn-link flex justify-center items-center" nzType="link" [routerLink]="g.id">
+                    Xem
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="block lg:hidden">
+      <div class="flex justify-between p-4 bg-white">
+        <div></div>
+        <div class="flex gap-3 items-center">
+          <!--          <button nz-button nzShape="circle" class="flex items-center justify-center !p-0 !border-none text-main rounded-full">-->
+          <!--            <app-icon name="import" size="24"></app-icon>-->
+          <!--          </button>-->
+          <button nzSize="small" nz-button nzType="primary" nzShape="circle">
+            <span nz-icon nzType="plus"></span>
+          </button>
+        </div>
+      </div>
+      <ul class="flex flex-col gap-5 px-5 pt-5">
+        <ng-container *ngFor="let item of groups">
+          <li>
+            <a [routerLink]="item.id" class="card block p-4 bg-white hover:shadow transition rounded-lg">
+              <div class="flex justify-start items-start gap-3">
+                <app-avatar [hasShadow]="true" [allowChange]="false" [src]="''" shape="circle" size="52"></app-avatar>
+                <div class="flex flex-col justify-center gap-2 grow items-stretch">
+                  <div class="flex flex-nowrap justify-between">
+                    <span class="text-grey-default">{{ 'Tên đơn vị' | translate }}</span>
+                    <span>{{ item.name }}</span>
+                  </div>
+                  <div class="flex flex-nowrap justify-between">
+                    <span class="text-grey-default">{{ 'Gọi tắt' | translate }}</span>
+                    <span>{{ item.shortName }}</span>
+                  </div>
+                  <div class="flex flex-nowrap justify-between">
+                    <span class="text-grey-default">{{ 'Ngày cập nhật' | translate }}</span>
+                    <span>{{ item.createdAt | date: 'shortDate' }}</span>
+                  </div>
+                  <div class="flex flex-nowrap justify-between">
+                    <span class="text-grey-default">{{ 'common.status' | translate }}</span>
+                    <app-content-status-label [status]="item.contentStatus"></app-content-status-label>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <nz-pagination
+      [nzTotal]="groups.length"
+      nzShowSizeChanger
+      nzResponsive
+      nzPageSize="10"
+      nzPageIndex="0"
+    ></nz-pagination>
+  </section>
+</app-item-list-master-layout>

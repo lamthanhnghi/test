@@ -1,0 +1,16 @@
+<footer class="bg-[#FBFBFB]">
+  <div class="px-10 py-4 w-full  mx-auto flex justify-between flex-col lg:flex-row items-center">
+    <div>
+      <img alt="logo" src="assets/images/logo.png" class="w-8 h-8 object-contain" />
+    </div>
+    <div class="max-mobile:mt-4 max-mobile:mb-8">
+      <p
+        class="flex lg:flex-row flex-col items-center gap-2.5 text-default-text-dark max-mobile:text-center max-mobile:gap-2.5"
+      >
+        <span>{{ 'app_config.copy_right' | translate }}</span>
+        <span class="hidden lg:block">|</span>
+        <a [routerLink]="[RouteUtils.ProfilePage.Base]">{{ 'common.privacy_policy' | translate }}</a>
+      </p>
+    </div>
+  </div>
+</footer>

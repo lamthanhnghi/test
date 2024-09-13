@@ -1,0 +1,50 @@
+<form [formGroup]="form" nz-form>
+  <div *nzModalTitle>
+    {{ data.title | translate }}
+  </div>
+  <div class="flex tablet:flex-row tablet:gap-4 flex-col justify-center items-center">
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">
+        {{ 'common.label' | translate }}
+      </nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_select' | translate) + ' ' + ('common.label' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <nz-select
+          [nzPlaceHolder]="('form.select' | translate) + ' ' + ('common.label' | translate)"
+          [formControlName]="formKeys.phoneLabel"
+        >
+          <ng-container *ngFor="let item of phoneLabelsOptions">
+            <nz-option [nzValue]="item.value" [nzLabel]="item.label | translate"></nz-option>
+          </ng-container>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- ------------------------------------------------------------------------------------------------------------ -->
+    <nz-form-item class="w-full">
+      <nz-form-label nzRequired class="text-left !pb-0" [nzSpan]="24">{{ 'common.phone' | translate }}</nz-form-label>
+      <nz-form-control
+        [nzErrorTip]="('common.please_input' | translate) + ' ' + ('common.phone' | translate)"
+        [nzSpan]="24"
+        class="w-full"
+      >
+        <input
+          mcRequired
+          nz-input
+          type="tel"
+          [placeholder]="'common.phone' | translate"
+          [formControlName]="formKeys.phone"
+        />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <label nz-checkbox [formControlName]="formKeys.isDefault">
+    {{ 'common.set_as_default' | translate }}
+  </label>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="modalRef.close(undefined)">{{ 'common.close' | translate }}</button>
+    <button nz-button nzType="primary" (click)="submit()">{{ 'common.save' | translate }}</button>
+  </div>
+</form>

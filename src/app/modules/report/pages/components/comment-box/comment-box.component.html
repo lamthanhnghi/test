@@ -1,0 +1,63 @@
+<ul class="flex flex-col gap-4">
+  <li class="flex gap-4 items-start w-full">
+    <app-avatar [src]="data?.avatar || ''" size="52" shape="circle" class="shrink-0"></app-avatar>
+    <div class="flex flex-col gap-2 grow">
+      <div>
+        <h5 class="mb-1 text-sm font-semibold text-grey-dark line-clamp-2 break-all">{{data?.name || "[?]"}}</h5>
+        <p class="text-grey text-sm line-clamp-2">{{data?.reportDate | date: DATE_TIME_FORMAT}} - {{data?.reportUserType | enumKey: "report_user_type" | translate}}</p>
+      </div>
+      <div>
+        <p class="mb-2">
+          <span *ngIf="data?.reportType === eReportType.Rating">{{ data?.reasonOption | enumKey: "rating_report_reason" | translate }}</span>
+          <span *ngIf="data?.reportType === eReportType.Message">{{ data?.reasonOption | enumKey: "message_report_reason" | translate }}</span>
+          <span *ngIf="data?.reportType === eReportType.Shop">{{ data?.reasonOption | enumKey: "shop_report_reason" | translate }}</span>
+        </p>
+        <p>
+          <span class="text-grey-light">{{"report_page.note" | translate}}: </span>{{" "}}
+          <span>{{data?.note}}</span>
+        </p>
+      </div>
+<!--      <ul class="flex gap-2">-->
+<!--        <li class="shrink-0 w-[80px] h-[80px]">-->
+<!--          <img nz-image src="" alt="" class="w-full h-full object-cover">-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--&lt;!&ndash;      Replies&ndash;&gt;-->
+<!--      <ul class="flex flex-col gap-4 w-full">-->
+<!--        <li class="p-4 flex flex-col rounded bg-[#f4f4f4]">-->
+<!--          <div class="mb-3">-->
+<!--            <h5 class="font-semibold text-grey-dark line-clamp-2 break-all">{{data?.name}}</h5>-->
+<!--            <p class="text-grey text-sm line-clamp-2">{{data?.reportDate | date: DATE_TIME_FORMAT}}</p>-->
+<!--          </div>-->
+<!--          <p>{{data?.content}}</p>-->
+<!--        </li>-->
+<!--&lt;!&ndash;        Guest&ndash;&gt;-->
+<!--        <li class="flex gap-2 items-start">-->
+<!--          <app-avatar src="''" size="40" shape="circle" class="shrink-0"></app-avatar>-->
+<!--          <div class="flex flex-col">-->
+<!--            <div class="mb-3">-->
+<!--              <h5 class="font-semibold text-grey-dark line-clamp-2 break-all">*Tên user</h5>-->
+<!--              <p class="text-grey text-sm line-clamp-2">*23/2/2023 19:20</p>-->
+<!--            </div>-->
+<!--            <p>*Nội dung phản hồi</p>-->
+<!--          </div>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--      <form class="flex flex-col gap-2">-->
+<!--        <nz-form-item class="mb-0 w-full">-->
+<!--          <nz-form-control class="w-full"  [nzErrorTip]="replyError">-->
+<!--            <textarea  [nzAutosize]="{ minRows: 3, maxRows: 7 }" placeholder="Nhập câu trả lời" nz-input formControlName="reply_content" ></textarea>-->
+<!--            <ng-template #replyError let-control>-->
+<!--              <ng-container *ngIf="control.hasError('required')">-->
+<!--                {{ 'common.please_input' | translate }} {{ 'Phản hồi' | translate }}-->
+<!--              </ng-container>-->
+<!--            </ng-template>-->
+<!--          </nz-form-control>-->
+<!--        </nz-form-item>-->
+<!--        <div class="items-center justify-end flex">-->
+<!--          <button nz-button nzType="primary" class="!h-fit py-2 text-xs max-w-[110px] w-full">Gửi</button>-->
+<!--        </div>-->
+<!--      </form>-->
+    </div>
+  </li>
+</ul>

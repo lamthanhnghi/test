@@ -1,0 +1,34 @@
+<div class="relative flex items-center">
+  <div
+    class="aspect-square inline-flex justify-center items-center bg-grey-lighter overflow-hidden"
+    [class.shadow-sm]="hasShadow"
+    [class.rounded-full]="shape === 'circle'"
+    [class.border-1]="hasBorder"
+    [class.border-grey-light]="hasBorder"
+    [ngStyle]="{ width: +size / 16 + 'rem', height: +size / 16 + 'rem' }"
+  >
+    <img
+      class="object-cover w-full h-full"
+      [class.rounded-full]="shape === 'circle'"
+      *ngIf="_src; else defaultTpl"
+      [nzSrc]="_src"
+      nz-image
+      alt="avatar"
+      [nzDisablePreview]="true"
+    />
+  </div>
+  <button
+    *ngIf="allowChange"
+    nz-button
+    nzType="default"
+    class="btn-icon btn-camera"
+    [ngStyle]="{ top: +size / 16 / 1.4142 + 'rem', left: +size / 16 / 1.4142 + 'rem' }"
+    (click)="updateAvatar()"
+  >
+    <app-icon name="camera" size="20" class="animated-fade-in"></app-icon>
+  </button>
+</div>
+
+<ng-template #defaultTpl>
+  <app-icon name="color:person" [size]="size"></app-icon>
+</ng-template>

@@ -1,0 +1,48 @@
+<article class="px-10 max-tablet:px-5 pb-10 h-full py-6">
+  <section class="w-[min(53.5rem_,_100%)] mx-auto">
+    <div class="step-wrapper inline-flex justify-start items-center">
+      <div
+        class="rounded-full w-8 h-8 inline-flex justify-center items-center text-main"
+        [ngClass]="{
+          'border-1 border-grey-neutral': step !== eUpdateInfoStep.Info,
+          'bg-main-lighter': step === eUpdateInfoStep.Info
+        }"
+      >
+        <span class="font-bold text-16px">1</span>
+      </div>
+      <div class="w-14 h-0.5 border-b-1 border-grey-neutral border-dashed"></div>
+      <div
+        class="rounded-full w-8 h-8 inline-flex justify-center items-center text-main border-1 border-grey-neutral"
+        [ngClass]="{
+          'border-1 border-grey-neutral': step !== eUpdateInfoStep.Document,
+          'bg-main-lighter': step === eUpdateInfoStep.Document
+        }"
+      >
+        <span class="font-bold text-16px">2</span>
+      </div>
+    </div>
+    <form
+      *ngIf="formBusiness && step === eUpdateInfoStep.Info"
+      class="mt-6"
+      [formGroup]="formBusiness"
+      nz-form
+      nzLayout="horizontal"
+      nzNoColon
+      (ngSubmit)="submit()"
+    >
+      <app-update-information-general
+        [formGroup]="formBusiness"
+        class="animated-fade-in-up"
+      ></app-update-information-general>
+      <div class="flex justify-center items-center gap-4 mt-6">
+        <button class="w-52" nz-button nzSize="large" nzType="default" type="button" (click)="clearSession()">
+          {{ 'common.back' | translate }}
+        </button>
+        <button class="w-52" nz-button nzSize="large" nzType="primary" type="submit" [disabled]="formBusiness.invalid">
+          {{ 'common.next' | translate }}
+        </button>
+      </div>
+    </form>
+    <app-upload-document *ngIf="step === eUpdateInfoStep.Document"></app-upload-document>
+  </section>
+</article>

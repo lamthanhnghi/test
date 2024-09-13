@@ -1,0 +1,4 @@
+<svg id="transaction-order" viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M80.1667 17.333H23.8333C21.4401 17.333 19.5 19.2731 19.5 21.6663V90.9997C19.5 93.3929 21.4401 95.333 23.8333 95.333H80.1667C82.5599 95.333 84.5 93.3929 84.5 90.9997V21.6663C84.5 19.2731 82.5599 17.333 80.1667 17.333Z" stroke="#58C14F" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M39 8.6665V21.6665M65 8.6665V21.6665M34.6666 41.1665H69.3333M34.6666 58.4998H60.6666M34.6666 75.8332H52" stroke="#58C14F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

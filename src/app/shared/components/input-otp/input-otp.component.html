@@ -1,0 +1,22 @@
+<section class="flex justify-center items-center gap-4">
+  <ng-container *ngFor="let item of [].constructor(this.length)">
+    <input #otpInput [placeholder]="'_'" nz-input type="tel" [disabled]="disabled" />
+  </ng-container>
+</section>
+<p class="text-center whitespace-nowrap mt-8 flex justify-center gap-1 leading-1 animated-fade-in" *ngIf="timeLeft > 0">
+  <span>{{ 'account_page.verify_code_expire_in' | translate }}</span>
+  <countdown #countdownComponent [config]="countdownConfig" (event)="onCountdown($event)"></countdown>
+  <span>{{ countdownUnit | translate }}</span>
+</p>
+
+<div
+  class="text-center whitespace-nowrap mt-8 flex flex-col justify-center gap-1 leading-1 animated-fade-in"
+  *ngIf="timeLeft === 0"
+>
+  <div>{{ 'account_page.verify_code_expired' | translate }}</div>
+  <div>
+    <a nz-button nzType="link" type="button" (click)="onResend()">
+      {{ 'account_page.resend_verify_code' | translate }}
+    </a>
+  </div>
+</div>

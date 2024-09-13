@@ -1,0 +1,315 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="flex mb-5 gap-3 lg:justify-end">
+      <!--@if (data && [eContentStatuses.New, eContentStatuses.AdminRejected].includes(data.contentStatus)) {-->
+      <!--@if (data) {-->
+      <!--  <button-->
+      <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !bg-transparent !border-red !border !text-red !text-[14px] !h-9 min-w-24"-->
+      <!--    nz-button-->
+      <!--    nzType="default"-->
+      <!--    nzDanger-->
+      <!--    (click)="delete()"-->
+      <!--  >-->
+      <!--    {{ 'common.delete' | translate }}-->
+      <!--  </button>-->
+      <!--}-->
+      @if (mode === ePageActions.Edit) {
+        <button
+          class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+          nz-button
+          nzType="primary"
+          nzDanger
+          (click)="cancel()"
+        >
+          {{ 'common.cancel' | translate }}
+        </button>
+      }
+      @if (mode === ePageActions.View) {
+        <!-- todo: un hide when integrate approval flow -->
+        <!--@if (data?.contentStatus === eContentStatuses.New) {-->
+        <!--  <button-->
+        <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"-->
+        <!--    nz-button-->
+        <!--    nzType="primary"-->
+        <!--    (click)="sendApproval()"-->
+        <!--  >-->
+        <!--    {{ 'common.send_for_review' | translate }}-->
+        <!--  </button>-->
+        <!--}-->
+
+        @if (data?.contentStatus !== eContentStatuses.AdminReviewing) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+            nz-button
+            nzType="default"
+            (click)="edit()"
+          >
+            {{ 'common.edit' | translate }}
+          </button>
+        }
+      }
+      @if ([ePageActions.Edit, ePageActions.Create].includes(mode)) {
+        <button
+          class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+          nz-button
+          nzType="default"
+          (click)="submit()"
+        >
+          {{ 'common.save' | translate }}
+        </button>
+      }
+    </div>
+    @if (mode !== ePageActions.View) {
+      <form class="wrapper-right" nz-form nzNoColon [formGroup]="form">
+        <div class="row-content">
+          <nz-form-item>
+            <nz-form-label nzRequired nzLabelAlign="left" [nzSm]="4" [nzFor]="eNotificationFormKeys.Title">
+              {{ 'common.title' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="titleError">
+              <input
+                nz-input
+                [formControlName]="eNotificationFormKeys.Title"
+                [id]="eNotificationFormKeys.Title"
+                [placeholder]="'common.input' | translate"
+                [readonly]="mode === ePageActions.View"
+                [nzBorderless]="mode === ePageActions.View"
+              />
+              <ng-template #titleError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'common.please_input' | translate }} {{ 'common.title' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- --------------------------------------------------------------------------------------------------------- -->
+        <div class="row-content">
+          <nz-form-item>
+            <nz-form-label
+              nzRequired
+              nzLabelAlign="left"
+              nzLabelWrap
+              [nzSm]="4"
+              [nzFor]="eNotificationFormKeys.Content"
+            >
+              {{ 'common.description' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="descError">
+              <input
+                nz-input
+                [formControlName]="eNotificationFormKeys.Content"
+                [id]="eNotificationFormKeys.Content"
+                [placeholder]="'common.input' | translate"
+              />
+              <ng-template #descError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'common.please_input' | translate }} {{ 'common.description' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- --------------------------------------------------------------------------------------------------------- -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzLabelAlign="left" [nzSm]="4">
+            {{ 'common.applicable_target' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <div class="flex flex-col justify-start items-stretch gap-4">
+              <div
+                class="border-1 border-background rounded flex justify-between items-center gap-2 h-[var(--input-height-default)] px-[0.6875rem]"
+              >
+                <span>{{ 'common.seller' | translate }}</span>
+                <nz-switch [formControlName]="eNotificationFormKeys.ApplyForSeller"></nz-switch>
+              </div>
+              <div
+                class="border-1 border-background rounded flex justify-between items-center gap-2 h-[var(--input-height-default)] px-[0.6875rem]"
+              >
+                <span>{{ 'common.buyer' | translate }}</span>
+                <nz-switch [formControlName]="eNotificationFormKeys.ApplyForUser"></nz-switch>
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- --------------------------------------------------------------------------------------------------------- -->
+        <nz-form-item>
+          <nz-form-label nzRequired nzLabelAlign="left" [nzSm]="4">
+            {{ 'common.notification_type' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <div class="flex flex-col justify-start items-stretch gap-4">
+              <div
+                class="border-1 border-background rounded flex justify-between items-center gap-2 h-[var(--input-height-default)] px-[0.6875rem]"
+              >
+                <span>{{ 'common.sms' | translate }}</span>
+                <nz-switch [formControlName]="eNotificationFormKeys.IsSendSMS"></nz-switch>
+              </div>
+              <div
+                class="border-1 border-background rounded flex justify-between items-center gap-2 h-[var(--input-height-default)] px-[0.6875rem]"
+              >
+                <span>{{ 'common.email' | translate }}</span>
+                <nz-switch [formControlName]="eNotificationFormKeys.IsSendEmail"></nz-switch>
+              </div>
+              <div
+                class="border-1 border-background rounded flex justify-between items-center gap-2 h-[var(--input-height-default)] px-[0.6875rem]"
+              >
+                <span>{{ 'common.push_notification' | translate }}</span>
+                <nz-switch [formControlName]="eNotificationFormKeys.IsSendPushNotification"></nz-switch>
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- --------------------------------------------------------------------------------------------------------- -->
+        <nz-form-item>
+          <nz-form-label class="col-left text-left" nzNoColon nzLabelAlign="left" [nzSm]="4">
+            {{ 'common.attached_files' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <app-input-file
+              layout="custom"
+              class="w-fit"
+              [fileList]="this.avatars"
+              [listenProgress]="true"
+              (fileAdded)="fileAdded($event)"
+              [multiple]="true"
+              [accepts]="ACCEPTED_EXTENSIONS"
+              [limit]="5"
+              [maxSize]="10 * 1024 * 1024"
+              [disabled]="mode === ePageActions.View"
+            >
+              <div
+                class="drop-zone-template flex flex-col justify-center items-center gap-2 w-28 h-28 rounded border-1 border-main border-dashed bg-main-lighter text-main"
+              >
+                <app-icon name="image" size="32"></app-icon>
+                <span>{{ 'common.add_file' | translate }}</span>
+              </div>
+              <div class="preview-template flex flex-wrap gap-4">
+                <mc-media
+                  *ngFor="let media of this.avatars"
+                  class="flex w-28 h-28"
+                  layout="square"
+                  [media]="media"
+                  [showInfo]="false"
+                  (removeClicked)="removeSkuImage(media)"
+                  [disabled]="mode === ePageActions.View"
+                ></mc-media>
+              </div>
+            </app-input-file>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- --------------------------------------------------------------------------------------------------------- -->
+        <nz-form-item>
+          <nz-form-label
+            class="!pl-0"
+            nzRequired
+            nzLabelAlign="left"
+            nzLabelWrap
+            [nzSm]="4"
+            [nzFor]="eNotificationFormKeys.SendDate"
+          >
+            {{ 'common.send_date' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="sendDateError">
+            <nz-date-picker
+              class="w-full"
+              [nzFormat]="DATE_FORMAT"
+              [formControlName]="eNotificationFormKeys.SendDate"
+              [nzPlaceHolder]="'common.select' | translate"
+              [nzInputReadOnly]="true"
+              [nzAllowClear]="false"
+              nzSuffixIcon="calendar"
+            ></nz-date-picker>
+            <ng-template #sendDateError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.send_date' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- --------------------------------------------------------------------------------------------------------- -->
+        <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View" *ngIf="data?.notificationID">
+          <nz-form-item>
+            <nz-form-label nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="4">
+              {{ 'common.status' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="">
+              <div [class.pl-3]="mode === ePageActions.View">
+                <app-content-status-label [status]="data?.contentStatus"></app-content-status-label>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </form>
+    } @else {
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-2">
+          {{ 'common.title' | translate }}
+        </div>
+        <div class="col-span-10">
+          {{ data?.title }}
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4 mt-4">
+        <div class="col-span-2">
+          {{ 'common.description' | translate }}
+        </div>
+        <div class="col-span-10">
+          {{ data?.content }}
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4 mt-4">
+        <div class="col-span-2">
+          {{ 'common.applicable_target' | translate }}
+        </div>
+        <div class="col-span-10">
+          {{ listTargets.join(', ') }}
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4 mt-4">
+        <div class="col-span-2">
+          {{ 'common.notification_type' | translate }}
+        </div>
+        <div class="col-span-10">
+          {{ listNotificationTypes.join(', ') }}
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4 mt-4">
+        <div class="col-span-2">
+          {{ 'common.attached_files' | translate }}
+        </div>
+        <div class="col-span-10">
+          <div class="flex gap-4">
+            <div class="flex justify-start items-center gap-2">
+              <ng-container *ngFor="let media of avatars">
+                <mc-media
+                  class="w-28 h-28"
+                  layout="square"
+                  [media]="media"
+                  [showInfo]="false"
+                  [disabled]="true"
+                ></mc-media>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4 mt-4">
+        <div class="col-span-2">
+          {{ 'common.send_date' | translate }}
+        </div>
+        <div class="col-span-10">
+          {{ data?.sendDate | date: DATE_FORMAT }}
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4 mt-4">
+        <div class="col-span-2">
+          {{ 'common.status' | translate }}
+        </div>
+        <div class="col-span-10">
+          <app-content-status-label [status]="data?.contentStatus"></app-content-status-label>
+        </div>
+      </div>
+    }
+  </div>
+</app-item-detail-master-layout>

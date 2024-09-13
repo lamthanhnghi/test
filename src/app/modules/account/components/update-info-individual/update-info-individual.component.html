@@ -1,0 +1,183 @@
+<ng-container [formGroup]="form">
+  <nz-form-item class="w-full gap-4 mb-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">
+      {{ 'account_page.seller_name' | translate }}
+    </nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('account_page.seller_name' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <input
+        mcAutocompleteOff
+        [placeholder]="'account_page.seller_name' | translate"
+        nz-input
+        type="text"
+        formControlName="contactFullName"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="w-full gap-4 mb-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">
+      {{ 'account_page.identity_type' | translate }}
+    </nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_select' | translate) + ('account_page.identity_type' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <nz-select [nzPlaceHolder]="'account_page.identity_type' | translate" formControlName="pIDType">
+        <ng-container *ngFor="let item of pidTypeOptions">
+          <nz-option [nzValue]="item" [nzLabel]="item | enumKey: 'pid_types' | translate"></nz-option>
+        </ng-container>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="w-full gap-4 mb-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">
+      {{ 'account_page.identity_number' | translate }}
+    </nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('account_page.identity_number' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <input
+        mcAutocompleteOff
+        [placeholder]="'account_page.identity_number' | translate"
+        nz-input
+        type="text"
+        formControlName="pID"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="w-full gap-4 mb-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.email' | translate }}</nz-form-label>
+    <nz-form-control [nzErrorTip]="emailError" [nzSpan]="16" class="w-full">
+      <div class="flex gap-2">
+        <div class="flex-grow">
+          <input
+            mcAutocompleteOff
+            [placeholder]="'common.email' | translate"
+            nz-input
+            type="email"
+            formControlName="email"
+          />
+        </div>
+        <div
+          *ngIf="form.get('email')?.disabled"
+          class="aspect-square w-10 rounded-lg inline-flex justify-center items-center border-1 border-grey-lighter bg-white"
+          [nz-tooltip]="'common.verified' | translate"
+        >
+          <app-icon name="material-check" size="24x24" color="text-main"></app-icon>
+        </div>
+      </div>
+
+      <ng-template #emailError let-control>
+        <ng-container *ngIf="control.hasError('required'); else invalidEmail">
+          {{ 'common.please_input' | translate }} {{ 'common.email' | translate }}
+        </ng-container>
+        <ng-template #invalidEmail>
+          <ng-container *ngIf="control.hasError('emailPattern')">
+            {{ 'form.email' | translate }} {{ 'form.invalid' | translate | lowercase }}
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="w-full gap-4 mb-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.phone' | translate }}</nz-form-label>
+    <nz-form-control [nzErrorTip]="phoneError" [nzSpan]="16" class="w-full">
+      <div class="flex gap-2">
+        <div class="flex-grow">
+          <input
+            mcAutocompleteOff
+            [placeholder]="'common.phone' | translate"
+            nz-input
+            type="tel"
+            formControlName="phone"
+          />
+        </div>
+        <div
+          *ngIf="form.get('phone')?.disabled"
+          class="aspect-square w-10 rounded-lg inline-flex justify-center items-center border-1 border-grey-lighter bg-white"
+          [nz-tooltip]="'common.verified' | translate"
+        >
+          <app-icon name="material-check" size="24x24" color="text-main"></app-icon>
+        </div>
+      </div>
+
+      <ng-template #phoneError let-control>
+        <ng-container *ngIf="control.hasError('required'); else invalidPhone">
+          {{ 'common.please_input' | translate }} {{ 'common.email' | translate }}
+        </ng-container>
+        <ng-template #invalidPhone>
+          <ng-container *ngIf="control.hasError('phonePattern')">
+            {{ 'form.phone' | translate }} {{ 'form.invalid' | translate | lowercase }}
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="w-full gap-4 mb-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.address' | translate }}</nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('common.address' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <textarea
+        mcRequired
+        [placeholder]="'common.address' | translate"
+        nz-input
+        [nzAutosize]="{ minRows: 2, maxRows: 3 }"
+        formControlName="address"
+      ></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="w-full gap-4 mb-4">
+    <nz-form-label class="text-left" [nzSpan]="8">{{ 'common.website' | translate }}</nz-form-label>
+    <nz-form-control
+      [nzErrorTip]="('common.please_input' | translate) + ('common.website' | translate)"
+      [nzSpan]="16"
+      class="w-full"
+    >
+      <input
+        mcAutocompleteOff
+        [placeholder]="'common.website' | translate"
+        nz-input
+        type="url"
+        formControlName="website"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="w-full gap-4 mb-4">
+    <nz-form-label nzRequired class="text-left" [nzSpan]="8">{{ 'common.post_code' | translate }}</nz-form-label>
+    <nz-form-control [nzErrorTip]="postalCodeError" [nzSpan]="16" class="w-full">
+      <input
+        mcAutocompleteOff
+        [placeholder]="'common.post_code' | translate"
+        nz-input
+        type="tel"
+        formControlName="postalCode"
+      />
+      <ng-template #postalCodeError let-control>
+        <ng-container *ngIf="control.hasError('required'); else invalidPostCode">
+          {{ 'common.please_input' | translate }} {{ 'common.post_code' | translate }}
+        </ng-container>
+        <ng-template #invalidPostCode>
+          <ng-container *ngIf="control.hasError('postalCodePattern')">
+            {{ 'common.post_code' | translate }} {{ 'form.invalid' | translate | lowercase }}
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+</ng-container>

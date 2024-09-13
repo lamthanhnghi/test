@@ -1,0 +1,7 @@
+:host {
+  .form-control-switch {
+    .ant-form-item-control-input-content {
+      @apply flex justify-end items-center;
+    }
+  }
+}

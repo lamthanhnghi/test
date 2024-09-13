@@ -1,0 +1,11 @@
+<div nz-menu nzMode="inline" class="sider-menu border-r-0">
+  <ng-container *ngFor="let item of menuItems">
+    <div nz-menu-item [nzMatchRouter]="true" class="ant-menu-item-without-icon" (click)="itemClicked.next()">
+      <a [routerLink]="item.link" [queryParams]="item['queryParams']">
+        <span>{{ item.title | translate }}</span>
+        <app-icon class="ml-auto" *ngIf="item?.hasWarning" name="info" size="22x22" color="text-red"></app-icon>
+        <span>{{ item['count'] }}</span>
+      </a>
+    </div>
+  </ng-container>
+</div>

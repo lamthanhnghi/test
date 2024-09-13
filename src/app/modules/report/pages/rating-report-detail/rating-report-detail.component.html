@@ -1,0 +1,75 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <section class="rounded bg-white mb-4 p-5 flex flex-col gap-4">
+    <div *ngIf="contentStatus === eReportContentStatus.Handled">
+      <p *ngIf="data?.dataRating?.reportedRatingProduct?.handleAction === eReportAction.HideComment" class="bg-[#E923231A] rounded text-red p-3">
+        {{ "report_page.comment_hidden" | translate }}</p>
+      <p *ngIf="data?.dataRating?.reportedRatingProduct?.handleAction === eReportAction.RejectReport" class="bg-[#4A8CEF1A] rounded text-blue p-3">
+        {{ "report_page.comment_rejected" | translate }}</p>
+    </div>
+    <div *ngIf="contentStatus !== eReportContentStatus.Handled" class="flex gap-2 items-center justify-end">
+      <button
+        *ngIf="contentStatus === eReportContentStatus.New"
+        class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+        nz-button
+        nzType="default"
+        (click)="setStatus(eReportContentStatus.Reviewing)"
+      >
+        {{ 'enums.content_statuses.admin_processing' | translate }}
+      </button>
+      <button
+        *ngIf="contentStatus === eReportContentStatus.Reviewing"
+        class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px]"
+        nz-button
+        nzType="default"
+        (click)="setStatus(eReportContentStatus.Handled)"
+      >
+        {{ 'enums.content_statuses.admin_processed' | translate }}
+      </button>
+    </div>
+    <div class="flex items-center">
+      <div class="flex items-center gap-2 grow">
+        <app-icon
+          [name]="titleConfig['icon']"
+          size="24"
+          [color]="titleConfig['color']"
+        ></app-icon>
+        <span class="font-semibold text-grey-darkness">{{titleConfig['title'] | translate}}</span>
+      </div>
+      <app-report-content-status-label [status]="contentStatus"></app-report-content-status-label>
+    </div>
+    <div>
+      <app-product-report-info [data]="data"></app-product-report-info>
+    </div>
+    <form nz-form [formGroup]="form" class="flex flex-col gap-2" *ngIf="contentStatus === eReportContentStatus.Reviewing">
+      <p class="font-bold text-grey-darkness">Chọn cách xử lý</p>
+      <div >
+        <nz-form-item class="mb-2">
+          <nz-form-control class="[&_.ant-form-item-control-input]:min-h-0" [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="optionError">
+            <nz-radio-group [formControlName]="eReportHandleFormKeys.Option">
+              <ng-container *ngFor="let i of actions">
+                <label nz-radio [nzValue]="i.value">{{i.label | translate}}</label>
+              </ng-container>
+            </nz-radio-group>
+            <ng-template #optionError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_select' | translate }} {{ 'Cách xử lý' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="mb-0">
+          <nz-form-control [nzSm]="'auto'" [nzXs]="24" >
+            <input
+              nz-input
+              [placeholder]="'report_page.note' | translate"
+              [formControlName]="eReportHandleFormKeys.Note"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </section>
+  <section class="rounded bg-white p-5">
+    <app-comment-box [data]="getInfo()"></app-comment-box>
+  </section>
+</app-item-detail-master-layout>

@@ -1,0 +1,18 @@
+<ng-container [ngSwitch]="type">
+  <span *ngSwitchCase="eProductTypes.Drug">
+    {{ 'enums.product_types.drug' | translate }}
+  </span>
+  <span *ngSwitchCase="eProductTypes.Functional">
+    {{ 'enums.product_types.functional' | translate }}
+  </span>
+  <span *ngSwitchCase="eProductTypes.MedicalEquipment">
+    {{ 'enums.product_types.medical_equipment' | translate }}
+  </span>
+  <span *ngSwitchCase="eProductTypes.Other">
+    {{ 'enums.product_types.other' | translate }}
+  </span>
+  <span *ngSwitchCase="eProductTypes.Supplement">
+    {{ 'enums.product_types.supplement' | translate }}
+  </span>
+  <span *ngSwitchDefault>[?]</span>
+</ng-container>

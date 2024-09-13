@@ -1,0 +1,19 @@
+:host {
+  @apply flex flex-col items-center justify-start h-full;
+
+  ::ng-deep {
+    nz-countdown {
+      @apply inline-flex;
+
+      .ant-statistic-title {
+        @apply hidden;
+      }
+      .ant-statistic-content {
+        @apply text-16px leading-[var(--default-line-height)];
+        .ant-statistic-content-value {
+          @apply text-16px font-normal text-default-text font-main;
+        }
+      }
+    }
+  }
+}

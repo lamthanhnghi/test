@@ -1,0 +1,12 @@
+:host {
+  .image-cover {
+    @apply relative;
+    @apply aspect-[var(--profile-cover-ratio)] overflow-hidden object-cover bg-grey-lighter;
+
+    button {
+      @apply absolute right-2 top-2 shadow-sm;
+      @apply w-8 h-8 max-h-8 max-w-8;
+      @apply rounded-full;
+    }
+  }
+}

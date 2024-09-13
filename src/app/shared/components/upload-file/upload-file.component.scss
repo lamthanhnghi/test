@@ -1,0 +1,22 @@
+::ng-deep {
+  .ngx-ic-source-image {
+    @apply mx-auto;
+  }
+
+  .ngx-ic-cropper {
+    --cropper-outline-color: rgba(0, 0, 0, 0.7);
+  }
+  /*****************************************************
+  *********************** Upload ***********************
+  *****************************************************/
+
+  nz-upload {
+    .ant-upload.ant-upload-drag {
+      @apply rounded-none border-none bg-transparent;
+
+      .ant-upload.ant-upload-btn {
+        @apply p-0;
+      }
+    }
+  }
+}

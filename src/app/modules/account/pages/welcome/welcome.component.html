@@ -1,0 +1,20 @@
+<article class="p-10 max-tablet:p-5 pb-10 h-full animated-fade-in-up">
+  <section class="w-[min(53.5rem_,_100%)] mx-auto flex flex-col justify-center items-center">
+    <app-logo class="w-28"></app-logo>
+    <h1 class="text-4xl font-medium mt-5 text-main">{{ 'app_config.app_name' | translate }}</h1>
+    <h3 class="mt-14 font-semibold text-20px">{{ 'msg.welcome_to_app' | translate }}</h3>
+    <p class="mt-6">{{ 'msg.welcome_description' | translate }}</p>
+    <div class="flex justify-center items-center gap-4 mt-10">
+      <a
+        class="ant-btn-warning w-36"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+        type="button"
+        [routerLink]="['/', RouteUtils.AccountPage.Base, RouteUtils.AccountPage.UpdateInfo]"
+      >
+        {{ 'common.update' | translate }}
+      </a>
+    </div>
+  </section>
+</article>

@@ -1,0 +1,12 @@
+<ng-container [ngSwitch]="status">
+  <span *ngSwitchCase="eProgramType.Combo">
+    {{ 'Combo' | translate }}
+  </span>
+  <span *ngSwitchCase="eProgramType.Discount">
+    {{ 'Giảm giá' | translate }}
+  </span>
+  <span *ngSwitchCase="eProgramType.Gift">
+    {{ 'Tặng quà' | translate }}
+  </span>
+  <span *ngSwitchDefault>[?]</span>
+</ng-container>

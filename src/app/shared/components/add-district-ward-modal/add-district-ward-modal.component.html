@@ -1,0 +1,27 @@
+<form [formGroup]="form" nz-form id="feedbackForm" (ngSubmit)="submit()">
+  <div *nzModalTitle>
+    {{ data.title | translate }}
+  </div>
+  <p class="mb-2 text-default-text">{{ data.message }}</p>
+  <nz-form-item>
+    <nz-form-label mcRequired nzNoColon nzLabelAlign="left" [nzSm]="24" [nzFor]="formKeys.name">{{ data.label | translate }}</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="nameError">
+      <input nz-input [formControlName]="formKeys.name" [id]="formKeys.name" />
+      <ng-template #nameError let-control>
+        <ng-container *ngIf="control.hasError('required')">
+          {{ 'common.please_input' | translate }} {{ 'common.name' | translate }}
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <div *nzModalFooter>
+    <div class="flex justify-stretch gap-5 max-w-[380px] mx-auto">
+      <button class="grow" nz-button nzType="default" (click)="modalRef.close(undefined)">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button class="grow !ml-0" nz-button nzType="primary" form="feedbackForm">
+        {{ (isEdit ? 'common.edit' : 'common.add') | translate }}
+      </button>
+    </div>
+  </div>
+</form>

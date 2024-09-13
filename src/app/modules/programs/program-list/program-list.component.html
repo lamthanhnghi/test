@@ -1,0 +1,134 @@
+<app-item-list-master-layout
+  [heading]="'Chương trình' | translate"
+  [menuItems]="menuItems"
+  (searchInputChange)="onSearchKeywordChange($event)"
+>
+  <section class="lg:px-5">
+    <div>
+      <div class="lg:block hidden">
+        <nz-table
+          nzBordered
+          [nzData]="data"
+          [nzLoading]="loading"
+          [(nzPageSize)]="filterObject.pageSize"
+          [(nzPageIndex)]="filterObject.pageIndex"
+          [nzShowPagination]="false"
+          (nzQueryParams)="tableQueryParamsChange$.next($event)"
+          [nzScroll]="{ x: '1280px', y: 'calc(100dvh - var(--footer-height) - 324px)' }"
+        >
+          <thead>
+          <tr>
+            <th nzWidth="100px">
+              <div class="text-center">{{ 'STT' | translate }}</div>
+            </th>
+            <th nzColumnKey="name" nzWidth="300px">{{ 'common.program' | translate }}</th>
+            <th nzColumnKey="sellerName">{{ 'Seller' | translate }}</th>
+            <th nzColumnKey="createdAt">{{ 'Ngày gửi duyệt' | translate }}</th>
+            <th nzColumnKey="status">{{ 'common.status' | translate }}</th>
+            <th nzColumnKey="action">{{ 'common.actions' | translate }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of data; index as i">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>
+              <div class="flex justify-start items-center gap-3">
+                <div class="w-[108px] aspect-video overflow-hidden flex-shrink-0">
+                  <img [src]="item.linkString" alt="" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex flex-col justify-center items-start gap-0.5">
+                  <h5 class="font-semibold text-[14px] text-grey-dark line-clamp-1 break-all">
+                    {{ item.title }}
+                  </h5>
+                  <p class="text-grey line-clamp-2">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </div>
+            </td>
+            <td class="text-center">{{ item.seller.businessName }}</td>
+            <td class="text-center">{{ item.createdDate | date: 'shortDate' }}</td>
+            <td class="text-center">
+              <app-content-status-label [status]="item.contentStatus"></app-content-status-label>
+              @if (item?.contentStatus === eContentStatuses.AdminRejected && item?.hasReviewRequest) {
+                <span class="size-3 rounded-full bg-red inline-block ml-2"></span>
+              }
+            </td>
+            <td>
+              <div class="flex gap-3 justify-center">
+                <button
+                  (click)="review(item.programID)"
+                  *ngIf="item.contentStatus === eContentStatuses.AdminPending"
+                  class="!text-[14px] ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn"
+                  nz-button
+                  nzType="default"
+                >
+                  {{ 'enums.content_statuses.admin_reviewing' | translate }}
+                </button>
+                <button
+                  class="ant-btn-link flex justify-center items-center"
+                  nzType="link"
+                  [routerLink]="item.programID"
+                >
+                  Xem
+                </button>
+                <!--                <button class="flex justify-center items-center" nzType="link" [routerLink]="item.sellerProfileID">-->
+                <!--                  <app-icon name="more" size="24x24" color="text-main"></app-icon>-->
+                <!--                </button>-->
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <ul class="flex lg:hidden flex-col gap-5 p-5 pb-0">
+        <ng-container *ngFor="let item of data">
+          <li>
+            <a [routerLink]="item.programID" class="card block p-4 bg-white hover:shadow transition rounded-lg">
+              <div class="mb-3 aspect-video overflow-hidden">
+                <img [src]="item.linkString" alt="" class="h-full w-full object-cover" />
+              </div>
+              <div class="flex justify-start items-center gap-3 mb-2">
+                <div class="flex flex-col justify-center items-start gap-0.5">
+                  <h5 class="font-semibold text-[14px] text-grey-dark line-clamp-2 break-all">
+                    {{ item.title }}
+                  </h5>
+                  <p class="text-grey line-clamp-2">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex flex-nowrap justify-between mb-2">
+                <span class="text-grey-default">{{ 'requesting_profiles_page.request_review_date' | translate }}</span>
+                <span>{{ item.createdDate }}</span>
+              </div>
+              <div class="flex flex-nowrap justify-between mb-2">
+                <span class="text-grey-default">{{ 'common.status' | translate }}</span>
+                <app-content-status-label [status]="item.contentStatus"></app-content-status-label>
+              </div>
+              <button
+                (click)="review(item.programID)"
+                *ngIf="item.contentStatus === eContentStatuses.AdminPending"
+                class="!text-[14px] ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn w-full"
+                nz-button
+                nzType="default"
+              >
+                {{ 'enums.content_statuses.admin_reviewing' | translate }}
+              </button>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <nz-pagination
+      nzShowSizeChanger
+      nzResponsive
+      [nzPageSizeOptions]="[10, 20, 30, 40, 50]"
+      [(nzPageSize)]="filterObject.pageSize"
+      [(nzPageIndex)]="filterObject.pageIndex"
+      [nzTotal]="filterObject.total"
+      (nzPageSizeChange)="onPageSizeChange()"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+    ></nz-pagination>
+  </section>
+</app-item-list-master-layout>

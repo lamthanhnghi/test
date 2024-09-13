@@ -1,0 +1,9 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  @if (data) {
+    <app-product-management [data]="data!" [mode]="ePageActions.View" (reloadEvent)="getItem()"></app-product-management>
+  } @else {
+    <div class="h-[80dvh] relative flex justify-center items-center bg-white">
+      <nz-empty></nz-empty>
+    </div>
+  }
+</app-item-detail-master-layout>

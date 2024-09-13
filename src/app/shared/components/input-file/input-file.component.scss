@@ -1,0 +1,31 @@
+:host {
+  @apply block;
+  .wrapper-upload {
+    @apply flex flex-col tablet:flex-row items-stretch justify-center gap-4;
+    .custom-dropzone {
+      @apply flex-1 flex flex-col items-stretch justify-center border-0;
+      @apply overflow-hidden;
+      height: initial;
+
+      &.default {
+        @apply h-56 rounded-lg;
+      }
+
+      &.ngx-dz-disabled {
+        opacity: 1;
+      }
+
+      .custom-label {
+        @apply flex flex-col justify-center items-center rounded-lg border-dashed border-2 border-main w-full h-full bg-main-lighter;
+        @apply text-center text-main;
+      }
+
+      .helper-text {
+        @apply text-12px text-main-light italic;
+      }
+    }
+    .items-zone {
+      @apply flex-1;
+    }
+  }
+}

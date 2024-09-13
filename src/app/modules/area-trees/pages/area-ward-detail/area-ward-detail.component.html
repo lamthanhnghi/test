@@ -1,0 +1,58 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="flex flex-col justify-start items-stretch gap-4 mb-4">
+      <button (click)="openModal()" nz-button nzType="primary" nzShape="circle" class="ml-auto">
+        <span nz-icon nzType="plus"></span>
+      </button>
+      <nz-table [nzData]="data" nzBordered class="mc-table" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th nzAlign="center" nzColumnKey="label" nzWidth="auto">
+              <span class="font-semibold">{{ 'Tên phường / xã' }}</span>
+            </th>
+            <th nzColumnKey="updatedAt" nzWidth="20ch">
+              <span class="font-semibold">{{ 'Ngày cập nhật' | translate }}</span>
+            </th>
+            <th nzWidth="8rem">{{ '' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of data">
+            <tr>
+              <td>
+                {{ item.name }}
+              </td>
+              <td class="text-center">
+                <div>{{ item.updatedDate | date: 'shortDate' }}</div>
+              </td>
+              <td>
+                <div class="flex gap-3 justify-center">
+                  <button
+                    class="ant-btn-link flex justify-center items-center text-blue hover:text-blue-dark focus:text-blue"
+                    nzType="link"
+                    (click)="openModal(item)"
+                  >
+                    {{ 'common.edit' | translate }}
+                  </button>
+                  <button (click)="deleteItem(item)" class="ant-btn-link flex justify-center items-center" nzType="link">
+                    {{ 'common.delete' | translate }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+      <nz-pagination
+        nzShowSizeChanger
+        nzResponsive
+        [nzPageSizeOptions]="[10, 20, 30, 40, 50]"
+        [(nzPageSize)]="filterObject.pageSize"
+        [(nzPageIndex)]="filterObject.pageIndex"
+        [nzTotal]="filterObject.total"
+        (nzPageSizeChange)="onPageSizeChange()"
+        (nzPageIndexChange)="onPageIndexChange($event)"
+      ></nz-pagination>
+    </div>
+  </div>
+</app-item-detail-master-layout>

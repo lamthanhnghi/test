@@ -1,0 +1,205 @@
+<app-item-detail-master-layout [crumbs]="breadcrumbs" [shouldBeInSection]="false">
+  <div class="px-5 lg:px-10 py-5 bg-white rounded shadow mb-5">
+    <div class="flex mb-5 gap-3 lg:justify-end">
+      <!--@if (data && [eContentStatuses.New, eContentStatuses.AdminRejected].includes(data.contentStatus)) {-->
+      <!--@if (data) {-->
+      <!--  <button-->
+      <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !bg-transparent !border-red !border !text-red !text-[14px] !h-9 min-w-24"-->
+      <!--    nz-button-->
+      <!--    nzType="default"-->
+      <!--    nzDanger-->
+      <!--    (click)="delete()"-->
+      <!--  >-->
+      <!--    {{ 'common.delete' | translate }}-->
+      <!--  </button>-->
+      <!--}-->
+      @if (mode === ePageActions.Edit) {
+        <button
+          class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"
+          nz-button
+          nzType="primary"
+          nzDanger
+          (click)="cancel()"
+        >
+          {{ 'common.cancel' | translate }}
+        </button>
+      }
+      @if (mode === ePageActions.View) {
+        <!-- todo: un hide when integrate approval flow -->
+        <!--@if (data?.contentStatus === eContentStatuses.New) {-->
+        <!--  <button-->
+        <!--    class="lg:flex-grow-0 flex-grow ant-btn btn !text-[14px] !h-9 min-w-24"-->
+        <!--    nz-button-->
+        <!--    nzType="primary"-->
+        <!--    (click)="sendApproval()"-->
+        <!--  >-->
+        <!--    {{ 'common.send_for_review' | translate }}-->
+        <!--  </button>-->
+        <!--}-->
+
+        @if (data?.contentStatus !== eContentStatuses.AdminReviewing) {
+          <button
+            class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+            nz-button
+            nzType="default"
+            (click)="edit()"
+          >
+            {{ 'common.edit' | translate }}
+          </button>
+        }
+      }
+      @if ([ePageActions.Edit, ePageActions.Create].includes(mode)) {
+        <button
+          class="lg:flex-grow-0 flex-grow ant-btn !bg-main-lighter !border-main !border !h-9 !text-main btn !text-[14px] min-w-24"
+          nz-button
+          nzType="default"
+          (click)="submit()"
+        >
+          {{ 'common.save' | translate }}
+        </button>
+      }
+    </div>
+    <form class="wrapper-right" nz-form [nzNoColon]="mode !== ePageActions.View" [formGroup]="form">
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label nzRequired nzLabelAlign="left" [nzSm]="4" [nzFor]="ePrivacyPolicyFormKeys.Title">
+            {{ 'Tên chính sách' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="titleError">
+            <input
+              nz-input
+              [formControlName]="ePrivacyPolicyFormKeys.Title"
+              [id]="ePrivacyPolicyFormKeys.Title"
+              [placeholder]="'common.input' | translate"
+              [readonly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+            />
+            <ng-template #titleError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'Tên chính sách' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div [ngClass]="{ 'bg-main-lighter px-4 py-3 rounded my-4 -mx-4': mode === ePageActions.View }">
+        <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+          <nz-form-item>
+            <nz-form-label nzRequired nzLabelAlign="left" [nzSm]="4" [nzFor]="ePrivacyPolicyFormKeys.Version">
+              {{ 'common.version' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="versionError">
+              <input
+                nz-input
+                [formControlName]="ePrivacyPolicyFormKeys.Version"
+                [id]="ePrivacyPolicyFormKeys.Version"
+                [placeholder]="'common.input' | translate"
+                [readonly]="mode === ePageActions.View"
+                [nzBorderless]="mode === ePageActions.View"
+              />
+              <ng-template #versionError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'common.please_input' | translate }} {{ 'common.version' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+          <nz-form-item>
+            <nz-form-label nzRequired nzLabelAlign="left" [nzSm]="4" [nzFor]="ePrivacyPolicyFormKeys.Notes">
+              {{ 'Mô tả thay đổi' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="'auto'" [nzXs]="24" [nzErrorTip]="notesError">
+              <input
+                nz-input
+                [formControlName]="ePrivacyPolicyFormKeys.Notes"
+                [id]="ePrivacyPolicyFormKeys.Notes"
+                [placeholder]="'common.input' | translate"
+                [readonly]="mode === ePageActions.View"
+                [nzBorderless]="mode === ePageActions.View"
+              />
+              <ng-template #notesError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  {{ 'common.please_input' | translate }} {{ 'Mô tả thay đổi' | translate }}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="4" [nzFor]="ePrivacyPolicyFormKeys.Content">
+            {{ 'common.content' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="contentError">
+            <app-ck-editor
+              [formControlName]="ePrivacyPolicyFormKeys.Content"
+              *ngIf="mode !== ePageActions.View"
+            ></app-ck-editor>
+            <div
+              class="py-2.5 pl-3"
+              *ngIf="mode === ePageActions.View"
+              [innerHTML]="data?.content | nzSanitizer: 'html'"
+            ></div>
+            <ng-template #contentError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.content' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View">
+        <nz-form-item>
+          <nz-form-label
+            nzRequired
+            nzLabelAlign="left"
+            nzLabelWrap
+            [nzSm]="4"
+            [nzFor]="ePrivacyPolicyFormKeys.DateApply"
+          >
+            {{ 'common.applied_date' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="dateApplyError">
+            <!--<div-->
+            <!--  class="w-full h-[var(&#45;&#45;input-height-default)] absolute top-0 left-0 bg-red z-10 cursor-not-allowed"-->
+            <!--  *ngIf="mode === ePageActions.View"-->
+            <!--&gt;</div>-->
+            <nz-date-picker
+              class="w-full"
+              [nzFormat]="DATE_FORMAT"
+              [formControlName]="ePrivacyPolicyFormKeys.DateApply"
+              [nzPlaceHolder]="'common.select' | translate"
+              [nzInputReadOnly]="true"
+              [nzAllowClear]="false"
+              [attr.aria-readonly]="mode === ePageActions.View"
+              [nzBorderless]="mode === ePageActions.View"
+              [nzSuffixIcon]="mode === ePageActions.View ? '' : 'calendar'"
+            ></nz-date-picker>
+            <ng-template #dateApplyError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                {{ 'common.please_input' | translate }} {{ 'common.applied_date' | translate }}
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- --------------------------------------------------------------------------------------------------------- -->
+      <div class="row-content" [attr.aria-readonly]="mode === ePageActions.View" *ngIf="data?.privacyPolicyID">
+        <nz-form-item>
+          <nz-form-label nzRequired nzLabelAlign="left" nzLabelWrap [nzSm]="4">
+            {{ 'common.status' | translate }}
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzErrorTip]="">
+            <div [class.pl-3]="mode === ePageActions.View">
+              <app-content-status-label [status]="data?.contentStatus"></app-content-status-label>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </div>
+</app-item-detail-master-layout>
